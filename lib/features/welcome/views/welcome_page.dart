@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kahootify/features/welcome/views/widgets/fancy_button.dart';
+import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/features/settings/views/settings_page.dart';
+import 'package:kahootify/features/welcome/views/widgets/welcome_button.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -7,62 +9,62 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
-  String value = '10';
 
-  void changeToTwenty(BuildContext superContext) {
-    print("test");
-    showDialog(
-        context: superContext,
-        builder: (context) {
-          return Material(
-            child: Center(
-              child: Container(
-                child: Column(
-                  children: [
-                    Text("cześć"),
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          value = "123";
-                        });
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Wyjście"),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-    setState(() {
-      value = (int.parse(value) + 1).toString();
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackground2Color,
       appBar: AppBar(
-        title: Text("WELCOME SCREEN"),
+        title: Text("KAHOOTIFY.LY"),
+        backgroundColor: kBackground1Color,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage())), /*settingsDialog(context),*/
+              child: Icon(Icons.settings),
+            ),
+          )
+        ],
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Welcome",
-                style: TextStyle(fontSize: 40, color: Colors.red),
-              ),
-              FancyButton(
-                onPressed: () => changeToTwenty(context),
-                value: value,
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "SELECT GAME MODE: ",
+                  style: TextStyle(fontSize: 25, color: kButtonColor),
+                ),
+                SizedBox(height: 35),
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      WelcomeButton(
+                        /* onPressed: () => changeToTwenty(context),*/
+                        onPressed: () {
+                          print("User wybrał host-player mode");
+                        }, //TODO funkcja od wyboru host-player mode
+                        value: "HOST-PLAYER MODE",
+                      ),
+                      SizedBox(height: 50),
+                      WelcomeButton(
+                        /* onPressed: () => changeToTwenty(context),*/
+                        onPressed: () {
+                          print("User wybrał player mode");
+                        }, //TODO funkcja od wyboru player mode
+                        value: "PLAYER MODE",
+                      ),
+                      SizedBox(height: 50),
+                    ]),
+              ],
+            ),
           ),
         ),
       ),
-    ); //TODO create welcome page UI
+    );
   }
 }
