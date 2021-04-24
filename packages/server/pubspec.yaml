@@ -1,0 +1,9 @@
+name: kahootify_server
+description: Dart package which manages the kahootify server
+version: 1.0.0
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  meta: ^1.2.3 #TODO to jest przykładowa paczka pewnie nie potrzebna
