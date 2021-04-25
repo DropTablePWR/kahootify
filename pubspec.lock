@@ -114,13 +114,6 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
-  lint:
-    dependency: "direct dev"
-    description:
-      name: lint
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.3"
   matcher:
     dependency: transitive
     description:
