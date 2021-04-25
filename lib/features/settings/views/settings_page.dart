@@ -5,9 +5,10 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Center(
-        child: Text("Settingsy"),
-      )),
+        child: Center(
+          child: Text("Settingsy"),
+        ),
+      ),
     );
   }
 }
