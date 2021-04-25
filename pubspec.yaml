@@ -13,6 +13,7 @@ dependencies:
   flutter_bloc: ^7.0.0
   shared_preferences: ^2.0.5
   equatable: ^2.0.0
+  web_socket_channel: ^2.0.0
   kahootify_server:
     path: packages/server
 

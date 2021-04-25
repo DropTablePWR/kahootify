@@ -50,6 +50,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  crypto:
+    dependency: transitive
+    description:
+      name: crypto
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   equatable:
     dependency: "direct main"
     description:
@@ -163,6 +170,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  ping_discover_network:
+    dependency: transitive
+    description:
+      name: ping_discover_network
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   platform:
     dependency: transitive
     description:
@@ -244,7 +258,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   stack_trace:
     dependency: transitive
     description:
@@ -279,7 +293,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   typed_data:
     dependency: transitive
     description:
@@ -294,6 +308,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  web_socket_channel:
+    dependency: "direct main"
+    description:
+      name: web_socket_channel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  wifi:
+    dependency: transitive
+    description:
+      name: wifi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   win32:
     dependency: transitive
     description:
