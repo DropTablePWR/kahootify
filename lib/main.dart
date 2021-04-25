@@ -27,12 +27,12 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late SharedPreferencesRepository prefsRepository;
-  bool loadedRepository = false;
+  bool isRepositoryLoaded = false;
 
   Future<void> initializeSharedPreferencesRepository() async {
     prefsRepository = SharedPreferencesRepository(await SharedPreferences.getInstance());
     setState(() {
-      loadedRepository = true;
+      isRepositoryLoaded = true;
     });
   }
 
@@ -49,7 +49,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: loadedRepository
+      home: isRepositoryLoaded
           ? BlocProvider(
               create: (context) => SettingsCubit(prefsRepository)..initialize(),
               child: WelcomePage(),

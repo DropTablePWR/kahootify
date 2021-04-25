@@ -1,20 +1,20 @@
 class Settings {
   String? playerName;
-  bool enabledMusic;
-  bool enabledSound;
+  bool isMusicEnabled;
+  bool isSfxEnabled;
 
-  Settings({this.playerName, required this.enabledMusic, required this.enabledSound});
+  Settings({this.playerName, required this.isMusicEnabled, required this.isSfxEnabled});
 
   Settings.initial()
       : playerName = null,
-        enabledMusic = true,
-        enabledSound = true;
+        isMusicEnabled = true,
+        isSfxEnabled = true;
 
-  Settings copyWith({String? playerName, bool? enabledMusic, bool? enabledSound}) {
+  Settings copyWith({String? playerName, bool? isMusicEnabled, bool? isSfxEnabled}) {
     return Settings(
       playerName: playerName ?? this.playerName,
-      enabledMusic: enabledMusic ?? this.enabledMusic,
-      enabledSound: enabledSound ?? this.enabledSound,
+      isMusicEnabled: isMusicEnabled ?? this.isMusicEnabled,
+      isSfxEnabled: isSfxEnabled ?? this.isSfxEnabled,
     );
   }
 }

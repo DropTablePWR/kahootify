@@ -9,27 +9,27 @@ class SettingsCubit extends Cubit<Settings> {
 
   void initialize() {
     final String? playerName = prefs.playerName;
-    final bool? enabledMusic = prefs.enabledMusic;
-    final bool? enabledSound = prefs.enabledSound;
-    emit(Settings.initial().copyWith(playerName: playerName, enabledSound: enabledSound, enabledMusic: enabledMusic));
-    if (enabledSound == null) {
-      prefs.enabledMusic = true;
-      prefs.enabledSound = true;
+    final bool? isMusicEnabled = prefs.isMusicEnabled;
+    final bool? isSfxEnabled = prefs.isSfxEnabled;
+    emit(Settings.initial().copyWith(playerName: playerName, isSfxEnabled: isSfxEnabled, isMusicEnabled: isMusicEnabled));
+    if (isSfxEnabled == null) {
+      prefs.isMusicEnabled = true;
+      prefs.isSfxEnabled = true;
     }
   }
 
-  void changePlayerName(String playerName) {
+  void setPlayerName(String playerName) {
     emit(state.copyWith(playerName: playerName));
     prefs.playerName = playerName;
   }
 
-  void toggleSound({required bool enabledSound}) {
-    emit(state.copyWith(enabledSound: enabledSound));
-    prefs.enabledSound = enabledSound;
+  void setSfxEnabled({required bool isSfxEnabled}) {
+    emit(state.copyWith(isSfxEnabled: isSfxEnabled));
+    prefs.isSfxEnabled = isSfxEnabled;
   }
 
-  void toggleMusic({required bool enabledMusic}) {
-    emit(state.copyWith(enabledMusic: enabledMusic));
-    prefs.enabledMusic = enabledMusic;
+  void setMusicEnabled({required bool isMusicEnabled}) {
+    emit(state.copyWith(isMusicEnabled: isMusicEnabled));
+    prefs.isMusicEnabled = isMusicEnabled;
   }
 }

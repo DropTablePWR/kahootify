@@ -7,13 +7,13 @@ class SharedPreferencesRepository {
 
   String? get playerName => prefs.getString('playerName');
 
-  bool? get enabledSound => prefs.getBool('enabledSound');
+  bool? get isSfxEnabled => prefs.getBool('isSfxEnabled');
 
-  bool? get enabledMusic => prefs.getBool('enabledMusic');
+  bool? get isMusicEnabled => prefs.getBool('isMusicEnabled');
 
-  set enabledMusic(bool? enabledMusic) => prefs.setBool('enabledMusic', enabledMusic ?? true);
+  set isMusicEnabled(bool? isMusicEnabled) => prefs.setBool('isMusicEnabled', isMusicEnabled ?? true);
 
-  set enabledSound(bool? enabledSound) => prefs.setBool('enabledSound', enabledSound ?? true);
+  set isSfxEnabled(bool? isSfxEnabled) => prefs.setBool('isSfxEnabled', isSfxEnabled ?? true);
 
   set playerName(String? playerName) => prefs.setString('playerName', playerName ?? '');
 }
