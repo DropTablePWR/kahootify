@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: loadedRepository
           ? BlocProvider(
-              create: (context) => SettingsCubit(prefsRepository),
+              create: (context) => SettingsCubit(prefsRepository)..initialize(),
               child: WelcomePage(),
             )
           : SplashPage(),

@@ -7,10 +7,10 @@ class SettingsCubit extends Cubit<Settings> {
 
   SettingsCubit(this.prefs) : super(Settings.initial());
 
-  Future<void> initialize() async {
-    String? playerName = prefs.playerName;
-    bool? enabledMusic = prefs.enabledMusic;
-    bool? enabledSound = prefs.enabledSound;
+  void initialize() {
+    final String? playerName = prefs.playerName;
+    final bool? enabledMusic = prefs.enabledMusic;
+    final bool? enabledSound = prefs.enabledSound;
     emit(Settings.initial().copyWith(playerName: playerName, enabledSound: enabledSound, enabledMusic: enabledMusic));
     if (enabledSound == null) {
       prefs.enabledMusic = true;
@@ -23,12 +23,12 @@ class SettingsCubit extends Cubit<Settings> {
     prefs.playerName = playerName;
   }
 
-  void toggleSound(bool enabledSound) {
+  void toggleSound({required bool enabledSound}) {
     emit(state.copyWith(enabledSound: enabledSound));
     prefs.enabledSound = enabledSound;
   }
 
-  void toggleMusic(bool enabledMusic) {
+  void toggleMusic({required bool enabledMusic}) {
     emit(state.copyWith(enabledMusic: enabledMusic));
     prefs.enabledMusic = enabledMusic;
   }
