@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
 
-class WelcomeButton extends StatelessWidget {
+class ChooseModeButton extends StatelessWidget {
   final Function() onPressed;
-  final String value;
+  final String text;
 
-  const WelcomeButton({required this.onPressed, required this.value});
+  const ChooseModeButton({required this.onPressed, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,14 @@ class WelcomeButton extends StatelessWidget {
       height: 100,
       child: ElevatedButton(
         onPressed: onPressed,
-        child: Text(value, style: TextStyle(fontSize: 20)),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: 20),
+        ),
         style: ElevatedButton.styleFrom(
             primary: kBackgroundGreenColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-            elevation: 50,
+            elevation: 15,
             padding: EdgeInsets.all(20.0),
             textStyle: TextStyle(color: kBackgroundLightColor)),
       ),

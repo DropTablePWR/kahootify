@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
-import 'package:kahootify/features/welcome/views/widgets/welcome_button.dart';
+import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
 
 import '../../../const.dart';
 
@@ -18,7 +18,7 @@ class _WelcomePageState extends State<WelcomePage> {
       appBar: AppBar(
         title: Text(kAppName),
         backgroundColor: kBackgroundGreenColor,
-        actions: <Widget>[
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: IconButton(
@@ -41,20 +41,18 @@ class _WelcomePageState extends State<WelcomePage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  WelcomeButton(
-                    /* onPressed: () => changeToTwenty(context),*/
+                  ChooseModeButton(
                     onPressed: () {
                       print("User wybrał host-player mode");
                     }, //TODO funkcja od wyboru host-player mode
-                    value: "HOST-PLAYER MODE",
+                    text: "HOST-GAME",
                   ),
                   SizedBox(height: 50),
-                  WelcomeButton(
-                    /* onPressed: () => changeToTwenty(context),*/
+                  ChooseModeButton(
                     onPressed: () {
                       print("User wybrał player mode");
                     }, //TODO funkcja od wyboru player mode
-                    value: "PLAYER MODE",
+                    text: "JOIN GAME",
                   ),
                   SizedBox(height: 50),
                 ],
