@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
 
 class WelcomeButton extends StatelessWidget {
-  final Function onPressed;
+  final Function() onPressed;
   final String value;
 
-  const WelcomeButton({Key key, this.onPressed, this.value}) : super(key: key);
+  const WelcomeButton({required this.onPressed, required this.value});
 
   @override
   Widget build(BuildContext context) {
