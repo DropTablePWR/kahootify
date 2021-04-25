@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class FancyButton extends StatelessWidget {
-  final Function onPressed;
+  final Function() onPressed;
   final String value;
 
-  const FancyButton({Key key, this.onPressed, this.value}) : super(key: key);
+  const FancyButton({Key? key, required this.onPressed, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
