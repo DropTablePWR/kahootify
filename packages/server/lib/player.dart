@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class Player {
-  int playerCode;
+  final int playerCode;
   WebSocket socket;
 
   Player(this.playerCode, this.socket) {
