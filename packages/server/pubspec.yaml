@@ -3,7 +3,11 @@ description: Dart package which manages the kahootify server
 version: 1.0.0
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  meta: ^1.2.3 #TODO to jest przykładowa paczka pewnie nie potrzebna
+  ping_discover_network: ^0.2.0+1
+  wifi: ^0.1.5
+  web_socket_channel: ^2.0.0
+  tuple: ^2.0.0
+
