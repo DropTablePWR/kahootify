@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/const.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
-
-import '../../../const.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
