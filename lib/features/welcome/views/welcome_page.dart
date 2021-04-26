@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/bloc/settings_cubit.dart';
+import 'package:kahootify/features/game_config/views/game_config_page.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
 
@@ -24,7 +25,14 @@ class _WelcomePageState extends State<WelcomePage> {
             padding: EdgeInsets.only(right: 20.0),
             child: IconButton(
               onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (routeContext) => BlocProvider<SettingsCubit>.value(value: context.read<SettingsCubit>(), child: SettingsPage())),
+                MaterialPageRoute(
+                  builder: (routeContext) {
+                    return BlocProvider<SettingsCubit>.value(
+                      value: context.read<SettingsCubit>(),
+                      child: SettingsPage(),
+                    );
+                  },
+                ),
               ),
               icon: Icon(Icons.settings),
             ),
@@ -45,9 +53,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ChooseModeButton(
-                    onPressed: () {
-                      print("User wybrał host-player mode");
-                    }, //TODO funkcja od wyboru host-player mode
+                    onPressed: () => Navigator.of(context).push(GameConfigPage.route()),
                     text: "HOST-GAME",
                   ),
                   SizedBox(height: 50),
