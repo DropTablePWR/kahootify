@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
@@ -12,11 +11,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPage extends State<SettingsPage> {
-  final playerNameInputController = TextEditingController();
+  late final playerNameInputController;
 
   @override
   void initState() {
     super.initState();
+    playerNameInputController = TextEditingController(text: context.read<SettingsCubit>().state.playerName);
     playerNameInputController.addListener(_setCurrentPlayerName);
   }
 
@@ -47,57 +47,75 @@ class _SettingsPage extends State<SettingsPage> {
                 SizedBox(height: 35),
                 Center(
                   child: Text(
-                    settings.playerName == null ? "PLAYERNAME" : settings.playerName.toString(),
+                    settings.playerName == null ? "PLAYERNAME" : settings.playerName!,
                     style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
                   ),
                 ),
                 SizedBox(height: 35),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
                   child: TextField(
                     textCapitalization: TextCapitalization.characters,
                     controller: playerNameInputController,
+                    cursorColor: kBackgroundGreenColor,
                     decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: kBackgroundGreenColor),
+                      ),
                       labelText: 'Enter your username',
+                      labelStyle: TextStyle(color: kBackgroundGreenColor),
                     ),
                   ),
                 ),
                 SizedBox(height: 35),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(settings.isMusicEnabled == true ? Icons.volume_up : Icons.volume_off, size: 50, color: kBackgroundGreenColor),
-                    SizedBox(width: 35),
-                    Switch(
-                      value: settings.isMusicEnabled,
-                      onChanged: (value) => context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: !settings.isMusicEnabled),
-                      activeTrackColor: kBasedBlackColor,
-                      activeColor: kBackgroundGreenColor,
-                    ),
-                  ],
+                _SoundSettingsTile(
+                  icon: settings.isMusicEnabled == true ? Icons.volume_up : Icons.volume_off,
+                  value: settings.isMusicEnabled,
+                  onChanged: (value) => context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: !settings.isMusicEnabled),
                 ),
                 SizedBox(height: 35),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(settings.isSfxEnabled == true ? Icons.music_note : Icons.music_off, size: 50, color: kBackgroundGreenColor),
-                    SizedBox(width: 35),
-                    Switch(
-                      value: settings.isSfxEnabled,
-                      onChanged: (value) => context.read<SettingsCubit>().setSfxEnabled(isSfxEnabled: !settings.isSfxEnabled),
-                      activeTrackColor: kBasedBlackColor,
-                      activeColor: kBackgroundGreenColor,
-                    ),
-                  ],
+                _SoundSettingsTile(
+                  icon: settings.isSfxEnabled == true ? Icons.music_note : Icons.music_off,
+                  value: settings.isSfxEnabled,
+                  onChanged: (value) => context.read<SettingsCubit>().setSfxEnabled(isSfxEnabled: !settings.isSfxEnabled),
                 ),
               ],
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class _SoundSettingsTile extends StatelessWidget {
+  final IconData icon;
+  final bool value;
+  final Function(bool) onChanged;
+
+  const _SoundSettingsTile({
+    Key? key,
+    required this.icon,
+    required this.value,
+    required this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Icon(icon, size: 50, color: kBackgroundGreenColor),
+        SizedBox(width: 35),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+          activeTrackColor: kBasedBlackColor,
+          activeColor: kBackgroundGreenColor,
+          inactiveThumbColor: kBasedBlackColor,
+        ),
+      ],
     );
   }
 }
