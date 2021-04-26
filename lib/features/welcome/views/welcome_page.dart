@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
+import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
 
@@ -21,7 +23,9 @@ class _WelcomePageState extends State<WelcomePage> {
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: IconButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage())),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (routeContext) => BlocProvider<SettingsCubit>.value(value: context.read<SettingsCubit>(), child: SettingsPage())),
+              ),
               icon: Icon(Icons.settings),
             ),
           )
