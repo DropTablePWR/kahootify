@@ -41,9 +41,9 @@ class GameConfigPageView extends StatelessWidget {
               SizedBox(
                 height: 300,
                 child: ListView.builder(
-                  itemCount: pageState.categoriesToChoose.length,
+                  itemCount: pageState.availableCategories.length,
                   itemBuilder: (_, index) {
-                    return Text(pageState.categoriesToChoose[index].name);
+                    return Text(pageState.availableCategories[index].name);
                   },
                 ),
               ),

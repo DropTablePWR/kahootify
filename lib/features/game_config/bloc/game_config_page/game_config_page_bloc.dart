@@ -6,7 +6,6 @@ import 'package:kahootify/core/models/api/category.dart';
 import 'package:meta/meta.dart';
 
 part 'game_config_page_event.dart';
-
 part 'game_config_page_state.dart';
 
 class GameConfigPageBloc extends Bloc<GameConfigPageEvent, GameConfigPageState> {

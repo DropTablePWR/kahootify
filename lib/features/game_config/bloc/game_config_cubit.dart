@@ -9,9 +9,9 @@ class GameConfigCubit extends Cubit<GameConfig> {
 
   void setMaxNumberOfPlayers(int maxNumberOfPlayers) => emit(state.copyWith(maxNumberOfPlayers: maxNumberOfPlayers));
 
-  void setChosenCategory(Category chosenCategory) => emit(state.copyWith(chosenCategory: chosenCategory));
+  void setCategory(Category category) => emit(state.copyWith(category: category));
 
-  void setTimeForAnswer(int timeForAnswer) => emit(state.copyWith(timeForAnswer: timeForAnswer));
+  void setAnswerTimeLimit(int answerTimeLimit) => emit(state.copyWith(answerTimeLimit: answerTimeLimit));
 
   void setNumberOfQuestions(int numberOfQuestions) => emit(state.copyWith(numberOfQuestions: numberOfQuestions));
 }

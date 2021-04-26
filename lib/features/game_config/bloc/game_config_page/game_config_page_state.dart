@@ -8,9 +8,9 @@ class GameConfigPageInitial extends GameConfigPageState {}
 class GameConfigPageLoading extends GameConfigPageState {}
 
 class GameConfigPageReady extends GameConfigPageState {
-  final List<Category> categoriesToChoose;
+  final List<Category> availableCategories;
 
-  GameConfigPageReady(this.categoriesToChoose);
+  GameConfigPageReady(this.availableCategories);
 }
 
 class GameConfigPageError extends GameConfigPageState {
