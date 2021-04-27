@@ -50,7 +50,7 @@ class _GameConfigPageView extends State<GameConfigPageView> {
   void initState() {
     super.initState();
     gameNameInputController = TextEditingController(text: context.read<GameConfigCubit>().state.gameName);
-    gameNameInputController.addListener(_setCurrentPlayerName);
+    gameNameInputController.addListener(_setCurrentGameName);
   }
 
   @override
@@ -59,7 +59,7 @@ class _GameConfigPageView extends State<GameConfigPageView> {
     super.dispose();
   }
 
-  _setCurrentPlayerName() {
+  _setCurrentGameName() {
     context.read<GameConfigCubit>().setGameName(gameNameInputController.text);
   }
 
@@ -128,40 +128,31 @@ class _GameConfigPageView extends State<GameConfigPageView> {
                         ),
                       ),
                       SizedBox(height: 15),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: _ConfigureNumberPicker(
-                          minValue: 2,
-                          maxValue: 10,
-                          step: 1,
-                          value: gameConfig.maxNumberOfPlayers,
-                          text: "Maximum number of players: ",
-                          onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(gameConfig.maxNumberOfPlayers),
-                        ),
+                      _GameConfigNumberPicker(
+                        minValue: 2,
+                        maxValue: 10,
+                        step: 1,
+                        value: gameConfig.maxNumberOfPlayers,
+                        text: "Maximum number of players: ",
+                        onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(gameConfig.maxNumberOfPlayers),
                       ),
                       SizedBox(height: 15),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: _ConfigureNumberPicker(
-                          minValue: 2,
-                          maxValue: 50,
-                          step: 1,
-                          value: gameConfig.numberOfQuestions,
-                          text: "Number of Questions: ",
-                          onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(gameConfig.numberOfQuestions),
-                        ),
+                      _GameConfigNumberPicker(
+                        minValue: 2,
+                        maxValue: 50,
+                        step: 1,
+                        value: gameConfig.numberOfQuestions,
+                        text: "Number of Questions: ",
+                        onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(gameConfig.numberOfQuestions),
                       ),
                       SizedBox(height: 15),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: _ConfigureNumberPicker(
-                          minValue: 10,
-                          maxValue: 30,
-                          step: 5,
-                          value: gameConfig.answerTimeLimit,
-                          text: "Seconds to answer: ",
-                          onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(gameConfig.answerTimeLimit),
-                        ),
+                      _GameConfigNumberPicker(
+                        minValue: 10,
+                        maxValue: 30,
+                        step: 5,
+                        value: gameConfig.answerTimeLimit,
+                        text: "Seconds to answer: ",
+                        onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(gameConfig.answerTimeLimit),
                       ),
                     ]);
                   },
@@ -179,7 +170,7 @@ class _GameConfigPageView extends State<GameConfigPageView> {
   }
 }
 
-class _ConfigureNumberPicker extends StatefulWidget {
+class _GameConfigNumberPicker extends StatefulWidget {
   final int minValue;
   final int maxValue;
   final int value;
@@ -187,7 +178,7 @@ class _ConfigureNumberPicker extends StatefulWidget {
   final String text;
   final Function(int) onChanged;
 
-  const _ConfigureNumberPicker({
+  const _GameConfigNumberPicker({
     Key? key,
     required this.minValue,
     required this.maxValue,
@@ -198,10 +189,10 @@ class _ConfigureNumberPicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  __ConfigureNumberPickerState createState() => __ConfigureNumberPickerState();
+  _GameConfigNumberPickerState createState() => _GameConfigNumberPickerState();
 }
 
-class __ConfigureNumberPickerState extends State<_ConfigureNumberPicker> {
+class _GameConfigNumberPickerState extends State<_GameConfigNumberPicker> {
   int _value = 0;
 
   @override
@@ -212,39 +203,42 @@ class __ConfigureNumberPickerState extends State<_ConfigureNumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            widget.text,
-            style: TextStyle(
-              color: kBackgroundGreenColor,
-              fontSize: 15,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+      child: Column(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              widget.text,
+              style: TextStyle(
+                color: kBackgroundGreenColor,
+                fontSize: 15,
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 8),
-        NumberPicker(
-          value: _value,
-          minValue: widget.minValue,
-          maxValue: widget.maxValue,
-          step: widget.step,
-          onChanged: (newValue) {
-            setState(() {
-              _value = newValue;
-            });
-            widget.onChanged(newValue);
-          },
-          axis: Axis.horizontal,
-          textStyle: TextStyle(fontSize: 25, color: kBasedBlackColor),
-          selectedTextStyle: TextStyle(fontSize: 25, color: kBackgroundGreenColor, fontWeight: FontWeight.bold),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: kBackgroundGreenColor),
+          SizedBox(height: 8),
+          NumberPicker(
+            value: _value,
+            minValue: widget.minValue,
+            maxValue: widget.maxValue,
+            step: widget.step,
+            onChanged: (newValue) {
+              setState(() {
+                _value = newValue;
+              });
+              widget.onChanged(newValue);
+            },
+            axis: Axis.horizontal,
+            textStyle: TextStyle(fontSize: 25, color: kBasedBlackColor),
+            selectedTextStyle: TextStyle(fontSize: 25, color: kBackgroundGreenColor, fontWeight: FontWeight.bold),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: kBackgroundGreenColor),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
