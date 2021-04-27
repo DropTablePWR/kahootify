@@ -73,20 +73,20 @@ class _GameConfigPageView extends State<GameConfigPageView> {
           );
         } else if (pageState is GameConfigPageReady) {
           return SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: 35),
-                BlocBuilder<GameConfigCubit, GameConfig>(
-                  builder: (context, gameConfig) {
-                    return Column(children: [
-                      Text(
-                        gameConfig.gameName,
-                        style: TextStyle(fontSize: 25, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: TextField(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                children: [
+                  SizedBox(height: 35),
+                  BlocBuilder<GameConfigCubit, GameConfig>(
+                    builder: (context, gameConfig) {
+                      return Column(children: [
+                        Text(
+                          gameConfig.gameName,
+                          style: TextStyle(fontSize: 25, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 30),
+                        TextField(
                           textCapitalization: TextCapitalization.characters,
                           controller: gameNameInputController,
                           cursorColor: kBackgroundGreenColor,
@@ -98,11 +98,8 @@ class _GameConfigPageView extends State<GameConfigPageView> {
                             labelStyle: TextStyle(color: kBackgroundGreenColor),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 15),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        child: DropdownButtonFormField<Category>(
+                        SizedBox(height: 35),
+                        DropdownButtonFormField<Category>(
                           value: gameConfig.category,
                           icon: const Icon(Icons.arrow_downward),
                           iconSize: 24,
@@ -126,38 +123,38 @@ class _GameConfigPageView extends State<GameConfigPageView> {
                             );
                           }).toList(),
                         ),
-                      ),
-                      SizedBox(height: 15),
-                      _GameConfigNumberPicker(
-                        minValue: 2,
-                        maxValue: 10,
-                        step: 1,
-                        value: gameConfig.maxNumberOfPlayers,
-                        text: "Maximum number of players: ",
-                        onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(gameConfig.maxNumberOfPlayers),
-                      ),
-                      SizedBox(height: 15),
-                      _GameConfigNumberPicker(
-                        minValue: 2,
-                        maxValue: 50,
-                        step: 1,
-                        value: gameConfig.numberOfQuestions,
-                        text: "Number of Questions: ",
-                        onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(gameConfig.numberOfQuestions),
-                      ),
-                      SizedBox(height: 15),
-                      _GameConfigNumberPicker(
-                        minValue: 10,
-                        maxValue: 30,
-                        step: 5,
-                        value: gameConfig.answerTimeLimit,
-                        text: "Seconds to answer: ",
-                        onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(gameConfig.answerTimeLimit),
-                      ),
-                    ]);
-                  },
-                ),
-              ],
+                        SizedBox(height: 35),
+                        _GameConfigNumberPicker(
+                          minValue: 2,
+                          maxValue: 10,
+                          step: 1,
+                          value: gameConfig.maxNumberOfPlayers,
+                          text: "Maximum number of players: ",
+                          onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(gameConfig.maxNumberOfPlayers),
+                        ),
+                        SizedBox(height: 35),
+                        _GameConfigNumberPicker(
+                          minValue: 2,
+                          maxValue: 50,
+                          step: 1,
+                          value: gameConfig.numberOfQuestions,
+                          text: "Number of Questions: ",
+                          onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(gameConfig.numberOfQuestions),
+                        ),
+                        SizedBox(height: 35),
+                        _GameConfigNumberPicker(
+                          minValue: 10,
+                          maxValue: 30,
+                          step: 5,
+                          value: gameConfig.answerTimeLimit,
+                          text: "Seconds to answer: ",
+                          onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(gameConfig.answerTimeLimit),
+                        ),
+                      ]);
+                    },
+                  ),
+                ],
+              ),
             ),
           );
         } else {
@@ -203,42 +200,39 @@ class _GameConfigNumberPickerState extends State<_GameConfigNumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-      child: Column(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              widget.text,
-              style: TextStyle(
-                color: kBackgroundGreenColor,
-                fontSize: 15,
-              ),
+    return Column(
+      children: <Widget>[
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            widget.text,
+            style: TextStyle(
+              color: kBackgroundGreenColor,
+              fontSize: 15,
             ),
           ),
-          SizedBox(height: 8),
-          NumberPicker(
-            value: _value,
-            minValue: widget.minValue,
-            maxValue: widget.maxValue,
-            step: widget.step,
-            onChanged: (newValue) {
-              setState(() {
-                _value = newValue;
-              });
-              widget.onChanged(newValue);
-            },
-            axis: Axis.horizontal,
-            textStyle: TextStyle(fontSize: 25, color: kBasedBlackColor),
-            selectedTextStyle: TextStyle(fontSize: 25, color: kBackgroundGreenColor, fontWeight: FontWeight.bold),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: kBackgroundGreenColor),
-            ),
+        ),
+        SizedBox(height: 8),
+        NumberPicker(
+          value: _value,
+          minValue: widget.minValue,
+          maxValue: widget.maxValue,
+          step: widget.step,
+          onChanged: (newValue) {
+            setState(() {
+              _value = newValue;
+            });
+            widget.onChanged(newValue);
+          },
+          axis: Axis.horizontal,
+          textStyle: TextStyle(fontSize: 25, color: kBasedBlackColor),
+          selectedTextStyle: TextStyle(fontSize: 25, color: kBackgroundGreenColor, fontWeight: FontWeight.bold),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: kBackgroundGreenColor),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
