@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
@@ -11,9 +12,19 @@ class Server {
   final int maxPlayers;
   late final server;
   Map<int, Player> knownPlayers = {};
+  SendPort? isolateToMain;
 
   Server(this.maxPlayers) {
     initialize();
+  }
+
+  Server.isolate(this.maxPlayers, this.isolateToMain) {
+    ReceivePort mainToIsolateStream = ReceivePort();
+    // Sending port to main
+    isolateToMain!.send(mainToIsolateStream.sendPort);
+    mainToIsolateStream.listen((data) {
+      handleDataFromMain(data);
+    });
   }
 
   void initialize() async {
@@ -32,10 +43,6 @@ class Server {
         });
       }
     }
-  }
-
-  static void sayHello(SendPort sendPort) {
-    sendPort.send("Hello from Isolate");
   }
 
   void handleConnectionProtocol(int id, WebSocket socket) {
@@ -60,6 +67,12 @@ class Server {
     //  TODO handle data
   }
 
+  void handleDataFromMain(dynamic data) {
+    //  TODO handle data to isolate
+    print(data);
+    isolateToMain!.send(data + "- isolate answer");
+  }
+
   void sendDataToAll(dynamic data) {
     knownPlayers.forEach((key, player) {
       try {
@@ -71,11 +84,23 @@ class Server {
 
 void _createRunningServer(Tuple2<SendPort, int> arguments) {
   var maxPlayers = arguments.item2;
-  Server(maxPlayers);
+  var sendPort = arguments.item1;
+  Server.isolate(maxPlayers, sendPort);
 }
 
-Future<Tuple2<Isolate, ReceivePort>> spawnIsolateServer(int maxPlayers) async {
+Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(int maxPlayers, Function listener) async {
+  Completer completer = new Completer<SendPort>();
   ReceivePort receivePort = ReceivePort();
+
+  receivePort.listen((data) {
+    if (data is SendPort) {
+      completer.complete(data);
+    } else {
+      listener(data);
+    }
+  });
+
   Isolate isolate = await Isolate.spawn(_createRunningServer, Tuple2(receivePort.sendPort, maxPlayers));
-  return Tuple2(isolate, receivePort);
+  var sendPort = await completer.future as SendPort;
+  return Tuple2(isolate, sendPort);
 }
