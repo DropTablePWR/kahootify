@@ -12,7 +12,7 @@ Future<void> main() async {
     print(data);
   };
 
-  var results = await spawnIsolateServer(3, listener, false);
+  var results = await spawnIsolateServer(3, listener, true);
   SendPort sendPort = results.item2;
 
   while (true) {

@@ -60,9 +60,11 @@ class Server {
   }
 
   void handleConnectionProtocol(int id, WebSocket socket) {
-    var player = findByPlayerCode(id);
-    if (player != null) {
-      player.reconnect(socket);
+    var entry = findByPlayerCode(id);
+    if (entry != null) {
+      knownPlayers[socket] = entry.value;
+      knownPlayers.remove(entry.key);
+      entry.value.reconnect(socket);
     } else {
       if (knownPlayers.length < maxPlayers) {
         knownPlayers[socket] = WebPlayer(id, socket);
@@ -73,10 +75,11 @@ class Server {
     }
   }
 
-  AbstractPlayer? findByPlayerCode(int playerCode) {
-    for (AbstractPlayer player in knownPlayers.values)
-      if (playerCode == player.playerCode) {
-        return player;
+  // return
+  MapEntry<dynamic, AbstractPlayer>? findByPlayerCode(int playerCode) {
+    for (var entry in knownPlayers.entries)
+      if (playerCode == entry.value.playerCode) {
+        return entry;
       }
     return null;
   }
