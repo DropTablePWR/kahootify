@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:kahootify_server/player.dart';
+import 'package:kahootify_server/players/abstract_player.dart';
+import 'package:kahootify_server/players/local_player.dart';
+import 'package:kahootify_server/players/web_player.dart';
 import 'package:tuple/tuple.dart';
 
 import 'const.dart';
@@ -10,14 +13,30 @@ import 'const.dart';
 class Server {
   final int maxPlayers;
   late final server;
-  Map<int, Player> knownPlayers = {};
+  Map<dynamic, AbstractPlayer> knownPlayers = {};
 
   Server(this.maxPlayers) {
     initialize();
   }
 
+  Server.isolate(this.maxPlayers, SendPort sendPort, bool withPlayer) {
+    ReceivePort receivePort = ReceivePort();
+    // Sending port to main
+    sendPort.send(receivePort.sendPort);
+
+    if (withPlayer) {
+      var player = LocalPlayer(0, sendPort);
+      knownPlayers[sendPort] = player;
+      receivePort.listen((data) {
+        handleData(data, player);
+      });
+    }
+    initialize();
+  }
+
   void initialize() async {
     server = await HttpServer.bind(kServerUrl, kServerPort, shared: true);
+    print("Server initialized");
     await for (HttpRequest req in server) {
       if (req.uri.path == '/') {
         var socket = await WebSocketTransformer.upgrade(req);
@@ -27,55 +46,78 @@ class Server {
           if (id != null) {
             handleConnectionProtocol(id, socket);
           } else {
-            handleData(data, socket);
+            var player = knownPlayers[socket];
+            if (player == null) {
+              print("Unauthorized connection");
+              socket.close(WebSocketStatus.normalClosure, "Unauthorized connection");
+            } else {
+              handleData(data, player);
+            }
           }
         });
       }
     }
   }
 
-  static void sayHello(SendPort sendPort) {
-    sendPort.send("Hello from Isolate");
-  }
-
   void handleConnectionProtocol(int id, WebSocket socket) {
-    if (wasPlayerConnected(id)) {
-      Player foundPlayer = knownPlayers[id]!;
-      foundPlayer.socket.close(WebSocketStatus.goingAway, "Reconnected player");
-      foundPlayer.socket = socket;
+    var entry = findByPlayerCode(id);
+    if (entry != null) {
+      knownPlayers[socket] = entry.value;
+      knownPlayers.remove(entry.key);
+      entry.value.reconnect(socket);
     } else {
       if (knownPlayers.length < maxPlayers) {
-        knownPlayers[id] = Player(id, socket);
+        knownPlayers[socket] = WebPlayer(id, socket);
       } else {
+        print("Number of players exceeded");
         socket.close(WebSocketStatus.normalClosure, "Number of players exceeded");
       }
     }
   }
 
-  bool wasPlayerConnected(int id) {
-    return knownPlayers.containsKey(id);
+  // return
+  MapEntry<dynamic, AbstractPlayer>? findByPlayerCode(int playerCode) {
+    for (var entry in knownPlayers.entries)
+      if (playerCode == entry.value.playerCode) {
+        return entry;
+      }
+    return null;
   }
 
-  void handleData(dynamic data, WebSocket socket) {
+  void handleData(dynamic data, AbstractPlayer player) {
     //  TODO handle data
+    print(data.toString() + " : " + player.playerCode.toString());
   }
 
   void sendDataToAll(dynamic data) {
     knownPlayers.forEach((key, player) {
       try {
-        player.socket.add(data);
+        player.send(data);
       } catch (e) {}
     });
   }
 }
 
-void _createRunningServer(Tuple2<SendPort, int> arguments) {
+void _createRunningServer(Tuple3<SendPort, int, bool> arguments) {
   var maxPlayers = arguments.item2;
-  Server(maxPlayers);
+  var sendPort = arguments.item1;
+  var withPlayer = arguments.item3;
+  Server.isolate(maxPlayers, sendPort, withPlayer);
 }
 
-Future<Tuple2<Isolate, ReceivePort>> spawnIsolateServer(int maxPlayers) async {
+Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(int maxPlayers, Function listener, bool withPlayer) async {
+  Completer completer = new Completer<SendPort>();
   ReceivePort receivePort = ReceivePort();
-  Isolate isolate = await Isolate.spawn(_createRunningServer, Tuple2(receivePort.sendPort, maxPlayers));
-  return Tuple2(isolate, receivePort);
+
+  receivePort.listen((data) {
+    if (data is SendPort) {
+      completer.complete(data);
+    } else {
+      listener(data);
+    }
+  });
+
+  Isolate isolate = await Isolate.spawn(_createRunningServer, Tuple3(receivePort.sendPort, maxPlayers, withPlayer));
+  var sendPort = await completer.future as SendPort;
+  return Tuple2(isolate, sendPort);
 }
