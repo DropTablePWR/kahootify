@@ -12,11 +12,11 @@ Future<void> main() async {
     print(data);
   };
 
-  var results = await spawnIsolateServer(5, listener);
+  var results = await spawnIsolateServer(3, listener, false);
   SendPort sendPort = results.item2;
 
   while (true) {
-    await Future.delayed(Duration(seconds: 5)).then((value) => sendPort.send("Main"));
+    await Future.delayed(Duration(seconds: 10)).then((value) => sendPort.send("Main"));
   }
 
   // Classic
