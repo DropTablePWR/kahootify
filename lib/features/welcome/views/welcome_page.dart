@@ -4,6 +4,7 @@ import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/features/game_config/views/game_config_page.dart';
+import 'package:kahootify/features/server_browsing/views/server_discovery_page.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
 
@@ -45,7 +46,7 @@ class _WelcomePageState extends State<WelcomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                kSelectGameMode,
+                "SELECT GAME MODE: ",
                 style: TextStyle(fontSize: 25, color: kBasedBlackColor),
               ),
               SizedBox(height: 35),
@@ -58,9 +59,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   ),
                   SizedBox(height: 50),
                   ChooseModeButton(
-                    onPressed: () {
-                      print("User wybrał player mode");
-                    }, //TODO funkcja od wyboru player mode
+                    onPressed: () => Navigator.of(context).push(ServerDiscoveryPage.route()),
                     text: "JOIN GAME",
                   ),
                   SizedBox(height: 50),

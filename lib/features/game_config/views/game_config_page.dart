@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
-import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/api/category.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_cubit.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_page/game_config_page_bloc.dart';
@@ -21,7 +20,7 @@ class GameConfigPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: kBackgroundLightColor,
         appBar: AppBar(
-          title: Text(kConfigGame),
+          title: Text("GAME CONFIGURATION"),
           backgroundColor: kBackgroundGreenColor,
         ),
         body: GameConfigPageView(),
