@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart' as http;
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/errors.dart';
-import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify/core/utils/network_analyzer.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
 class ServerDiscoveryRepository {
