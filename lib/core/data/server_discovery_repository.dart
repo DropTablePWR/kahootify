@@ -5,7 +5,7 @@ import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/errors.dart';
-import 'package:kahootify/core/models/server_info.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify/core/utils/network_analyzer.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
@@ -47,7 +47,7 @@ class ServerDiscoveryRepository {
         serverStatus: ServerStatus.lobby,
       ),
     ); //TODO remove when actual endpoint available
-    Uri uri;
+    /*Uri uri;
     uri = Uri.http(serverIp, "info");
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -57,6 +57,6 @@ class ServerDiscoveryRepository {
       return Left(ServerConnectionError());
     }
     var data = jsonDecode(response.body);
-    return Right(ServerInfo.fromJson(serverIp, data));
+    return Right(ServerInfo.fromJson(serverIp, data));*/
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
-import 'package:kahootify/core/models/server_info.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:meta/meta.dart';
 
 part 'server_discovery_event.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
-import 'package:kahootify/core/models/server_info.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify/features/server_browsing/bloc/server_discovery_bloc.dart';
 import 'package:web_socket_channel/io.dart';
 
