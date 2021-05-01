@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
-import 'package:kahootify/const.dart';
 import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/core/models/settings.dart';
 
@@ -35,7 +34,7 @@ class _SettingsPage extends State<SettingsPage> {
     return Scaffold(
       backgroundColor: kBackgroundLightColor,
       appBar: AppBar(
-        title: Text(kSettings),
+        title: Text("SETTINGS"),
         backgroundColor: kBackgroundGreenColor,
       ),
       body: SafeArea(

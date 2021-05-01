@@ -5,3 +5,5 @@ class ApiError extends Error {
 
   ApiError(this.reason);
 }
+
+class ServerConnectionError extends Error {}
