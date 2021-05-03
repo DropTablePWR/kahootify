@@ -5,15 +5,26 @@ abstract class ServerDiscoveryState {}
 
 class SearchingForServers extends ServerDiscoveryState {}
 
-class FoundServers extends ServerDiscoveryState {
+class FoundServersState extends ServerDiscoveryState {
+  final bool stillSearching;
   final List<ServerInfo> discoveredServers;
 
-  FoundServers(this.discoveredServers);
+  FoundServersState({required this.discoveredServers, this.stillSearching = true});
 
-  FoundServers addServer(ServerInfo serverInfo) {
+  FoundServersState addServer(ServerInfo serverInfo) {
     discoveredServers.add(serverInfo);
-    return FoundServers(discoveredServers);
+    return FoundServersState(discoveredServers: discoveredServers);
+  }
+
+  FoundServersState endSearch() {
+    return FoundServersState(discoveredServers: this.discoveredServers, stillSearching: false);
   }
 }
 
-class SearchingError extends ServerDiscoveryState {}
+class NoServersFound extends ServerDiscoveryState {}
+
+class SearchingErrorState extends ServerDiscoveryState {
+  final String reason;
+
+  SearchingErrorState(this.reason);
+}

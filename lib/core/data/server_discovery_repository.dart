@@ -1,49 +1,62 @@
 import 'dart:async';
 
-import 'package:dartz/dartz.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/errors.dart';
 import 'package:kahootify/core/utils/network_analyzer.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:wifi_iot/wifi_iot.dart';
 
+abstract class ServerDiscoveryStreamResult {}
+
+class FoundNewServer extends ServerDiscoveryStreamResult {
+  final String ip;
+
+  FoundNewServer(this.ip);
+}
+
+class EndOfSearch extends ServerDiscoveryStreamResult {}
+
+class ServerDiscoveryErrorResult extends ServerDiscoveryStreamResult {
+  final ServerDiscoveryError error;
+
+  ServerDiscoveryErrorResult(this.error);
+}
+
 class ServerDiscoveryRepository {
-  StreamController<String> _controller = StreamController<String>();
+  StreamController<ServerDiscoveryStreamResult> _controller = StreamController<ServerDiscoveryStreamResult>();
 
   ServerDiscoveryRepository() {
     startDiscovery();
   }
 
-  Stream<String> get serverDiscovery {
+  Stream<ServerDiscoveryStreamResult> get serverDiscovery {
     return _controller.stream;
   }
 
   void startDiscovery() async {
     final myIp = await WiFiForIoTPlugin.getIP();
     if (myIp == null) {
-      print("Discovery error");
+      _controller.add(ServerDiscoveryErrorResult(NoWifiConnectionError("No WIFI")));
       return;
     }
     final mySubnet = myIp.substring(0, myIp.lastIndexOf("."));
     final discoveryStream = NetworkAnalyzer.discover(mySubnet, kDefaultServerPort);
     discoveryStream.listen((NetworkAddress address) {
       if (address.exists) {
-        _controller.add(address.ip);
+        _controller.add(FoundNewServer(address.ip));
       }
     }).onDone(() {
-      print("Trzeba to będzie jeszcze powtórzyć");
+      _controller.add(EndOfSearch());
     });
   }
 
-  Future<Either<ServerConnectionError, ServerInfo>> getServerInfo(String serverIp) async {
-    return Right(
-      ServerInfo(
-        ip: serverIp,
-        name: "serverTest",
-        maxNumberOfPlayers: 6,
-        currentNumberOfPlayers: 2,
-        serverStatus: ServerStatus.lobby,
-      ),
+  Future<ServerInfo?> getServerInfo(String serverIp) async {
+    return ServerInfo(
+      ip: serverIp,
+      name: "serverTest",
+      maxNumberOfPlayers: 6,
+      currentNumberOfPlayers: 2,
+      serverStatus: ServerStatus.lobby,
     ); //TODO remove when actual endpoint available
     /*Uri uri;
     uri = Uri.http(serverIp, "info");
