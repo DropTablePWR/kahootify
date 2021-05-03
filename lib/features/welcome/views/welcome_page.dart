@@ -42,30 +42,32 @@ class _WelcomePageState extends State<WelcomePage> {
       ),
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "SELECT GAME MODE: ",
-                style: TextStyle(fontSize: 25, color: kBasedBlackColor),
-              ),
-              SizedBox(height: 35),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ChooseModeButton(
-                    onPressed: () => Navigator.of(context).push(GameConfigPage.route()),
-                    text: "HOST-GAME",
-                  ),
-                  SizedBox(height: 50),
-                  ChooseModeButton(
-                    onPressed: () => Navigator.of(context).push(ServerDiscoveryPage.route()),
-                    text: "JOIN GAME",
-                  ),
-                  SizedBox(height: 50),
-                ],
-              ),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "SELECT GAME MODE: ",
+                  style: TextStyle(fontSize: 25, color: kBasedBlackColor),
+                ),
+                SizedBox(height: 35),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ChooseModeButton(
+                      onPressed: () => Navigator.of(context).push(GameConfigPage.route()),
+                      text: "HOST-GAME",
+                    ),
+                    SizedBox(height: 50),
+                    ChooseModeButton(
+                      onPressed: () => Navigator.of(context).push(ServerDiscoveryPage.route()),
+                      text: "JOIN GAME",
+                    ),
+                    SizedBox(height: 50),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

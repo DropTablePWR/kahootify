@@ -40,45 +40,47 @@ class _SettingsPage extends State<SettingsPage> {
       body: SafeArea(
         child: BlocBuilder<SettingsCubit, Settings>(
           builder: (context, settings) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 35),
-                Center(
-                  child: Text(
-                    settings.playerName == null ? "PLAYERNAME" : settings.playerName!,
-                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 35),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-                  child: TextField(
-                    textCapitalization: TextCapitalization.characters,
-                    controller: playerNameInputController,
-                    cursorColor: kBackgroundGreenColor,
-                    decoration: InputDecoration(
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: kBackgroundGreenColor),
-                      ),
-                      labelText: 'Enter your username',
-                      labelStyle: TextStyle(color: kBackgroundGreenColor),
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 35),
+                  Center(
+                    child: Text(
+                      settings.playerName == null ? "PLAYERNAME" : settings.playerName!,
+                      style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-                SizedBox(height: 35),
-                _SoundSettingsTile(
-                  icon: settings.isMusicEnabled == true ? Icons.volume_up : Icons.volume_off,
-                  value: settings.isMusicEnabled,
-                  onChanged: (value) => context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: !settings.isMusicEnabled),
-                ),
-                SizedBox(height: 35),
-                _SoundSettingsTile(
-                  icon: settings.isSfxEnabled == true ? Icons.music_note : Icons.music_off,
-                  value: settings.isSfxEnabled,
-                  onChanged: (value) => context.read<SettingsCubit>().setSfxEnabled(isSfxEnabled: !settings.isSfxEnabled),
-                ),
-              ],
+                  SizedBox(height: 35),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                    child: TextField(
+                      textCapitalization: TextCapitalization.characters,
+                      controller: playerNameInputController,
+                      cursorColor: kBackgroundGreenColor,
+                      decoration: InputDecoration(
+                        focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: kBackgroundGreenColor),
+                        ),
+                        labelText: 'Enter your username',
+                        labelStyle: TextStyle(color: kBackgroundGreenColor),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 35),
+                  _SoundSettingsTile(
+                    icon: settings.isMusicEnabled == true ? Icons.volume_up : Icons.volume_off,
+                    value: settings.isMusicEnabled,
+                    onChanged: (value) => context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: !settings.isMusicEnabled),
+                  ),
+                  SizedBox(height: 35),
+                  _SoundSettingsTile(
+                    icon: settings.isSfxEnabled == true ? Icons.music_note : Icons.music_off,
+                    value: settings.isSfxEnabled,
+                    onChanged: (value) => context.read<SettingsCubit>().setSfxEnabled(isSfxEnabled: !settings.isSfxEnabled),
+                  ),
+                ],
+              ),
             );
           },
         ),
