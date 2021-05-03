@@ -203,7 +203,7 @@ class _DiscoveredServerListItem extends StatelessWidget {
                   width: 60,
                   height: 60,
                   child: CircularProgressIndicator(
-                    color: kBasedBlackColor,
+                    valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
                     strokeWidth: 10,
                     value: serverInfo.currentNumberOfPlayers / serverInfo.maxNumberOfPlayers,
                   ),
