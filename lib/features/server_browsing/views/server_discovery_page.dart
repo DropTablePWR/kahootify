@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
-import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify/features/server_browsing/bloc/server_discovery_bloc.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:web_socket_channel/io.dart';
 
 class ServerDiscoveryPage extends StatelessWidget {
@@ -28,9 +28,9 @@ class _ServerDiscoveryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ServerDiscoveryBloc, ServerDiscoveryState>(
       builder: (context, state) {
-        if (state is SearchingError) {
+        if (state is SearchingErrorState) {
           return Text("error");
-        } else if (state is FoundServers) {
+        } else if (state is FoundServersState) {
           return ListView.builder(
             itemCount: state.discoveredServers.length,
             itemBuilder: (context, index) => _DiscoveredServerListItem(serverInfo: state.discoveredServers[index]),

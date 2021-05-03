@@ -6,4 +6,14 @@ class ApiError extends Error {
   ApiError(this.reason);
 }
 
+class ServerDiscoveryError {
+  final String message;
+
+  ServerDiscoveryError(this.message);
+}
+
+class NoWifiConnectionError extends ServerDiscoveryError {
+  NoWifiConnectionError(String message) : super(message);
+}
+
 class ServerConnectionError extends Error {}
