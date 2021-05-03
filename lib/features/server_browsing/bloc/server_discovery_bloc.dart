@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
 import 'package:kahootify/core/models/errors.dart';
 import 'package:kahootify_server/models/server_info.dart';

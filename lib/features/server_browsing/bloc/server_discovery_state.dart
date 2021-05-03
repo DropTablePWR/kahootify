@@ -1,9 +1,12 @@
 part of 'server_discovery_bloc.dart';
 
 @immutable
-abstract class ServerDiscoveryState {}
+abstract class ServerDiscoveryState extends Equatable {}
 
-class SearchingForServers extends ServerDiscoveryState {}
+class SearchingForServers extends ServerDiscoveryState {
+  @override
+  List<Object?> get props => [];
+}
 
 class FoundServersState extends ServerDiscoveryState {
   final bool stillSearching;
@@ -19,12 +22,21 @@ class FoundServersState extends ServerDiscoveryState {
   FoundServersState endSearch() {
     return FoundServersState(discoveredServers: this.discoveredServers, stillSearching: false);
   }
+
+  @override
+  List<Object?> get props => [discoveredServers, stillSearching];
 }
 
-class NoServersFound extends ServerDiscoveryState {}
+class NoServersFound extends ServerDiscoveryState {
+  @override
+  List<Object?> get props => [];
+}
 
 class SearchingErrorState extends ServerDiscoveryState {
   final String reason;
 
   SearchingErrorState(this.reason);
+
+  @override
+  List<Object?> get props => [];
 }
