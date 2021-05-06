@@ -1,8 +1,9 @@
-import 'package:enum_to_string/enum_to_string.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kahootify_server/models/data.dart';
 
-enum ServerStatus { lobby, inGame, results }
+part 'server_info.g.dart';
 
+@JsonSerializable()
 class ServerInfo extends Data {
   final String ip;
   final String name;
@@ -11,13 +12,13 @@ class ServerInfo extends Data {
   final ServerStatus serverStatus;
 
   ServerInfo({required this.ip, required this.name, required this.maxNumberOfPlayers, required this.currentNumberOfPlayers, required this.serverStatus})
-      : super(DataType.ServerInfo);
+      : super(DataType.serverInfo);
 
   ServerInfo.init({required this.name, required this.maxNumberOfPlayers})
       : currentNumberOfPlayers = 0,
         serverStatus = ServerStatus.lobby,
         ip = 'localhost',
-        super(DataType.ServerInfo);
+        super(DataType.serverInfo);
 
   copyWith({String? ip, String? name, int? maxNumberOfPlayers, int? currentNumberOfPlayers, ServerStatus? serverStatus}) {
     return ServerInfo(
@@ -29,21 +30,9 @@ class ServerInfo extends Data {
     );
   }
 
-  ServerInfo.fromJson(String ip, Map<String, dynamic> json)
-      : ip = ip,
-        name = json['name'],
-        maxNumberOfPlayers = json['maxNumberOfPlayers'],
-        currentNumberOfPlayers = json['currentNumberOfPlayers'],
-        serverStatus = EnumToString.fromString(ServerStatus.values, json['serverStatus'])!,
-        super.fromJson(json);
+  factory ServerInfo.fromJson(Map<String, dynamic> json) => _$ServerInfoFromJson(json);
 
-  @override
-  Map<String, dynamic> toJson() {
-    var result = super.toJson();
-    result['name'] = name;
-    result['maxNumberOfPlayers'] = maxNumberOfPlayers;
-    result['currentNumberOfPlayers'] = currentNumberOfPlayers;
-    result['serverStatus'] = EnumToString.convertToString(serverStatus);
-    return result;
-  }
+  Map<String, dynamic> toJson() => _$ServerInfoToJson(this);
 }
+
+enum ServerStatus { lobby, inGame, results }

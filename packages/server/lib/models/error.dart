@@ -1,18 +1,15 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:kahootify_server/models/data.dart';
 
+part 'error.g.dart';
+
+@JsonSerializable()
 class Error extends Data {
   String message;
 
-  Error(this.message) : super(DataType.Error);
+  Error(this.message) : super(DataType.error);
 
-  @override
-  Map<String, dynamic> toJson() {
-    var result = super.toJson();
-    result['message'] = message;
-    return result;
-  }
+  factory Error.fromJson(Map<String, dynamic> json) => _$ErrorFromJson(json);
 
-  Error.fromJson(Map<String, dynamic> json)
-      : message = json['message'],
-        super.fromJson(json);
+  Map<String, dynamic> toJson() => _$ErrorToJson(this);
 }

@@ -1,21 +1,16 @@
-import 'package:enum_to_string/enum_to_string.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-abstract class Data {
+part 'data.g.dart';
+
+@JsonSerializable()
+class Data {
   late DataType dataType;
 
   Data(this.dataType);
 
-  Data.fromJson(Map<String, dynamic> json) {
-    var type = EnumToString.fromString(DataType.values, json['type']);
-    if (type == null)
-      dataType = DataType.Unknown;
-    else
-      dataType = type;
-  }
+  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
 
-  Map<String, dynamic> toJson() {
-    return {'type': EnumToString.convertToString(dataType)};
-  }
+  Map<String, dynamic> toJson() => _$DataToJson(this);
 }
 
-enum DataType { ServerInfo, UserInfo, Unknown, Error }
+enum DataType { serverInfo, userInfo, unknown, error }
