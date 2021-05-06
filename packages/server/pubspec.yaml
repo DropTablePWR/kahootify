@@ -8,6 +8,15 @@ environment:
 dependencies:
   ping_discover_network: ^0.2.0+1
   wifi: ^0.1.5
-  web_socket_channel: ^2.0.0
+  web_socket_channel: ^2.1.0
   tuple: ^2.0.0
+  json_annotation: ^4.0.1
+
+
+dev_dependencies:
+  build_runner: ^2.0.2
+  json_serializable: ^4.1.1
+
+
+
 
