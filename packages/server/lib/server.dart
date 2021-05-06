@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
+import 'package:kahootify_server/models/Error.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/local_player.dart';
 import 'package:kahootify_server/players/web_player.dart';
@@ -11,15 +13,15 @@ import 'package:tuple/tuple.dart';
 import 'const.dart';
 
 class Server {
-  final int maxPlayers;
+  ServerInfo serverInfo;
   late final server;
   Map<dynamic, AbstractPlayer> knownPlayers = {};
 
-  Server(this.maxPlayers) {
+  Server(this.serverInfo) {
     initialize();
   }
 
-  Server.isolate(this.maxPlayers, SendPort sendPort, bool withPlayer) {
+  Server.isolate(this.serverInfo, SendPort sendPort, bool withPlayer) {
     ReceivePort receivePort = ReceivePort();
     // Sending port to main
     sendPort.send(receivePort.sendPort);
@@ -39,22 +41,33 @@ class Server {
     print("Server initialized");
     await for (HttpRequest req in server) {
       if (req.uri.path == '/') {
-        var socket = await WebSocketTransformer.upgrade(req);
-        socket.listen((event) {
-          var data = jsonDecode(event);
-          var id = data['id'];
-          if (id != null) {
-            handleConnectionProtocol(id, socket);
-          } else {
-            var player = knownPlayers[socket];
-            if (player == null) {
-              print("Unauthorized connection");
-              socket.close(WebSocketStatus.normalClosure, "Unauthorized connection");
-            } else {
-              handleData(data, player);
+        try {
+          var socket = await WebSocketTransformer.upgrade(req);
+          socket.listen((event) {
+            try {
+              var data = jsonDecode(event);
+              var id = data['id'];
+              if (id != null) {
+                handleConnectionProtocol(id, socket);
+              } else {
+                var player = knownPlayers[socket];
+                if (player == null) {
+                  print("Unauthorized connection");
+                  socket.close(WebSocketStatus.normalClosure, "Unauthorized connection");
+                } else {
+                  handleData(data, player);
+                }
+              }
+            } catch (e) {
+              socket.add(Error("Invalid data").toJson());
             }
-          }
-        });
+          });
+        } catch (e) {
+          req.response.write(Error("Something went wrong").toJson());
+        }
+      } else if (req.uri.path == '/info') {
+        var z = serverInfo.toJson();
+        req.response.write(z);
       }
     }
   }
@@ -66,7 +79,7 @@ class Server {
       knownPlayers.remove(entry.key);
       entry.value.reconnect(socket);
     } else {
-      if (knownPlayers.length < maxPlayers) {
+      if (knownPlayers.length < serverInfo.maxNumberOfPlayers) {
         knownPlayers[socket] = WebPlayer(id, socket);
       } else {
         print("Number of players exceeded");
@@ -98,14 +111,14 @@ class Server {
   }
 }
 
-void _createRunningServer(Tuple3<SendPort, int, bool> arguments) {
-  var maxPlayers = arguments.item2;
+void _createRunningServer(Tuple3<SendPort, ServerInfo, bool> arguments) {
+  var serverInfo = arguments.item2;
   var sendPort = arguments.item1;
   var withPlayer = arguments.item3;
-  Server.isolate(maxPlayers, sendPort, withPlayer);
+  Server.isolate(serverInfo, sendPort, withPlayer);
 }
 
-Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(int maxPlayers, Function listener, bool withPlayer) async {
+Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(ServerInfo serverInfo, Function listener, bool withPlayer) async {
   Completer completer = new Completer<SendPort>();
   ReceivePort receivePort = ReceivePort();
 
@@ -117,7 +130,7 @@ Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(int maxPlayers, Function li
     }
   });
 
-  Isolate isolate = await Isolate.spawn(_createRunningServer, Tuple3(receivePort.sendPort, maxPlayers, withPlayer));
+  Isolate isolate = await Isolate.spawn(_createRunningServer, Tuple3(receivePort.sendPort, serverInfo, withPlayer));
   var sendPort = await completer.future as SendPort;
   return Tuple2(isolate, sendPort);
 }

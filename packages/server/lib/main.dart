@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/server.dart';
 
 // Test Server
@@ -11,8 +12,10 @@ Future<void> main() async {
   Function listener = (dynamic data) {
     print(data);
   };
+  // first config
+  ServerInfo serverInfo = ServerInfo.init(name: "test", maxNumberOfPlayers: 5);
 
-  var results = await spawnIsolateServer(3, listener, true);
+  var results = await spawnIsolateServer(serverInfo, listener, true);
   SendPort sendPort = results.item2;
 
   while (true) {
