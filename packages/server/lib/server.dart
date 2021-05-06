@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 
-import 'package:kahootify_server/models/Error.dart';
+import 'package:kahootify_server/models/error.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/local_player.dart';
@@ -63,11 +63,11 @@ class Server {
             }
           });
         } catch (e) {
-          req.response.write(Error("Something went wrong").toJson());
+          print("Invalid upgrade");
         }
       } else if (req.uri.path == '/info') {
-        var z = serverInfo.toJson();
-        req.response.write(z);
+        req.response.write(_getActualServerInfo().toJson());
+        await req.response.close();
       }
     }
   }
@@ -86,6 +86,11 @@ class Server {
         socket.close(WebSocketStatus.normalClosure, "Number of players exceeded");
       }
     }
+  }
+
+  ServerInfo _getActualServerInfo() {
+    serverInfo.currentNumberOfPlayers = knownPlayers.length;
+    return serverInfo;
   }
 
   // return

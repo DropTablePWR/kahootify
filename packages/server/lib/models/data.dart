@@ -1,10 +1,12 @@
+import 'package:enum_to_string/enum_to_string.dart';
+
 abstract class Data {
   late DataType dataType;
 
   Data(this.dataType);
 
   Data.fromJson(Map<String, dynamic> json) {
-    var type = json['type'];
+    var type = EnumToString.fromString(DataType.values, json['type']);
     if (type == null)
       dataType = DataType.Unknown;
     else
@@ -12,7 +14,7 @@ abstract class Data {
   }
 
   Map<String, dynamic> toJson() {
-    return {'type': dataType.toString()};
+    return {'type': EnumToString.convertToString(dataType)};
   }
 }
 

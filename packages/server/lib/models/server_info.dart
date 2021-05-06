@@ -1,3 +1,4 @@
+import 'package:enum_to_string/enum_to_string.dart';
 import 'package:kahootify_server/models/data.dart';
 
 enum ServerStatus { lobby, inGame, results }
@@ -6,7 +7,7 @@ class ServerInfo extends Data {
   final String ip;
   final String name;
   final int maxNumberOfPlayers;
-  final int currentNumberOfPlayers;
+  int currentNumberOfPlayers;
   final ServerStatus serverStatus;
 
   ServerInfo({required this.ip, required this.name, required this.maxNumberOfPlayers, required this.currentNumberOfPlayers, required this.serverStatus})
@@ -33,7 +34,7 @@ class ServerInfo extends Data {
         name = json['name'],
         maxNumberOfPlayers = json['maxNumberOfPlayers'],
         currentNumberOfPlayers = json['currentNumberOfPlayers'],
-        serverStatus = json['serverStatus'],
+        serverStatus = EnumToString.fromString(ServerStatus.values, json['serverStatus'])!,
         super.fromJson(json);
 
   @override
@@ -42,7 +43,7 @@ class ServerInfo extends Data {
     result['name'] = name;
     result['maxNumberOfPlayers'] = maxNumberOfPlayers;
     result['currentNumberOfPlayers'] = currentNumberOfPlayers;
-    result['serverStatus'] = serverStatus.toString();
+    result['serverStatus'] = EnumToString.convertToString(serverStatus);
     return result;
   }
 }
