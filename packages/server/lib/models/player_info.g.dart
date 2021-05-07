@@ -12,7 +12,8 @@ PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
     json['name'] as String,
   )
     ..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType'])
-    ..score = (json['score'] as num).toDouble();
+    ..score = (json['score'] as num).toDouble()
+    ..ready = json['ready'] as bool;
 }
 
 Map<String, dynamic> _$PlayerInfoToJson(PlayerInfo instance) => <String, dynamic>{
@@ -20,6 +21,7 @@ Map<String, dynamic> _$PlayerInfoToJson(PlayerInfo instance) => <String, dynamic
       'id': instance.id,
       'name': instance.name,
       'score': instance.score,
+      'ready': instance.ready,
     };
 
 K _$enumDecode<K, V>(
@@ -53,4 +55,5 @@ const _$DataTypeEnumMap = {
   DataType.playerInfo: 'playerInfo',
   DataType.unknown: 'unknown',
   DataType.error: 'error',
+  DataType.playersInfo: 'playersInfo',
 };

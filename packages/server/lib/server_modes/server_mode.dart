@@ -64,11 +64,9 @@ abstract class ServerMode {
         handlePlayerInfo(PlayerInfo.fromJson(json), player);
         break;
       case DataType.unknown:
-        // TODO: Handle this case.
-        break;
       case DataType.error:
-        // TODO: Handle this case.
-        break;
+      case DataType.playersInfo:
+        player.send(ErrorInfo("Unsupported operation").toJson());
     }
   }
 
