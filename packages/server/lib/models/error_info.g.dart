@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'error.dart';
+part of 'error_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Error _$ErrorFromJson(Map<String, dynamic> json) {
-  return Error(
+ErrorInfo _$ErrorInfoFromJson(Map<String, dynamic> json) {
+  return ErrorInfo(
     json['message'] as String,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$ErrorToJson(Error instance) => <String, dynamic>{
+Map<String, dynamic> _$ErrorInfoToJson(ErrorInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'message': instance.message,
     };
@@ -45,7 +45,7 @@ K _$enumDecode<K, V>(
 
 const _$DataTypeEnumMap = {
   DataType.serverInfo: 'serverInfo',
-  DataType.userInfo: 'userInfo',
+  DataType.playerInfo: 'playerInfo',
   DataType.unknown: 'unknown',
   DataType.error: 'error',
 };

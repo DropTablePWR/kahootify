@@ -59,7 +59,7 @@ const _$ServerStatusEnumMap = {
 
 const _$DataTypeEnumMap = {
   DataType.serverInfo: 'serverInfo',
-  DataType.userInfo: 'userInfo',
+  DataType.playerInfo: 'playerInfo',
   DataType.unknown: 'unknown',
   DataType.error: 'error',
 };
