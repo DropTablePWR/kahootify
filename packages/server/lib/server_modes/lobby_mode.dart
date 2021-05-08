@@ -1,3 +1,4 @@
+import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
@@ -20,6 +21,19 @@ class LobbyMode extends ServerMode {
     playerInfo.score = player.playerInfo.score;
     player.playerInfo = playerInfo;
     server.sendDataToAll(playerInfo.toJson());
+    if (_everyoneIsReady()) {
+      server.sendDataToAll(Data(DataType.gameStarted).toJson());
+      server.serverMode = nextMode();
+    }
+  }
+
+  bool _everyoneIsReady() {
+    for (AbstractPlayer player in server.knownPlayers.values) {
+      if (player.playerInfo.ready == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @override

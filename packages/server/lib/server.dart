@@ -5,7 +5,7 @@ import 'dart:isolate';
 
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
-import 'package:kahootify_server/models/players_info.dart';
+import 'package:kahootify_server/models/player_list_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/local_player.dart';
@@ -90,9 +90,9 @@ class Server {
     _serverInfo = value;
   }
 
-  void sendAllPlayersInfo() {
+  void sendAllPlayerListInfo() {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
-    var data = PlayersInfo(players);
+    var data = PlayerListInfo(players);
     sendDataToAll(data.toJson());
   }
 
