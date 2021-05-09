@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
+import 'package:kahootify_server/models/player_list_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/local_player.dart';
@@ -35,6 +36,7 @@ class Server {
     if (playerInfo != null) {
       var player = LocalPlayer(playerInfo, sendPort);
       knownPlayers[sendPort] = player;
+      player.send(serverInfo.toJson());
       receivePort.listen((event) {
         serverMode.dataListener(event, player);
       });
@@ -86,6 +88,12 @@ class Server {
 
   set serverInfo(ServerInfo value) {
     _serverInfo = value;
+  }
+
+  void sendAllPlayerListInfo() {
+    var players = knownPlayers.values.map((e) => e.playerInfo).toList();
+    var data = PlayerListInfo(players);
+    sendDataToAll(data.toJson());
   }
 
   void sendDataToAll(dynamic data) {

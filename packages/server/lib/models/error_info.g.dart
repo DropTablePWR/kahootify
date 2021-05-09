@@ -48,4 +48,6 @@ const _$DataTypeEnumMap = {
   DataType.playerInfo: 'playerInfo',
   DataType.unknown: 'unknown',
   DataType.error: 'error',
+  DataType.playerListInfo: 'playerListInfo',
+  DataType.gameStarted: 'gameStarted',
 };

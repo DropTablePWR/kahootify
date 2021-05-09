@@ -13,16 +13,3 @@ class ErrorInfo extends Data {
 
   Map<String, dynamic> toJson() => _$ErrorInfoToJson(this);
 }
-
-// var id = data['id'];
-// if (id != null) {
-// serverMode.handleConnectionProtocol(id, socket);
-// } else {
-// var player = knownPlayers[socket];
-// if (player == null) {
-// print("Unauthorized connection");
-// socket.close(WebSocketStatus.normalClosure, "Unauthorized connection");
-// } else {
-// serverMode.handleData(data, player);
-// }
-// }

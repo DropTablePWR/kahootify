@@ -8,6 +8,7 @@ class PlayerInfo extends Data {
   int id;
   String name;
   double score = 0.0;
+  bool ready = false;
 
   PlayerInfo(this.id, this.name) : super(DataType.playerInfo);
 
