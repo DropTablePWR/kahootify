@@ -1,6 +1,5 @@
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -20,15 +19,17 @@ class _LobbyPageState extends State<LobbyPage> {
   QrImage qrImage = QrImage(
     data: "1234567890",
     version: QrVersions.auto,
-    size: 200.0,
+    size: 300.0,
   );
 
-  bool iAmReady = false;
+  bool iAmReady = true;
+  bool isPlayer = true;
+  bool allReady = true;
 
   final maxNumberOfPlayers = 10;
   final numberOfPlayers = 7;
   String category = 'History';
-  String serverName = 'Serer testowy';
+  String serverName = 'SERVER';
   final numberOfQuestions = 20;
   final answerTimeLimit = 13;
 
@@ -67,26 +68,36 @@ class _LobbyPageState extends State<LobbyPage> {
           answerTimeLimit: answerTimeLimit),
       frontLayer: Scaffold(
         backgroundColor: kBackgroundLightColor,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: FlutterSwitch(
-            valueFontSize: 10.0,
-            width: 110,
-            borderRadius: 30.0,
-            value: iAmReady,
-            activeText: "I am ready",
-            inactiveText: "I am not ready",
-            activeColor: kBackgroundGreenColor,
-            showOnOff: true,
-            onToggle: (value) {
-              setState(() {
-                iAmReady = value;
-                print("I'M READY!!!");
-                //TODO Zmiana stanu na ready
-              });
-            },
-          ),
-        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: isPlayer
+            ? FloatingActionButton.extended(
+                backgroundColor: iAmReady ? kBackgroundGreenColor : kBasedBlackColor,
+                label: Text(iAmReady ? "I am ready" : "I am not ready"),
+                onPressed: () {
+                  setState(() {
+                    iAmReady = !iAmReady;
+                    print(iAmReady.toString());
+                    //TODO Zmiana stanu na ready
+                  });
+                },
+                icon: Icon(iAmReady ? Icons.check : Icons.clear, color: Colors.white, size: 50),
+                shape: OutlineInputBorder(),
+              )
+            : allReady
+                ? FloatingActionButton.extended(
+                    backgroundColor: kBackgroundGreenColor,
+                    label: Text("Start a game"),
+                    onPressed: () {
+                      setState(() {
+                        iAmReady = !iAmReady;
+                        print("Start a game");
+                        //TODO Rozpoczęcie rozgrywki
+                      });
+                    },
+                    icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
+                    shape: OutlineInputBorder(),
+                  )
+                : Text(''),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: ListView(
@@ -153,10 +164,12 @@ class _BackLayer extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.videogame_asset, size: 60),
+                SizedBox(width: 30),
                 Flexible(
                   child: Text(
                     serverName,
@@ -165,10 +178,12 @@ class _BackLayer extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.category, size: 60),
+                SizedBox(width: 30),
                 Flexible(
                   child: Text(
                     category,
@@ -177,10 +192,12 @@ class _BackLayer extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.format_list_numbered_outlined, size: 60),
+                SizedBox(width: 30),
                 Flexible(
                   child: Text(
                     numberOfQuestions.toString(),
@@ -189,10 +206,12 @@ class _BackLayer extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.timelapse, size: 60),
+                SizedBox(width: 30),
                 Flexible(
                   child: Text(
                     answerTimeLimit.toString() + ' s',
@@ -201,25 +220,20 @@ class _BackLayer extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 30),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Icon(Icons.people, size: 60),
-                Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 60,
-                        height: 60,
-                        child: CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
-                          strokeWidth: 10,
-                          value: numberOfPlayers / maxNumberOfPlayers,
-                        ),
-                      ),
-                    ),
-                    Center(child: Text("$numberOfPlayers/$maxNumberOfPlayers", style: TextStyle(color: kBasedBlackColor, fontSize: 20))),
-                  ],
+                SizedBox(width: 30),
+                Container(
+                  width: 70,
+                  height: 70,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
+                    strokeWidth: 10,
+                    value: numberOfPlayers / maxNumberOfPlayers,
+                  ),
                 ),
               ],
             ),
