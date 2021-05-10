@@ -2,6 +2,7 @@ import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:kahootify/color_consts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -15,6 +16,12 @@ class _LobbyPageState extends State<LobbyPage> {
     {'nick': 'Player3', 'isReady': true},
     {'nick': 'Player4', 'isReady': false}
   ];
+
+  QrImage qrImage = QrImage(
+    data: "1234567890",
+    version: QrVersions.auto,
+    size: 200.0,
+  );
 
   bool iAmReady = false;
 
@@ -33,6 +40,23 @@ class _LobbyPageState extends State<LobbyPage> {
       appBar: BackdropAppBar(
         title: Text("LOBBY"),
         backgroundColor: kBackgroundGreenColor,
+        actions: [
+          Padding(
+              padding: EdgeInsets.only(right: 20.0),
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: qrImage,
+                      );
+                    },
+                  );
+                },
+                child: Icon(Icons.qr_code),
+              )),
+        ],
       ),
       backLayer: _BackLayer(
           maxNumberOfPlayers: maxNumberOfPlayers,
@@ -42,6 +66,7 @@ class _LobbyPageState extends State<LobbyPage> {
           numberOfQuestions: numberOfQuestions,
           answerTimeLimit: answerTimeLimit),
       frontLayer: Scaffold(
+        backgroundColor: kBackgroundLightColor,
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: FlutterSwitch(
@@ -123,15 +148,83 @@ class _BackLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Server name: ' + serverName),
-          Text('Question category: ' + category),
-          Text('Number of questions: ' + numberOfQuestions.toString()),
-          Text('Time for an answer: ' + answerTimeLimit.toString()),
-          Text('Game`s attendance: ' + '$numberOfPlayers/$maxNumberOfPlayers'),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 30),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.videogame_asset, size: 60),
+                Flexible(
+                  child: Text(
+                    serverName,
+                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.category, size: 60),
+                Flexible(
+                  child: Text(
+                    category,
+                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.format_list_numbered_outlined, size: 60),
+                Flexible(
+                  child: Text(
+                    numberOfQuestions.toString(),
+                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.timelapse, size: 60),
+                Flexible(
+                  child: Text(
+                    answerTimeLimit.toString() + ' s',
+                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Icon(Icons.people, size: 60),
+                Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
+                          strokeWidth: 10,
+                          value: numberOfPlayers / maxNumberOfPlayers,
+                        ),
+                      ),
+                    ),
+                    Center(child: Text("$numberOfPlayers/$maxNumberOfPlayers", style: TextStyle(color: kBasedBlackColor, fontSize: 20))),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
