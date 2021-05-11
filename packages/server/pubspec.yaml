@@ -13,11 +13,6 @@ dependencies:
   json_annotation: ^4.0.1
 
 
-dev_dependencies:
-  test: ^1.17.3
-  build_runner: ^2.0.2
-  json_serializable: ^4.1.1
-
 
 
 
