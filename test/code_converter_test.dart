@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:kahootify_server/utils/code_converter.dart';
 
-
 main() {
   test('Ip should be correctly encoded and decoded', () {
     for (var i = 0; i < 255; i++) {
