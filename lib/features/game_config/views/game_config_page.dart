@@ -6,6 +6,7 @@ import 'package:kahootify/features/game_config/bloc/game_config_cubit.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_page/game_config_page_bloc.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/lobby/views/lobby_page.dart';
+import 'package:kahootify/widgets/text_fields/default_text_field.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class GameConfigPage extends StatelessWidget {
@@ -87,18 +88,7 @@ class _GameConfigPageView extends State<GameConfigPageView> {
                           style: TextStyle(fontSize: 25, color: kBasedBlackColor, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 30),
-                        TextField(
-                          textCapitalization: TextCapitalization.characters,
-                          controller: gameNameInputController,
-                          cursorColor: kBackgroundGreenColor,
-                          decoration: InputDecoration(
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: kBackgroundGreenColor),
-                            ),
-                            labelText: 'Enter your game name',
-                            labelStyle: TextStyle(color: kBackgroundGreenColor),
-                          ),
-                        ),
+                        DefaultTextField(label: 'Enter your game name', controller: gameNameInputController),
                         SizedBox(height: 35),
                         DropdownButtonFormField<Category>(
                           value: gameConfig.category,
@@ -115,7 +105,6 @@ class _GameConfigPageView extends State<GameConfigPageView> {
                           ),
                           onChanged: (Category? category) {
                             context.read<GameConfigCubit>().setCategory(category!);
-                            print("wybrałeś: " + category.name);
                           },
                           items: pageState.availableCategories.map((category) {
                             return DropdownMenuItem(

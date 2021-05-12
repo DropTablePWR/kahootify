@@ -1,28 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_info.dart';
+part of 'error_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ServerInfo _$ServerInfoFromJson(Map<String, dynamic> json) {
-  return ServerInfo(
-    ip: json['ip'] as String,
-    name: json['name'] as String,
-    maxNumberOfPlayers: json['maxNumberOfPlayers'] as int,
-    currentNumberOfPlayers: json['currentNumberOfPlayers'] as int,
-    serverStatus: _$enumDecode(_$ServerStatusEnumMap, json['serverStatus']),
+ErrorInfo _$ErrorInfoFromJson(Map<String, dynamic> json) {
+  return ErrorInfo(
+    json['message'] as String,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$ErrorInfoToJson(ErrorInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
-      'ip': instance.ip,
-      'name': instance.name,
-      'maxNumberOfPlayers': instance.maxNumberOfPlayers,
-      'currentNumberOfPlayers': instance.currentNumberOfPlayers,
-      'serverStatus': _$ServerStatusEnumMap[instance.serverStatus],
+      'message': instance.message,
     };
 
 K _$enumDecode<K, V>(
@@ -50,12 +42,6 @@ K _$enumDecode<K, V>(
     },
   ).key;
 }
-
-const _$ServerStatusEnumMap = {
-  ServerStatus.lobby: 'lobby',
-  ServerStatus.inGame: 'inGame',
-  ServerStatus.results: 'results',
-};
 
 const _$DataTypeEnumMap = {
   DataType.serverInfo: 'serverInfo',

@@ -44,7 +44,9 @@ K _$enumDecode<K, V>(
 
 const _$DataTypeEnumMap = {
   DataType.serverInfo: 'serverInfo',
-  DataType.userInfo: 'userInfo',
+  DataType.playerInfo: 'playerInfo',
   DataType.unknown: 'unknown',
   DataType.error: 'error',
+  DataType.playerListInfo: 'playerListInfo',
+  DataType.gameStarted: 'gameStarted',
 };

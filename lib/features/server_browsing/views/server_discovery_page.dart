@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
+import 'package:kahootify/features/manual_server_connection/views/qr_code_scan_page.dart';
 import 'package:kahootify/features/server_browsing/bloc/server_discovery_bloc.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:web_socket_channel/io.dart';
@@ -18,20 +19,9 @@ class ServerDiscoveryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundLightColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          print("Teraz chcę się połączyć za pomocą qr kodu lub zwykłego kodu");
-          //TODO Arkadiusz Mirecki - KAH-28, KAH-12
-        },
-        child: const Icon(Icons.qr_code, color: kBackgroundLightColor),
-        backgroundColor: kBasedBlackColor,
-      ),
-      body: BlocProvider<ServerDiscoveryBloc>(
-        create: (context) => ServerDiscoveryBloc(repository: serverDiscoveryRepository),
-        child: _ServerDiscoveryView(),
-      ),
+    return BlocProvider<ServerDiscoveryBloc>(
+      create: (context) => ServerDiscoveryBloc(repository: serverDiscoveryRepository),
+      child: _ServerDiscoveryView(),
     );
   }
 }
@@ -133,6 +123,11 @@ class _ServerDiscoveryView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: kBackgroundLightColor,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrCodeScanPage())),
+            child: const Icon(Icons.qr_code, color: kBackgroundLightColor),
+            backgroundColor: kBasedBlackColor,
+          ),
           appBar: AppBar(
             title: Text("AVAILABLE SERVERS"),
             backgroundColor: kBackgroundGreenColor,
