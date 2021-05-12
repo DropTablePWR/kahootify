@@ -5,6 +5,7 @@ import 'package:kahootify/core/models/api/category.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_cubit.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_page/game_config_page_bloc.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
+import 'package:kahootify/features/lobby/views/lobby_page.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class GameConfigPage extends StatelessWidget {
@@ -26,6 +27,7 @@ class GameConfigPage extends StatelessWidget {
         body: GameConfigPageView(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => LobbyPage()));
             print("Gotowe i zaakceptowane - przechodzimy do następnego ekranu");
             //TODO tutaj będzię przejście do następnego ekranu, po ustawieniu parametrów gry
           },

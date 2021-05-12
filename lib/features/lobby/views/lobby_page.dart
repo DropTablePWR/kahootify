@@ -13,7 +13,6 @@ class _LobbyPageState extends State<LobbyPage> {
     {'nick': 'Player1', 'isReady': true},
     {'nick': 'Player2', 'isReady': false},
     {'nick': 'Player3', 'isReady': true},
-    {'nick': 'Player4', 'isReady': false}
   ];
 
   bool iAmReady = true;
@@ -38,33 +37,39 @@ class _LobbyPageState extends State<LobbyPage> {
         backgroundColor: kBackgroundGreenColor,
         actions: [
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        content: QrImage(
+            padding: EdgeInsets.only(right: 20.0),
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      content: Container(
+                        height: 300,
+                        width: 300,
+                        child: QrImage(
                           data: qrData,
                           version: QrVersions.auto,
                           size: 300.0,
                         ),
-                      );
-                    },
-                  );
-                },
-                child: Icon(Icons.qr_code),
-              )),
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.qr_code),
+            ),
+          ),
         ],
       ),
       backLayer: _BackLayer(
-          maxNumberOfPlayers: maxNumberOfPlayers,
-          numberOfPlayers: numberOfPlayers,
-          category: category,
-          serverName: serverName,
-          numberOfQuestions: numberOfQuestions,
-          answerTimeLimit: answerTimeLimit),
+        maxNumberOfPlayers: maxNumberOfPlayers,
+        numberOfPlayers: numberOfPlayers,
+        category: category,
+        serverName: serverName,
+        numberOfQuestions: numberOfQuestions,
+        answerTimeLimit: answerTimeLimit,
+      ),
       frontLayer: Scaffold(
         backgroundColor: kBackgroundLightColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -96,7 +101,7 @@ class _LobbyPageState extends State<LobbyPage> {
                     icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
                     shape: OutlineInputBorder(),
                   )
-                : Text(''),
+                : SizedBox.shrink(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: ListView(
@@ -160,85 +165,56 @@ class _BackLayer extends StatelessWidget {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.videogame_asset, size: 60),
-                SizedBox(width: 30),
-                Flexible(
-                  child: Text(
-                    serverName,
-                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
+        child: Column(children: [
+          SizedBox(height: 30),
+          _ServerInfoWidget(iconData: Icons.videogame_asset, text: serverName),
+          SizedBox(height: 30),
+          _ServerInfoWidget(iconData: Icons.category, text: category),
+          SizedBox(height: 30),
+          _ServerInfoWidget(iconData: Icons.format_list_numbered_outlined, text: numberOfQuestions.toString()),
+          SizedBox(height: 30),
+          _ServerInfoWidget(iconData: Icons.timelapse, text: answerTimeLimit.toString() + ' s'),
+          SizedBox(height: 30),
+          _ServerInfoWidget(
+            iconData: Icons.people,
+            customChild: Container(
+              width: 70,
+              height: 70,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
+                strokeWidth: 10,
+                value: numberOfPlayers / maxNumberOfPlayers,
+              ),
             ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.category, size: 60),
-                SizedBox(width: 30),
-                Flexible(
-                  child: Text(
-                    category,
-                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.format_list_numbered_outlined, size: 60),
-                SizedBox(width: 30),
-                Flexible(
-                  child: Text(
-                    numberOfQuestions.toString(),
-                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.timelapse, size: 60),
-                SizedBox(width: 30),
-                Flexible(
-                  child: Text(
-                    answerTimeLimit.toString() + ' s',
-                    style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(Icons.people, size: 60),
-                SizedBox(width: 30),
-                Container(
-                  width: 70,
-                  height: 70,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
-                    strokeWidth: 10,
-                    value: numberOfPlayers / maxNumberOfPlayers,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
+          )
+        ]),
       ),
+    );
+  }
+}
+
+class _ServerInfoWidget extends StatelessWidget {
+  final IconData iconData;
+  final Widget? customChild;
+  final String? text;
+
+  const _ServerInfoWidget({Key? key, required this.iconData, this.customChild, this.text}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Icon(iconData, size: 60),
+        SizedBox(width: 30),
+        customChild ??
+            Flexible(
+              child: Text(
+                text ?? "",
+                style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
+              ),
+            ),
+      ],
     );
   }
 }
