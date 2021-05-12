@@ -16,16 +16,11 @@ class _LobbyPageState extends State<LobbyPage> {
     {'nick': 'Player4', 'isReady': false}
   ];
 
-  QrImage qrImage = QrImage(
-    data: "1234567890",
-    version: QrVersions.auto,
-    size: 300.0,
-  );
-
   bool iAmReady = true;
   bool isPlayer = true;
   bool allReady = true;
 
+  String qrData = "1234567890";
   final maxNumberOfPlayers = 10;
   final numberOfPlayers = 7;
   String category = 'History';
@@ -50,7 +45,11 @@ class _LobbyPageState extends State<LobbyPage> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        content: qrImage,
+                        content: QrImage(
+                          data: qrData,
+                          version: QrVersions.auto,
+                          size: 300.0,
+                        ),
                       );
                     },
                   );

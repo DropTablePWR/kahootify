@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/core/data/shared_preferences_repository.dart';
-import 'package:kahootify/features/lobby/views/lobby_page.dart';
 import 'package:kahootify/features/splash/views/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/bloc/settings_cubit.dart';
+import 'features/welcome/views/welcome_page.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override
@@ -51,9 +51,8 @@ class _MyAppState extends State<MyApp> {
       ),
       home: isRepositoryLoaded
           ? BlocProvider(
-              create: (context) => SettingsCubit(prefsRepository)..initialize(),
-              child: LobbyPage(),
-              /* child: WelcomePage(),*/
+        create: (context) => SettingsCubit(prefsRepository)..initialize(),
+              child: WelcomePage(),
             )
           : SplashPage(),
     );
