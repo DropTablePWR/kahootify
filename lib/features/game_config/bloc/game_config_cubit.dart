@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:kahootify/core/models/api/category.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
+import 'package:kahootify_server/models/category.dart';
 
 class GameConfigCubit extends Cubit<GameConfig> {
   GameConfigCubit() : super(GameConfig());

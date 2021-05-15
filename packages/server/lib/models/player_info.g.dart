@@ -8,8 +8,8 @@ part of 'player_info.dart';
 
 PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
   return PlayerInfo(
-    json['id'] as int,
-    json['name'] as String,
+    id: json['id'] as int,
+    name: json['name'] as String,
   )
     ..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType'])
     ..score = (json['score'] as num).toDouble()

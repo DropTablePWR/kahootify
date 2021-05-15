@@ -8,12 +8,13 @@ class ApiError extends Error {
 
 class ServerDiscoveryError {
   final String message;
+  final String solutionMessage;
 
-  ServerDiscoveryError(this.message);
+  ServerDiscoveryError(this.message, this.solutionMessage);
 }
 
 class NoWifiConnectionError extends ServerDiscoveryError {
-  NoWifiConnectionError(String message) : super(message);
+  NoWifiConnectionError() : super('No Wifi!', 'Please connect to WiFi to search for servers');
 }
 
 class ServerConnectionError extends Error {}

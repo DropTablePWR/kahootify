@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:kahootify_server/models/category.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/server.dart';
@@ -14,8 +15,14 @@ Future<void> main() async {
     print("From Server: " + data.toString());
   };
   // first config
-  ServerInfo serverInfo = ServerInfo.init(name: "test", maxNumberOfPlayers: 5);
-  PlayerInfo playerInfo = PlayerInfo(0, "localhost_Master");
+  ServerInfo serverInfo = ServerInfo.init(
+    name: "test",
+    maxNumberOfPlayers: 5,
+    category: Category(id: 1, name: 'test'),
+    answerTimeLimit: 20,
+    numberOfQuestions: 10,
+  );
+  PlayerInfo playerInfo = PlayerInfo(id: 0, name: "localhost_Master");
 
   var results = await spawnIsolateServer(serverInfo, listener, playerInfo);
   SendPort sendPort = results.item2;

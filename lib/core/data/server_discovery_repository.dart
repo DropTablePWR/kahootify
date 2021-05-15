@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/errors.dart';
 import 'package:kahootify/core/utils/network_analyzer.dart';
@@ -35,8 +37,8 @@ class ServerDiscoveryRepository {
 
   void startDiscovery() async {
     final myIp = await WiFiForIoTPlugin.getIP();
-    if (myIp == null) {
-      _controller.add(ServerDiscoveryErrorResult(NoWifiConnectionError("No WIFI")));
+    if (myIp == null || myIp == '0.0.0.0') {
+      _controller.add(ServerDiscoveryErrorResult(NoWifiConnectionError()));
       return;
     }
     final mySubnet = myIp.substring(0, myIp.lastIndexOf("."));
@@ -51,23 +53,17 @@ class ServerDiscoveryRepository {
   }
 
   Future<ServerInfo?> getServerInfo(String serverIp) async {
-    return ServerInfo(
-      ip: serverIp,
-      name: "serverTest",
-      maxNumberOfPlayers: 6,
-      currentNumberOfPlayers: 2,
-      serverStatus: ServerStatus.lobby,
-    ); //TODO remove when actual endpoint available
-    /*Uri uri;
-    uri = Uri.http(serverIp, "info");
+    Uri uri;
+    uri = Uri.http('$serverIp:$kDefaultServerPort', "info");
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
     final response = await http.get(uri, headers: headers);
     if (response.statusCode != 200) {
-      return Left(ServerConnectionError());
+      return null;
     }
+
     var data = jsonDecode(response.body);
-    return Right(ServerInfo.fromJson(serverIp, data));*/
+    return ServerInfo.fromJson(data);
   }
 }

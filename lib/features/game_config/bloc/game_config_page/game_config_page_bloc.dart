@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:kahootify/core/data/remote_trivia_repository.dart';
-import 'package:kahootify/core/models/api/category.dart';
+import 'package:kahootify_server/models/category.dart';
 import 'package:meta/meta.dart';
 
 part 'game_config_page_event.dart';

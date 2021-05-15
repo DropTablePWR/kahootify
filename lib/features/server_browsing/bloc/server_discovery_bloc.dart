@@ -42,15 +42,15 @@ class ServerDiscoveryBloc extends Bloc<ServerDiscoveryEvent, ServerDiscoveryStat
         }
       }
     } else if (event is DiscoveryError) {
-      yield SearchingErrorState(event.error.message);
-    } else if (event is EndOfSearch) {
+      yield SearchingErrorState(event.error.message, event.error.solutionMessage);
+    } else if (event is DiscoveryEnded) {
       if (state is FoundServersState) {
         yield (state as FoundServersState).endSearch();
       } else if (state is SearchingForServers) {
         yield NoServersFound();
       }
     } else if (event is RefreshRequested) {
-      if (state is SearchingErrorState || (state is FoundServersState && !(state as FoundServersState).stillSearching)) {
+      if (state is! SearchingForServers && !(state is FoundServersState && (state as FoundServersState).stillSearching)) {
         repository.startDiscovery();
         yield SearchingForServers();
       }

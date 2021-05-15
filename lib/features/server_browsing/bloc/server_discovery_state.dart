@@ -34,8 +34,9 @@ class NoServersFound extends ServerDiscoveryState {
 
 class SearchingErrorState extends ServerDiscoveryState {
   final String reason;
+  final String solution;
 
-  SearchingErrorState(this.reason);
+  SearchingErrorState(this.reason, this.solution);
 
   @override
   List<Object?> get props => [];

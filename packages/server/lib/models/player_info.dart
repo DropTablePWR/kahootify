@@ -10,7 +10,7 @@ class PlayerInfo extends Data {
   double score = 0.0;
   bool ready = false;
 
-  PlayerInfo(this.id, this.name) : super(DataType.playerInfo);
+  PlayerInfo({required this.id, required this.name}) : super(DataType.playerInfo);
 
   factory PlayerInfo.fromJson(Map<String, dynamic> json) => _$PlayerInfoFromJson(json);
 

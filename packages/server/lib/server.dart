@@ -48,6 +48,7 @@ class Server {
     server = await HttpServer.bind(kServerUrl, kServerPort, shared: true);
     print("Server initialized");
     await for (HttpRequest req in server) {
+      print(req);
       if (req.uri.path == '/') {
         try {
           var socket = await WebSocketTransformer.upgrade(req);
@@ -62,11 +63,11 @@ class Server {
                 if (data.dataType == DataType.playerInfo) {
                   serverMode.handleConnectionProtocol(PlayerInfo.fromJson(json), socket);
                 } else {
-                  socket.add(ErrorInfo("First send playerInfo").toJson());
+                  socket.add(jsonEncode(ErrorInfo("First send playerInfo").toJson()));
                 }
               } catch (e) {
                 print(e);
-                socket.add(ErrorInfo("Invalid data").toJson());
+                socket.add(jsonEncode(ErrorInfo("Invalid data").toJson()));
               }
             }
           });
@@ -75,7 +76,7 @@ class Server {
           print("Invalid upgrade");
         }
       } else if (req.uri.path == '/info') {
-        req.response.write(serverInfo.toJson());
+        req.response.write(jsonEncode(serverInfo.toJson()));
         await req.response.close();
       }
     }

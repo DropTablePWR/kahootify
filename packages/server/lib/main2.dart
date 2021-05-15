@@ -7,7 +7,7 @@ import 'package:web_socket_channel/io.dart';
 main() async {
   var socket = IOWebSocketChannel.connect("ws://localhost:6666/");
 
-  PlayerInfo playerInfo = PlayerInfo(1, "Artur");
+  PlayerInfo playerInfo = PlayerInfo(id: 1, name: "Artur");
 
   socket.sink.add(jsonEncode(playerInfo.toJson()));
   socket.stream.listen((event) {
@@ -15,6 +15,6 @@ main() async {
   });
 
   while (true) {
-    await Future.delayed(Duration(seconds: 10)).then((value) => socket.sink.add(jsonEncode(PlayerInfo(1, "CC").toJson())));
+    await Future.delayed(Duration(seconds: 10)).then((value) => socket.sink.add(jsonEncode(PlayerInfo(id: 1, name: "CC").toJson())));
   }
 }
