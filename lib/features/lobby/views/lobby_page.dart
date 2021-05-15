@@ -1,41 +1,48 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/widgets/player_number_indicator.dart';
-import 'package:kahootify_server/models/category.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class LobbyPage extends StatefulWidget {
+  final bool isHost;
+  final StreamController input;
+  final Stream output;
+  final ServerInfo initialServerInfo;
+
+  const LobbyPage({required this.isHost, required this.input, required this.output, required this.initialServerInfo});
+
   @override
   _LobbyPageState createState() => _LobbyPageState();
 }
 
 class _LobbyPageState extends State<LobbyPage> {
-  List<PlayerInfo> playersList = [
-    PlayerInfo(id: 0, name: 'Marek'),
-    PlayerInfo(id: 1, name: 'Arek'),
-    PlayerInfo(id: 2, name: 'Darek'),
-    PlayerInfo(id: 3, name: 'Czarek'),
-    PlayerInfo(id: 4, name: 'Artur'),
-  ];
-
+  List<PlayerInfo> playersList = [];
   bool iAmReady = true;
-  bool isPlayer = true;
   bool allReady = true;
 
-  String qrData = "1234567890";
-  final ServerInfo serverInfo = ServerInfo(
-    maxNumberOfPlayers: 10,
-    numberOfQuestions: 20,
-    answerTimeLimit: 13,
-    serverStatus: ServerStatus.lobby,
-    category: Category(id: 1, name: 'Motoryzacja'),
-    currentNumberOfPlayers: 7,
-    name: 'server',
-    ip: '192.168.1.23',
-  );
+  @override
+  void initState() {
+    widget.output.listen((event) {
+      print(event);
+      var data = jsonDecode(event);
+      if (data['dataType'] == "playerListInfo") {
+        final updatedPlayers = List<PlayerInfo>.from(data['players'].map((rawPlayer) {
+          return PlayerInfo.fromJson(rawPlayer);
+        }).toList());
+        setState(() {
+          playersList = updatedPlayers;
+        });
+      }
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +61,20 @@ class _LobbyPageState extends State<LobbyPage> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      content: Container(
-                        height: 300,
-                        width: 300,
-                        child: QrImage(
-                          data: qrData,
-                          version: QrVersions.auto,
-                          size: 300.0,
-                        ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            height: 300,
+                            width: 300,
+                            child: QrImage(
+                              data: widget.initialServerInfo.qrCode,
+                              version: QrVersions.auto,
+                              size: 300.0,
+                            ),
+                          ),
+                          Text(widget.initialServerInfo.code)
+                        ],
                       ),
                     );
                   },
@@ -72,11 +85,11 @@ class _LobbyPageState extends State<LobbyPage> {
           ),
         ],
       ),
-      backLayer: _BackLayer(serverInfo: serverInfo),
+      backLayer: _BackLayer(serverInfo: widget.initialServerInfo),
       frontLayer: Scaffold(
         backgroundColor: kBackgroundLightColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: isPlayer
+        floatingActionButton: !widget.isHost
             ? FloatingActionButton.extended(
                 backgroundColor: iAmReady ? kBackgroundGreenColor : kBasedBlackColor,
                 label: Text(iAmReady ? "I am ready" : "I am not ready"),
@@ -88,23 +101,23 @@ class _LobbyPageState extends State<LobbyPage> {
                   });
                 },
                 icon: Icon(iAmReady ? Icons.check : Icons.clear, color: Colors.white, size: 50),
-                shape: OutlineInputBorder(),
-              )
+          shape: OutlineInputBorder(),
+        )
             : allReady
-                ? FloatingActionButton.extended(
-                    backgroundColor: kBackgroundGreenColor,
-                    label: Text("Start a game"),
-                    onPressed: () {
-                      setState(() {
-                        iAmReady = !iAmReady;
-                        print("Start a game");
-                        //TODO Rozpoczęcie rozgrywki
-                      });
-                    },
-                    icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
-                    shape: OutlineInputBorder(),
-                  )
-                : SizedBox.shrink(),
+            ? FloatingActionButton.extended(
+          backgroundColor: kBackgroundGreenColor,
+          label: Text("Start a game"),
+          onPressed: () {
+            setState(() {
+              iAmReady = !iAmReady;
+              print("Start a game");
+              //TODO Rozpoczęcie rozgrywki
+            });
+          },
+          icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
+          shape: OutlineInputBorder(),
+        )
+            : SizedBox.shrink(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(

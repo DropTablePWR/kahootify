@@ -44,17 +44,17 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Kahootify.ly',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: isRepositoryLoaded
-          ? BlocProvider(
-              create: (context) => SettingsCubit(prefsRepository)..initialize(),
-              child: WelcomePage(),
-            )
-          : SplashPage(),
-    );
+    if (isRepositoryLoaded) {
+      return BlocProvider<SettingsCubit>(
+        create: (context) => SettingsCubit(prefsRepository)..initialize(),
+        child: MaterialApp(
+          title: 'Kahootify.ly',
+          theme: ThemeData(primarySwatch: Colors.blue),
+          home: WelcomePage(),
+        ),
+      );
+    } else {
+      return MaterialApp(home: SplashPage());
+    }
   }
 }

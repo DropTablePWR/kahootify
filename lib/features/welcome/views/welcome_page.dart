@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
-import 'package:kahootify/core/bloc/settings_cubit.dart';
+import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/game_config/views/game_config_page.dart';
 import 'package:kahootify/features/server_browsing/views/server_discovery_page.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
 
-class WelcomePage extends StatefulWidget {
-  @override
-  _WelcomePageState createState() => _WelcomePageState();
-}
-
-class _WelcomePageState extends State<WelcomePage> {
+class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,16 +19,7 @@ class _WelcomePageState extends State<WelcomePage> {
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: IconButton(
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (routeContext) {
-                    return BlocProvider<SettingsCubit>.value(
-                      value: context.read<SettingsCubit>(),
-                      child: SettingsPage(),
-                    );
-                  },
-                ),
-              ),
+              onPressed: () => Navigator.of(context).push<GameConfig>(MaterialPageRoute(builder: (routeContext) => SettingsPage())),
               icon: Icon(Icons.settings),
             ),
           )
@@ -55,7 +40,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ChooseModeButton(
-                      onPressed: () => Navigator.of(context).push(GameConfigPage.route()),
+                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (routeContext) => GameConfigPage())),
                       text: "HOST-GAME",
                     ),
                     SizedBox(height: 50),

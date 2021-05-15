@@ -1,10 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kahootify/color_consts.dart';
 import 'package:kahootify/const.dart';
+import 'package:kahootify/core/bloc/settings_cubit.dart';
+import 'package:kahootify/features/lobby/views/lobby_page.dart';
 import 'package:kahootify/widgets/player_number_indicator.dart';
+import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -15,16 +20,13 @@ class DiscoveredServerListItem extends StatelessWidget {
 
   static const _itemTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500);
 
-  void connect() async {
+  void connect(BuildContext context) async {
     var socket = IOWebSocketChannel.connect("ws://${serverInfo.ip}:$kDefaultServerPort/");
-    socket.sink.add(jsonEncode({'id': 1}));
-    socket.stream.listen((event) {
-      print(event);
-    });
-
-    while (true) {
-      await Future.delayed(Duration(seconds: 3)).then((value) => socket.sink.add(jsonEncode({'message': "player"})));
-    }
+    final settings = context.read<SettingsCubit>().state;
+    final playerInfo = PlayerInfo(id: settings.playerId, name: settings.playerName);
+    socket.sink.add(jsonEncode(playerInfo.toJson()));
+    final input = StreamController();
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => LobbyPage(isHost: false, input: input, output: socket.stream, initialServerInfo: serverInfo)));
   }
 
   String getServerStatus(ServerStatus serverStatus) {
@@ -49,7 +51,7 @@ class DiscoveredServerListItem extends StatelessWidget {
         height: 70.0,
         child: InkWell(
           onLongPress: () => Fluttertoast.showToast(msg: "Server ip: " + serverInfo.ip),
-          onTap: connect,
+          onTap: () => connect(context),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
