@@ -37,6 +37,7 @@ class _GameConfigPage extends StatefulWidget {
 
 class _GameConfigPageState extends State<_GameConfigPage> {
   late final gameNameInputController;
+  final serverInput = StreamController();
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
   @override
   void dispose() {
     gameNameInputController.dispose();
+    serverInput.close();
     super.dispose();
   }
 
@@ -70,7 +72,6 @@ class _GameConfigPageState extends State<_GameConfigPage> {
       final playerInfo = PlayerInfo(id: 0, name: context.read<SettingsCubit>().prefs.playerName ?? 'randomName');
       final results = await spawnIsolateServer(serverInfo, serverOutput, playerInfo);
       SendPort sendPort = results.item2;
-      final serverInput = StreamController();
       serverInput.stream.listen((data) => sendPort.send(data));
       Navigator.of(context).push(
         MaterialPageRoute(

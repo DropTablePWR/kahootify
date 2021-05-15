@@ -13,20 +13,33 @@ import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:web_socket_channel/io.dart';
 
-class DiscoveredServerListItem extends StatelessWidget {
+class DiscoveredServerListItem extends StatefulWidget {
   final ServerInfo serverInfo;
 
   const DiscoveredServerListItem({required this.serverInfo});
 
   static const _itemTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500);
 
+  @override
+  _DiscoveredServerListItemState createState() => _DiscoveredServerListItemState();
+}
+
+class _DiscoveredServerListItemState extends State<DiscoveredServerListItem> {
+  final input = StreamController();
+
+  @override
+  void dispose() {
+    input.close();
+    super.dispose();
+  }
+
   void connect(BuildContext context) async {
-    var socket = IOWebSocketChannel.connect("ws://${serverInfo.ip}:$kDefaultServerPort/");
+    var socket = IOWebSocketChannel.connect("ws://${widget.serverInfo.ip}:$kDefaultServerPort/");
     final settings = context.read<SettingsCubit>().state;
     final playerInfo = PlayerInfo(id: settings.playerId, name: settings.playerName);
     socket.sink.add(jsonEncode(playerInfo.toJson()));
-    final input = StreamController();
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => LobbyPage(isHost: false, input: input, output: socket.stream, initialServerInfo: serverInfo)));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => LobbyPage(isHost: false, input: input, output: socket.stream, initialServerInfo: widget.serverInfo)));
   }
 
   String getServerStatus(ServerStatus serverStatus) {
@@ -50,16 +63,17 @@ class DiscoveredServerListItem extends StatelessWidget {
       child: SizedBox(
         height: 70.0,
         child: InkWell(
-          onLongPress: () => Fluttertoast.showToast(msg: "Server ip: " + serverInfo.ip),
+          onLongPress: () => Fluttertoast.showToast(msg: "Server ip: " + widget.serverInfo.ip),
           onTap: () => connect(context),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(child: Text(serverInfo.name, style: _itemTextStyle)),
-                Expanded(child: PlayerNumberIndicator(serverInfo: serverInfo)),
-                Expanded(child: Text(getServerStatus(serverInfo.serverStatus), textAlign: TextAlign.right, style: _itemTextStyle)),
+                Expanded(child: Text(widget.serverInfo.name, style: DiscoveredServerListItem._itemTextStyle)),
+                Expanded(child: PlayerNumberIndicator(serverInfo: widget.serverInfo)),
+                Expanded(
+                    child: Text(getServerStatus(widget.serverInfo.serverStatus), textAlign: TextAlign.right, style: DiscoveredServerListItem._itemTextStyle)),
               ],
             ),
           ),
