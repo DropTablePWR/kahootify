@@ -101,23 +101,23 @@ class _LobbyPageState extends State<LobbyPage> {
                   });
                 },
                 icon: Icon(iAmReady ? Icons.check : Icons.clear, color: Colors.white, size: 50),
-          shape: OutlineInputBorder(),
-        )
+                shape: OutlineInputBorder(),
+              )
             : allReady
-            ? FloatingActionButton.extended(
-          backgroundColor: kBackgroundGreenColor,
-          label: Text("Start a game"),
-          onPressed: () {
-            setState(() {
-              iAmReady = !iAmReady;
-              print("Start a game");
-              //TODO Rozpoczęcie rozgrywki
-            });
-          },
-          icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
-          shape: OutlineInputBorder(),
-        )
-            : SizedBox.shrink(),
+                ? FloatingActionButton.extended(
+                    backgroundColor: kBackgroundGreenColor,
+                    label: Text("Start a game"),
+                    onPressed: () {
+                      setState(() {
+                        iAmReady = !iAmReady;
+                        print("Start a game");
+                        //TODO Rozpoczęcie rozgrywki
+                      });
+                    },
+                    icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
+                    shape: OutlineInputBorder(),
+                  )
+                : SizedBox.shrink(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
           child: ListView.builder(

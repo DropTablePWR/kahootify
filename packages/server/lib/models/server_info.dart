@@ -38,8 +38,7 @@ class ServerInfo extends Data {
     required this.numberOfQuestions,
     required this.answerTimeLimit,
     required this.ip,
-  })
-      : currentNumberOfPlayers = 0,
+  })   : currentNumberOfPlayers = 0,
         code = CodeConverter.encodeIp(ip) ?? '000000',
         qrCode = CodeConverter.encodeIpAsQrCode(ip) ?? '000000',
         serverStatus = ServerStatus.lobby,
