@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_consts.dart';
-import 'package:kahootify/core/models/api/category.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_cubit.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_page/game_config_page_bloc.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/lobby/views/lobby_page.dart';
 import 'package:kahootify/widgets/text_fields/default_text_field.dart';
+import 'package:kahootify_server/models/category.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class GameConfigPage extends StatelessWidget {

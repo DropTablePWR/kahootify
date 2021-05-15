@@ -1,6 +1,10 @@
 import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/widgets/player_number_indicator.dart';
+import 'package:kahootify_server/models/category.dart';
+import 'package:kahootify_server/models/player_info.dart';
+import 'package:kahootify_server/models/server_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class LobbyPage extends StatefulWidget {
@@ -9,10 +13,12 @@ class LobbyPage extends StatefulWidget {
 }
 
 class _LobbyPageState extends State<LobbyPage> {
-  List playersList = [
-    {'nick': 'Player1', 'isReady': true},
-    {'nick': 'Player2', 'isReady': false},
-    {'nick': 'Player3', 'isReady': true},
+  List<PlayerInfo> playersList = [
+    PlayerInfo(id: 0, name: 'Marek'),
+    PlayerInfo(id: 1, name: 'Arek'),
+    PlayerInfo(id: 2, name: 'Darek'),
+    PlayerInfo(id: 3, name: 'Czarek'),
+    PlayerInfo(id: 4, name: 'Artur'),
   ];
 
   bool iAmReady = true;
@@ -20,12 +26,16 @@ class _LobbyPageState extends State<LobbyPage> {
   bool allReady = true;
 
   String qrData = "1234567890";
-  final maxNumberOfPlayers = 10;
-  final numberOfPlayers = 7;
-  String category = 'History';
-  String serverName = 'SERVER';
-  final numberOfQuestions = 20;
-  final answerTimeLimit = 13;
+  final ServerInfo serverInfo = ServerInfo(
+    maxNumberOfPlayers: 10,
+    numberOfQuestions: 20,
+    answerTimeLimit: 13,
+    serverStatus: ServerStatus.lobby,
+    category: Category(id: 1, name: 'Motoryzacja'),
+    currentNumberOfPlayers: 7,
+    name: 'server',
+    ip: '192.168.1.23',
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +72,7 @@ class _LobbyPageState extends State<LobbyPage> {
           ),
         ],
       ),
-      backLayer: _BackLayer(
-        maxNumberOfPlayers: maxNumberOfPlayers,
-        numberOfPlayers: numberOfPlayers,
-        category: category,
-        serverName: serverName,
-        numberOfQuestions: numberOfQuestions,
-        answerTimeLimit: answerTimeLimit,
-      ),
+      backLayer: _BackLayer(serverInfo: serverInfo),
       frontLayer: Scaffold(
         backgroundColor: kBackgroundLightColor,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -104,8 +107,10 @@ class _LobbyPageState extends State<LobbyPage> {
                 : SizedBox.shrink(),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 30),
-          child: ListView(
-            children: [SizedBox(height: 35), for (var i in playersList) _PlayersListItem(playerNick: i['nick'], isReady: i['isReady'])],
+          child: ListView.builder(
+            itemCount: playersList.length,
+            padding: EdgeInsets.only(top: 35),
+            itemBuilder: (BuildContext context, int index) => _PlayersListItem(playerInfo: playersList[index]),
           ),
         ),
       ),
@@ -114,10 +119,9 @@ class _LobbyPageState extends State<LobbyPage> {
 }
 
 class _PlayersListItem extends StatelessWidget {
-  final String playerNick;
-  final bool isReady;
+  final PlayerInfo playerInfo;
 
-  const _PlayersListItem({Key? key, required this.playerNick, required this.isReady}) : super(key: key);
+  const _PlayersListItem({required this.playerInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +129,7 @@ class _PlayersListItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      color: isReady ? kBackgroundGreenColor : kBasedBlackColor,
+      color: playerInfo.ready ? kBackgroundGreenColor : kBasedBlackColor,
       elevation: 10,
       child: SizedBox(
         height: 50.0,
@@ -133,8 +137,8 @@ class _PlayersListItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(child: Text(playerNick, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-            Container(child: Icon(isReady ? Icons.check : Icons.clear, color: Colors.white, size: 50)),
+            Container(child: Text(playerInfo.name, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
+            Container(child: Icon(playerInfo.ready ? Icons.check : Icons.clear, color: Colors.white, size: 50)),
           ],
         ),
       ),
@@ -143,22 +147,9 @@ class _PlayersListItem extends StatelessWidget {
 }
 
 class _BackLayer extends StatelessWidget {
-  final maxNumberOfPlayers;
-  final numberOfPlayers;
-  final String category;
-  final String serverName;
-  final numberOfQuestions;
-  final answerTimeLimit;
+  final ServerInfo serverInfo;
 
-  const _BackLayer(
-      {Key? key,
-      required this.maxNumberOfPlayers,
-      required this.numberOfPlayers,
-      required this.category,
-      required this.serverName,
-      required this.numberOfQuestions,
-      required this.answerTimeLimit})
-      : super(key: key);
+  const _BackLayer({required this.serverInfo});
 
   @override
   Widget build(BuildContext context) {
@@ -167,26 +158,15 @@ class _BackLayer extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 30),
         child: Column(children: [
           SizedBox(height: 30),
-          _ServerInfoWidget(iconData: Icons.videogame_asset, text: serverName),
+          _ServerInfoWidget(iconData: Icons.videogame_asset, text: serverInfo.name),
           SizedBox(height: 30),
-          _ServerInfoWidget(iconData: Icons.category, text: category),
+          _ServerInfoWidget(iconData: Icons.category, text: serverInfo.category.name),
           SizedBox(height: 30),
-          _ServerInfoWidget(iconData: Icons.format_list_numbered_outlined, text: numberOfQuestions.toString()),
+          _ServerInfoWidget(iconData: Icons.format_list_numbered_outlined, text: serverInfo.numberOfQuestions.toString()),
           SizedBox(height: 30),
-          _ServerInfoWidget(iconData: Icons.timelapse, text: answerTimeLimit.toString() + ' s'),
+          _ServerInfoWidget(iconData: Icons.timelapse, text: serverInfo.answerTimeLimit.toString() + ' s'),
           SizedBox(height: 30),
-          _ServerInfoWidget(
-            iconData: Icons.people,
-            customChild: Container(
-              width: 70,
-              height: 70,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(kBasedBlackColor),
-                strokeWidth: 10,
-                value: numberOfPlayers / maxNumberOfPlayers,
-              ),
-            ),
-          )
+          _ServerInfoWidget(iconData: Icons.people, customChild: PlayerNumberIndicator(serverInfo: serverInfo))
         ]),
       ),
     );

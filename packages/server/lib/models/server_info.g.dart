@@ -13,6 +13,9 @@ ServerInfo _$ServerInfoFromJson(Map<String, dynamic> json) {
     maxNumberOfPlayers: json['maxNumberOfPlayers'] as int,
     currentNumberOfPlayers: json['currentNumberOfPlayers'] as int,
     serverStatus: _$enumDecode(_$ServerStatusEnumMap, json['serverStatus']),
+    category: Category.fromJson(json['category'] as Map<String, dynamic>),
+    numberOfQuestions: json['numberOfQuestions'] as int,
+    answerTimeLimit: json['answerTimeLimit'] as int,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
@@ -20,7 +23,10 @@ Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) => <String, dynamic
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'ip': instance.ip,
       'name': instance.name,
+      'category': instance.category,
       'maxNumberOfPlayers': instance.maxNumberOfPlayers,
+      'numberOfQuestions': instance.numberOfQuestions,
+      'answerTimeLimit': instance.answerTimeLimit,
       'currentNumberOfPlayers': instance.currentNumberOfPlayers,
       'serverStatus': _$ServerStatusEnumMap[instance.serverStatus],
     };

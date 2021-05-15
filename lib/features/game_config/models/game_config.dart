@@ -1,4 +1,4 @@
-import 'package:kahootify/core/models/api/category.dart';
+import 'package:kahootify_server/models/category.dart';
 
 class GameConfig {
   String gameName;
