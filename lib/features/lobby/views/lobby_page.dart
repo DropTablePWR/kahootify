@@ -27,15 +27,15 @@ class _LobbyPageState extends State<LobbyPage> {
 
   String qrData = "1234567890";
   final ServerInfo serverInfo = ServerInfo(
-    maxNumberOfPlayers: 10,
-    numberOfQuestions: 20,
-    answerTimeLimit: 13,
-    serverStatus: ServerStatus.lobby,
-    category: Category(id: 1, name: 'Motoryzacja'),
-    currentNumberOfPlayers: 7,
-    name: 'server',
-    ip: '192.168.1.23',
-  );
+      maxNumberOfPlayers: 10,
+      numberOfQuestions: 20,
+      answerTimeLimit: 13,
+      serverStatus: ServerStatus.lobby,
+      category: Category(id: 1, name: 'Motoryzacja'),
+      currentNumberOfPlayers: 7,
+      name: 'server',
+      ip: '192.168.1.23',
+      autoStart: false);
 
   @override
   Widget build(BuildContext context) {

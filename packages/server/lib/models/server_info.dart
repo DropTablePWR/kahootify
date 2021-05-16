@@ -14,25 +14,28 @@ class ServerInfo extends Data {
   final int answerTimeLimit;
   int currentNumberOfPlayers;
   final ServerStatus serverStatus;
+  final bool autoStart;
 
-  ServerInfo({
-    required this.ip,
-    required this.name,
-    required this.maxNumberOfPlayers,
-    required this.currentNumberOfPlayers,
-    required this.serverStatus,
-    required this.category,
-    required this.numberOfQuestions,
-    required this.answerTimeLimit,
-  }) : super(DataType.serverInfo);
+  ServerInfo(
+      {required this.ip,
+      required this.name,
+      required this.maxNumberOfPlayers,
+      required this.currentNumberOfPlayers,
+      required this.serverStatus,
+      required this.category,
+      required this.numberOfQuestions,
+      required this.answerTimeLimit,
+      required this.autoStart})
+      : super(DataType.serverInfo);
 
-  ServerInfo.init({
-    required this.name,
-    required this.maxNumberOfPlayers,
-    required this.category,
-    required this.numberOfQuestions,
-    required this.answerTimeLimit,
-  })   : currentNumberOfPlayers = 0,
+  ServerInfo.init(
+      {required this.name,
+      required this.maxNumberOfPlayers,
+      required this.category,
+      required this.numberOfQuestions,
+      required this.answerTimeLimit,
+      this.autoStart = false})
+      : currentNumberOfPlayers = 0,
         serverStatus = ServerStatus.lobby,
         ip = 'localhost',
         super(DataType.serverInfo);
@@ -46,6 +49,7 @@ class ServerInfo extends Data {
     Category? category,
     int? numberOfQuestions,
     int? answerTimeLimit,
+    bool? autoStart,
   }) {
     return ServerInfo(
       ip: ip ?? this.ip,
@@ -56,6 +60,7 @@ class ServerInfo extends Data {
       category: category ?? this.category,
       numberOfQuestions: numberOfQuestions ?? this.numberOfQuestions,
       answerTimeLimit: answerTimeLimit ?? this.answerTimeLimit,
+      autoStart: autoStart ?? this.autoStart,
     );
   }
 

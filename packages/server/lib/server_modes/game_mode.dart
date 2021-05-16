@@ -22,4 +22,9 @@ class GameMode extends ServerMode {
   void handleServerInfo(ServerInfo serverInfo, AbstractPlayer player) {
     // TODO: implement handleServerInfo
   }
+
+  @override
+  void handleStartGame(AbstractPlayer player) {
+    // TODO: implement handleStartGame
+  }
 }
