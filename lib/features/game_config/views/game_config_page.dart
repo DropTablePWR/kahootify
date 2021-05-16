@@ -80,6 +80,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
             input: serverInput,
             output: serverOutput.stream,
             initialServerInfo: serverInfo,
+            playerInfo: playerInfo,
           ),
         ),
       );

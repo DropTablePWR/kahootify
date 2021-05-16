@@ -38,8 +38,21 @@ class _DiscoveredServerListItemState extends State<DiscoveredServerListItem> {
     final settings = context.read<SettingsCubit>().state;
     final playerInfo = PlayerInfo(id: settings.playerId, name: settings.playerName);
     socket.sink.add(jsonEncode(playerInfo.toJson()));
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => LobbyPage(isHost: false, input: input, output: socket.stream, initialServerInfo: widget.serverInfo)));
+    input.stream.listen((event) {
+      print("Wysyłam $event");
+      socket.sink.add(event);
+    });
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => LobbyPage(
+          isHost: false,
+          input: input,
+          output: socket.stream,
+          initialServerInfo: widget.serverInfo,
+          playerInfo: playerInfo,
+        ),
+      ),
+    );
   }
 
   String getServerStatus(ServerStatus serverStatus) {
@@ -73,7 +86,12 @@ class _DiscoveredServerListItemState extends State<DiscoveredServerListItem> {
                 Expanded(child: Text(widget.serverInfo.name, style: DiscoveredServerListItem._itemTextStyle)),
                 Expanded(child: PlayerNumberIndicator(serverInfo: widget.serverInfo)),
                 Expanded(
-                    child: Text(getServerStatus(widget.serverInfo.serverStatus), textAlign: TextAlign.right, style: DiscoveredServerListItem._itemTextStyle)),
+                  child: Text(
+                    getServerStatus(widget.serverInfo.serverStatus),
+                    textAlign: TextAlign.right,
+                    style: DiscoveredServerListItem._itemTextStyle,
+                  ),
+                ),
               ],
             ),
           ),

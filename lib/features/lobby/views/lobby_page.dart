@@ -14,8 +14,9 @@ class LobbyPage extends StatefulWidget {
   final StreamController input;
   final Stream output;
   final ServerInfo initialServerInfo;
+  final PlayerInfo playerInfo;
 
-  const LobbyPage({required this.isHost, required this.input, required this.output, required this.initialServerInfo});
+  const LobbyPage({required this.isHost, required this.input, required this.output, required this.initialServerInfo, required this.playerInfo});
 
   @override
   _LobbyPageState createState() => _LobbyPageState();
@@ -25,19 +26,22 @@ class _LobbyPageState extends State<LobbyPage> {
   List<PlayerInfo> playersList = [];
   bool iAmReady = true;
   bool allReady = true;
+  late PlayerInfo playerInfo;
 
   @override
   void initState() {
+    playerInfo = widget.playerInfo;
     widget.output.listen((event) {
       print(event);
       var data = jsonDecode(event);
-      if (data['dataType'] == "playerListInfo") {
-        final updatedPlayers = List<PlayerInfo>.from(data['players'].map((rawPlayer) {
-          return PlayerInfo.fromJson(rawPlayer);
-        }).toList());
-        setState(() {
-          playersList = updatedPlayers;
-        });
+      switch (data['dataType']) {
+        case 'playerListInfo':
+          final updatedPlayers = List<PlayerInfo>.from(data['players'].map((rawPlayer) => PlayerInfo.fromJson(rawPlayer)).toList());
+          setState(() => playersList = updatedPlayers);
+          break;
+        case 'playerInfo':
+          print("coś");
+          break;
       }
     });
 
@@ -97,7 +101,7 @@ class _LobbyPageState extends State<LobbyPage> {
                   setState(() {
                     iAmReady = !iAmReady;
                     print(iAmReady.toString());
-                    //TODO Zmiana stanu na ready
+                    widget.input.add(playerInfo.copyWith(ready: iAmReady));
                   });
                 },
                 icon: Icon(iAmReady ? Icons.check : Icons.clear, color: Colors.white, size: 50),

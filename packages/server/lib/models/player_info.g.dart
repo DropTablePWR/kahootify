@@ -10,10 +10,9 @@ PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
   return PlayerInfo(
     id: json['id'] as int,
     name: json['name'] as String,
-  )
-    ..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType'])
-    ..score = (json['score'] as num).toDouble()
-    ..ready = json['ready'] as bool;
+    score: (json['score'] as num).toDouble(),
+    ready: json['ready'] as bool,
+  )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
 Map<String, dynamic> _$PlayerInfoToJson(PlayerInfo instance) => <String, dynamic>{
