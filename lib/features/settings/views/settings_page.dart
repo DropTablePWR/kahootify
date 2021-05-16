@@ -46,10 +46,7 @@ class _SettingsPage extends State<SettingsPage> {
                 children: [
                   SizedBox(height: 35),
                   Center(
-                    child: Text(
-                      settings.playerName == null ? "PLAYERNAME" : settings.playerName!,
-                      style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold),
-                    ),
+                    child: Text(settings.playerName, style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 35),
                   Padding(

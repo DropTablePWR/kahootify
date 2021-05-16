@@ -37,6 +37,7 @@ class Server {
       var player = LocalPlayer(playerInfo, sendPort);
       knownPlayers[sendPort] = player;
       player.send(serverInfo.toJson());
+      sendPlayerListInfoToAll();
       receivePort.listen((event) {
         serverMode.dataListener(event, player);
       });
@@ -113,7 +114,7 @@ void _createRunningServer(Tuple3<SendPort, ServerInfo, PlayerInfo?> arguments) {
 }
 
 // if playerInfo is not null, then create localhost player
-Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(ServerInfo serverInfo, Function listener, PlayerInfo? playerInfo) async {
+Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(ServerInfo serverInfo, StreamController output, PlayerInfo? playerInfo) async {
   Completer completer = new Completer<SendPort>();
   ReceivePort receivePort = ReceivePort();
 
@@ -121,7 +122,7 @@ Future<Tuple2<Isolate, SendPort>> spawnIsolateServer(ServerInfo serverInfo, Func
     if (data is SendPort) {
       completer.complete(data);
     } else {
-      listener(data);
+      output.add(data);
     }
   });
 

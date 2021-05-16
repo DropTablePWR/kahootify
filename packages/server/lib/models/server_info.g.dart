@@ -8,6 +8,8 @@ part of 'server_info.dart';
 
 ServerInfo _$ServerInfoFromJson(Map<String, dynamic> json) {
   return ServerInfo(
+    code: json['code'] as String,
+    qrCode: json['qrCode'] as String,
     ip: json['ip'] as String,
     name: json['name'] as String,
     maxNumberOfPlayers: json['maxNumberOfPlayers'] as int,
@@ -25,6 +27,8 @@ Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) =>
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'ip': instance.ip,
       'name': instance.name,
+      'code': instance.code,
+      'qrCode': instance.qrCode,
       'category': instance.category,
       'maxNumberOfPlayers': instance.maxNumberOfPlayers,
       'numberOfQuestions': instance.numberOfQuestions,

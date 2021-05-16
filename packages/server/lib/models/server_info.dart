@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:kahootify_server/models/category.dart';
 import 'package:kahootify_server/models/data.dart';
+import 'package:kahootify_server/utils/code_converter.dart';
 
 part 'server_info.g.dart';
 
@@ -8,6 +9,8 @@ part 'server_info.g.dart';
 class ServerInfo extends Data {
   final String ip;
   final String name;
+  final String code;
+  final String qrCode;
   final Category category;
   final int maxNumberOfPlayers;
   final int numberOfQuestions;
@@ -16,28 +19,32 @@ class ServerInfo extends Data {
   final ServerStatus serverStatus;
   final bool autoStart;
 
-  ServerInfo(
-      {required this.ip,
-      required this.name,
-      required this.maxNumberOfPlayers,
-      required this.currentNumberOfPlayers,
-      required this.serverStatus,
-      required this.category,
-      required this.numberOfQuestions,
-      required this.answerTimeLimit,
-      required this.autoStart})
-      : super(DataType.serverInfo);
+  ServerInfo({
+    required this.code,
+    required this.qrCode,
+    required this.ip,
+    required this.name,
+    required this.maxNumberOfPlayers,
+    required this.currentNumberOfPlayers,
+    required this.serverStatus,
+    required this.category,
+    required this.numberOfQuestions,
+    required this.answerTimeLimit,
+    required this.autoStart,
+  }) : super(DataType.serverInfo);
 
-  ServerInfo.init(
-      {required this.name,
-      required this.maxNumberOfPlayers,
-      required this.category,
-      required this.numberOfQuestions,
-      required this.answerTimeLimit,
-      this.autoStart = false})
-      : currentNumberOfPlayers = 0,
+  ServerInfo.init({
+    required this.name,
+    required this.maxNumberOfPlayers,
+    required this.category,
+    required this.numberOfQuestions,
+    required this.answerTimeLimit,
+    required this.ip,
+  })   : currentNumberOfPlayers = 0,
+        this.autoStart = false,
+        code = CodeConverter.encodeIp(ip) ?? '000000',
+        qrCode = CodeConverter.encodeIpAsQrCode(ip) ?? '000000',
         serverStatus = ServerStatus.lobby,
-        ip = 'localhost',
         super(DataType.serverInfo);
 
   copyWith({
@@ -49,6 +56,8 @@ class ServerInfo extends Data {
     Category? category,
     int? numberOfQuestions,
     int? answerTimeLimit,
+    String? qrCode,
+    String? code,
     bool? autoStart,
   }) {
     return ServerInfo(
@@ -60,6 +69,8 @@ class ServerInfo extends Data {
       category: category ?? this.category,
       numberOfQuestions: numberOfQuestions ?? this.numberOfQuestions,
       answerTimeLimit: answerTimeLimit ?? this.answerTimeLimit,
+      qrCode: qrCode ?? this.qrCode,
+      code: code ?? this.code,
       autoStart: autoStart ?? this.autoStart,
     );
   }
