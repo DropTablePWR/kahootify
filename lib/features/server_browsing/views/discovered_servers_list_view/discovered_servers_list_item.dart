@@ -39,7 +39,6 @@ class _DiscoveredServerListItemState extends State<DiscoveredServerListItem> {
     final playerInfo = PlayerInfo(id: settings.playerId, name: settings.playerName);
     socket.sink.add(jsonEncode(playerInfo.toJson()));
     input.stream.listen((event) {
-      print("Wysyłam $event");
       socket.sink.add(event);
     });
     Navigator.of(context).push(

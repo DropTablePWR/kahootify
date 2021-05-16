@@ -24,13 +24,14 @@ class LobbyPage extends StatefulWidget {
 
 class _LobbyPageState extends State<LobbyPage> {
   List<PlayerInfo> playersList = [];
-  bool iAmReady = true;
-  bool allReady = true;
+  late bool iAmReady;
+  bool allReady = false;
   late PlayerInfo playerInfo;
 
   @override
   void initState() {
     playerInfo = widget.playerInfo;
+    iAmReady = playerInfo.ready;
     widget.output.listen((event) {
       print(event);
       var data = jsonDecode(event);
@@ -101,7 +102,7 @@ class _LobbyPageState extends State<LobbyPage> {
                   setState(() {
                     iAmReady = !iAmReady;
                     print(iAmReady.toString());
-                    widget.input.add(playerInfo.copyWith(ready: iAmReady));
+                    widget.input.add(jsonEncode(playerInfo.copyWith(ready: iAmReady).toJson()));
                   });
                 },
                 icon: Icon(iAmReady ? Icons.check : Icons.clear, color: Colors.white, size: 50),
