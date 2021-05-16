@@ -22,19 +22,11 @@ class LobbyMode extends ServerMode {
     playerInfo.score = player.playerInfo.score;
     playerInfo.id = player.playerInfo.id;
     player.playerInfo = playerInfo;
-    server.sendPlayerListInfoToAll();
-    if (_everyoneIsReady()) {
+    var playerListInfo = server.generatePlayerListInfo();
+    server.sendDataToAll(playerListInfo.toJson());
+    if (server.serverInfo.autoStart && playerListInfo.everyoneIsReady) {
       server.serverMode = nextMode();
     }
-  }
-
-  bool _everyoneIsReady() {
-    for (AbstractPlayer player in server.knownPlayers.values) {
-      if (player.playerInfo.ready == false) {
-        return false;
-      }
-    }
-    return true;
   }
 
   @override

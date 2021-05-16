@@ -9,12 +9,14 @@ part of 'player_list_info.dart';
 PlayerListInfo _$PlayerListInfoFromJson(Map<String, dynamic> json) {
   return PlayerListInfo(
     (json['players'] as List<dynamic>).map((e) => PlayerInfo.fromJson(e as Map<String, dynamic>)).toList(),
+    json['everyoneIsReady'] as bool,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
 Map<String, dynamic> _$PlayerListInfoToJson(PlayerListInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'players': instance.players,
+      'everyoneIsReady': instance.everyoneIsReady,
     };
 
 K _$enumDecode<K, V>(
