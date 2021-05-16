@@ -18,10 +18,12 @@ ServerInfo _$ServerInfoFromJson(Map<String, dynamic> json) {
     category: Category.fromJson(json['category'] as Map<String, dynamic>),
     numberOfQuestions: json['numberOfQuestions'] as int,
     answerTimeLimit: json['answerTimeLimit'] as int,
+    autoStart: json['autoStart'] as bool,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) =>
+    <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'ip': instance.ip,
       'name': instance.name,
@@ -33,6 +35,7 @@ Map<String, dynamic> _$ServerInfoToJson(ServerInfo instance) => <String, dynamic
       'answerTimeLimit': instance.answerTimeLimit,
       'currentNumberOfPlayers': instance.currentNumberOfPlayers,
       'serverStatus': _$ServerStatusEnumMap[instance.serverStatus],
+      'autoStart': instance.autoStart,
     };
 
 K _$enumDecode<K, V>(
@@ -74,4 +77,5 @@ const _$DataTypeEnumMap = {
   DataType.error: 'error',
   DataType.playerListInfo: 'playerListInfo',
   DataType.gameStarted: 'gameStarted',
+  DataType.startGame: 'startGame',
 };

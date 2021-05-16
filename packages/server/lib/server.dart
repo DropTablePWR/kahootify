@@ -48,7 +48,6 @@ class Server {
     server = await HttpServer.bind(kServerUrl, kServerPort, shared: true);
     print("Server initialized");
     await for (HttpRequest req in server) {
-      print(req);
       if (req.uri.path == '/') {
         try {
           var socket = await WebSocketTransformer.upgrade(req);
@@ -91,7 +90,7 @@ class Server {
     _serverInfo = value;
   }
 
-  void sendAllPlayerListInfo() {
+  void sendPlayerListInfoToAll() {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
     var data = PlayerListInfo(players);
     sendDataToAll(data.toJson());

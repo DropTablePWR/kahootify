@@ -14,7 +14,7 @@ main() async {
     print(event);
   });
 
-  while (true) {
+  while (socket.stream.isBroadcast) {
     await Future.delayed(Duration(seconds: 10)).then((value) => socket.sink.add(jsonEncode(PlayerInfo(id: 1, name: "CC").toJson())));
   }
 }

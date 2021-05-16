@@ -17,19 +17,21 @@ class ServerInfo extends Data {
   final int answerTimeLimit;
   int currentNumberOfPlayers;
   final ServerStatus serverStatus;
+  final bool autoStart;
 
-  ServerInfo({
-    required this.code,
+  ServerInfo(
+      {required this.code,
     required this.qrCode,
     required this.ip,
-    required this.name,
-    required this.maxNumberOfPlayers,
-    required this.currentNumberOfPlayers,
-    required this.serverStatus,
-    required this.category,
-    required this.numberOfQuestions,
-    required this.answerTimeLimit,
-  }) : super(DataType.serverInfo);
+      required this.name,
+      required this.maxNumberOfPlayers,
+      required this.currentNumberOfPlayers,
+      required this.serverStatus,
+      required this.category,
+      required this.numberOfQuestions,
+      required this.answerTimeLimit,
+      required this.autoStart})
+      : super(DataType.serverInfo);
 
   ServerInfo.init({
     required this.name,
@@ -41,6 +43,14 @@ class ServerInfo extends Data {
   })   : currentNumberOfPlayers = 0,
         code = CodeConverter.encodeIp(ip) ?? '000000',
         qrCode = CodeConverter.encodeIpAsQrCode(ip) ?? '000000',
+  ServerInfo.init(
+      {required this.name,
+      required this.maxNumberOfPlayers,
+      required this.category,
+      required this.numberOfQuestions,
+      required this.answerTimeLimit,
+      this.autoStart = false})
+      : currentNumberOfPlayers = 0,
         serverStatus = ServerStatus.lobby,
         super(DataType.serverInfo);
 
@@ -55,6 +65,7 @@ class ServerInfo extends Data {
     int? answerTimeLimit,
     String? qrCode,
     String? code,
+    bool? autoStart,
   }) {
     return ServerInfo(
       ip: ip ?? this.ip,
@@ -67,6 +78,7 @@ class ServerInfo extends Data {
       answerTimeLimit: answerTimeLimit ?? this.answerTimeLimit,
       qrCode: qrCode ?? this.qrCode,
       code: code ?? this.code,
+      autoStart: autoStart ?? this.autoStart,
     );
   }
 
