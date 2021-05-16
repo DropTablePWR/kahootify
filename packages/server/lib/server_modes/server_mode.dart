@@ -33,12 +33,8 @@ abstract class ServerMode {
         var player = WebPlayer(playerInfo, socket);
         server.knownPlayers[socket] = player;
         player.send(server.serverInfo.toJson());
-        // send user list to new player
-        var players = server.knownPlayers.values.map((e) => e.playerInfo).toList();
-        var data = PlayerListInfo(players);
-        player.send(data.toJson());
-        // send new player to all
-        server.sendDataToAll(player.playerInfo);
+        // send everyone player list
+        server.sendPlayerListInfoToAll();
       } else {
         print("Number of players exceeded");
         socket.add(jsonEncode(ErrorInfo("Number of players exceeded").toJson()));
@@ -73,6 +69,9 @@ abstract class ServerMode {
       case DataType.playerInfo:
         handlePlayerInfo(PlayerInfo.fromJson(json), player);
         break;
+      case DataType.startGame:
+        handleStartGame(player);
+        break;
       case DataType.unknown:
       case DataType.error:
       case DataType.playerListInfo:
@@ -80,6 +79,8 @@ abstract class ServerMode {
         player.send(ErrorInfo("Unsupported operation").toJson());
     }
   }
+
+  void handleStartGame(AbstractPlayer player);
 
   void handleServerInfo(ServerInfo serverInfo, AbstractPlayer player);
 

@@ -13,16 +13,17 @@ class LobbyMode extends ServerMode {
 
   @override
   ServerMode nextMode() {
+    server.sendDataToAll(Data(DataType.gameStarted).toJson());
     return GameMode(server);
   }
 
   @override
   void handlePlayerInfo(PlayerInfo playerInfo, AbstractPlayer player) {
     playerInfo.score = player.playerInfo.score;
+    playerInfo.id = player.playerInfo.id;
     player.playerInfo = playerInfo;
-    server.sendDataToAll(playerInfo.toJson());
+    server.sendPlayerListInfoToAll();
     if (_everyoneIsReady()) {
-      server.sendDataToAll(Data(DataType.gameStarted).toJson());
       server.serverMode = nextMode();
     }
   }
@@ -41,6 +42,15 @@ class LobbyMode extends ServerMode {
     if (player is LocalPlayer) {
       server.serverInfo = serverInfo;
       server.sendDataToAll(serverInfo.toJson());
+    } else {
+      player.send(ErrorInfo("No privileges for this operation"));
+    }
+  }
+
+  @override
+  void handleStartGame(AbstractPlayer player) {
+    if (player is LocalPlayer) {
+      server.serverMode = nextMode();
     } else {
       player.send(ErrorInfo("No privileges for this operation"));
     }

@@ -50,4 +50,5 @@ const _$DataTypeEnumMap = {
   DataType.error: 'error',
   DataType.playerListInfo: 'playerListInfo',
   DataType.gameStarted: 'gameStarted',
+  DataType.startGame: 'startGame',
 };
