@@ -37,6 +37,7 @@ class Server {
       var player = LocalPlayer(playerInfo, sendPort);
       knownPlayers[sendPort] = player;
       player.send(serverInfo.toJson());
+      sendPlayerListInfoToAll();
       receivePort.listen((event) {
         serverMode.dataListener(event, player);
       });
