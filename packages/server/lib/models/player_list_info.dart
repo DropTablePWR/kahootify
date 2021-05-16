@@ -7,8 +7,9 @@ part 'player_list_info.g.dart';
 @JsonSerializable()
 class PlayerListInfo extends Data {
   List<PlayerInfo> players;
+  bool everyoneIsReady;
 
-  PlayerListInfo(this.players) : super(DataType.playerListInfo);
+  PlayerListInfo(this.players, this.everyoneIsReady) : super(DataType.playerListInfo);
 
   factory PlayerListInfo.fromJson(Map<String, dynamic> json) => _$PlayerListInfoFromJson(json);
 

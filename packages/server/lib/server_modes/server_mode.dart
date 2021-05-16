@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
-import 'package:kahootify_server/models/player_list_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/web_player.dart';
@@ -25,16 +24,14 @@ abstract class ServerMode {
       server.knownPlayers.remove(entry.key);
       entry.value.reconnect(socket, playerInfo);
       entry.value.send(server.serverInfo.toJson());
-      var players = server.knownPlayers.values.map((e) => e.playerInfo).toList();
-      var data = PlayerListInfo(players);
-      entry.value.send(data.toJson());
+      entry.value.send(server.generatePlayerListInfo().toJson());
     } else {
       if (server.knownPlayers.length < server.serverInfo.maxNumberOfPlayers) {
         var player = WebPlayer(playerInfo, socket);
         server.knownPlayers[socket] = player;
         player.send(server.serverInfo.toJson());
         // send everyone player list
-        server.sendPlayerListInfoToAll();
+        server.sendDataToAll(server.generatePlayerListInfo().toJson());
       } else {
         print("Number of players exceeded");
         socket.add(jsonEncode(ErrorInfo("Number of players exceeded").toJson()));

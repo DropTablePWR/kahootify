@@ -37,7 +37,7 @@ class Server {
       var player = LocalPlayer(playerInfo, sendPort);
       knownPlayers[sendPort] = player;
       player.send(serverInfo.toJson());
-      sendPlayerListInfoToAll();
+      sendDataToAll(generatePlayerListInfo().toJson());
       receivePort.listen((event) {
         serverMode.dataListener(event, player);
       });
@@ -91,10 +91,18 @@ class Server {
     _serverInfo = value;
   }
 
-  void sendPlayerListInfoToAll() {
+  bool _everyoneIsReady() {
+    for (AbstractPlayer player in server.knownPlayers.values) {
+      if (player.playerInfo.ready == false) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  PlayerListInfo generatePlayerListInfo() {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
-    var data = PlayerListInfo(players);
-    sendDataToAll(data.toJson());
+    return PlayerListInfo(players, _everyoneIsReady());
   }
 
   void sendDataToAll(dynamic data) {
