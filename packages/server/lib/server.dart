@@ -92,7 +92,7 @@ class Server {
   }
 
   bool _everyoneIsReady() {
-    for (AbstractPlayer player in server.knownPlayers.values) {
+    for (AbstractPlayer player in knownPlayers.values) {
       if (player.playerInfo.ready == false) {
         return false;
       }
