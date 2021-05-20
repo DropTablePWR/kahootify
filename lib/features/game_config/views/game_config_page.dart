@@ -158,7 +158,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
                             step: 1,
                             value: gameConfig.maxNumberOfPlayers,
                             text: "Maximum number of players: ",
-                            onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(gameConfig.maxNumberOfPlayers),
+                            onChanged: (value) => context.read<GameConfigCubit>().setMaxNumberOfPlayers(value),
                           ),
                           SizedBox(height: 35),
                           _GameConfigNumberPicker(
@@ -167,7 +167,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
                             step: 1,
                             value: gameConfig.numberOfQuestions,
                             text: "Number of Questions: ",
-                            onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(gameConfig.numberOfQuestions),
+                            onChanged: (value) => context.read<GameConfigCubit>().setNumberOfQuestions(value),
                           ),
                           SizedBox(height: 35),
                           _GameConfigNumberPicker(
@@ -176,7 +176,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
                             step: 5,
                             value: gameConfig.answerTimeLimit,
                             text: "Seconds to answer: ",
-                            onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(gameConfig.answerTimeLimit),
+                            onChanged: (value) => context.read<GameConfigCubit>().setAnswerTimeLimit(value),
                           ),
                         ]);
                       },
