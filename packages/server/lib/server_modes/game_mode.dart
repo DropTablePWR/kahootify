@@ -19,10 +19,9 @@ class GameMode extends ServerMode {
   }
 
   @override
-  ServerMode nextMode() {
+  void nextMode() {
     // TODO: implement nextMode
     print("End of game");
-    return this;
   }
 
   void run() async {
