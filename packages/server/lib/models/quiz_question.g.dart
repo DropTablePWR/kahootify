@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'player_info.dart';
+part of 'quiz_question.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
-  return PlayerInfo(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    score: (json['score'] as num).toDouble(),
-    ready: json['ready'] as bool,
+QuizQuestion _$QuizQuestionFromJson(Map<String, dynamic> json) {
+  return QuizQuestion(
+    json['category'] as String,
+    _$enumDecode(_$QuestionDifficultyEnumMap, json['difficulty']),
+    json['question'] as String,
+    (json['possibleAnswers'] as List<dynamic>).map((e) => e as String).toList(),
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$PlayerInfoToJson(PlayerInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$QuizQuestionToJson(QuizQuestion instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
-      'id': instance.id,
-      'name': instance.name,
-      'score': instance.score,
-      'ready': instance.ready,
+      'category': instance.category,
+      'difficulty': _$QuestionDifficultyEnumMap[instance.difficulty],
+      'question': instance.question,
+      'possibleAnswers': instance.possibleAnswers,
     };
 
 K _$enumDecode<K, V>(
@@ -48,6 +48,12 @@ K _$enumDecode<K, V>(
     },
   ).key;
 }
+
+const _$QuestionDifficultyEnumMap = {
+  QuestionDifficulty.easy: 'easy',
+  QuestionDifficulty.medium: 'medium',
+  QuestionDifficulty.hard: 'hard',
+};
 
 const _$DataTypeEnumMap = {
   DataType.serverInfo: 'serverInfo',

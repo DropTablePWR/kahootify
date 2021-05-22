@@ -1,26 +1,22 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'player_info.dart';
+part of 'answer.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PlayerInfo _$PlayerInfoFromJson(Map<String, dynamic> json) {
-  return PlayerInfo(
-    id: json['id'] as int,
-    name: json['name'] as String,
-    score: (json['score'] as num).toDouble(),
-    ready: json['ready'] as bool,
+Answer _$AnswerFromJson(Map<String, dynamic> json) {
+  return Answer(
+    json['answer'] as int,
+    json['question'] as String,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$PlayerInfoToJson(PlayerInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$AnswerToJson(Answer instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
-      'id': instance.id,
-      'name': instance.name,
-      'score': instance.score,
-      'ready': instance.ready,
+      'answer': instance.answer,
+      'question': instance.question,
     };
 
 K _$enumDecode<K, V>(
