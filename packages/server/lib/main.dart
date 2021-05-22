@@ -20,7 +20,7 @@ Future<void> main() async {
   ServerInfo serverInfo = ServerInfo.init(
     name: "test",
     maxNumberOfPlayers: 5,
-    category: Category(id: 1, name: 'test'),
+    category: Category(id: 10, name: 'test'),
     answerTimeLimit: 20,
     numberOfQuestions: 10,
     ip: '192.168.1.23',
@@ -31,7 +31,7 @@ Future<void> main() async {
   SendPort sendPort = results.item2;
 
   while (true) {
-    await Future.delayed(Duration(seconds: 60)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
+    await Future.delayed(Duration(seconds: 3)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
   }
 
   // Classic

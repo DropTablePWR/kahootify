@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:kahootify_server/models/answer.dart';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
@@ -15,7 +16,7 @@ abstract class ServerMode {
 
   ServerMode(this.server);
 
-  ServerMode nextMode();
+  void nextMode();
 
   void handleConnectionProtocol(PlayerInfo playerInfo, WebSocket socket) {
     var entry = findByPlayerCode(playerInfo.id);
@@ -69,13 +70,20 @@ abstract class ServerMode {
       case DataType.startGame:
         handleStartGame(player);
         break;
+      case DataType.answer:
+        handleAnswer(Answer.fromJson(json), player);
+        break;
       case DataType.unknown:
       case DataType.error:
       case DataType.playerListInfo:
+      case DataType.question:
       case DataType.gameStarted:
         player.send(ErrorInfo("Unsupported operation").toJson());
+        break;
     }
   }
+
+  void handleAnswer(Answer answer, AbstractPlayer player);
 
   void handleStartGame(AbstractPlayer player);
 

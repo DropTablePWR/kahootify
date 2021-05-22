@@ -45,6 +45,14 @@ class Server {
     initialize();
   }
 
+  void sendDataToHost(dynamic data) {
+    for (AbstractPlayer player in knownPlayers.values) {
+      if (player is LocalPlayer) {
+        player.send(data);
+      }
+    }
+  }
+
   void initialize() async {
     server = await HttpServer.bind(kServerUrl, kServerPort, shared: true);
     print("Server initialized");

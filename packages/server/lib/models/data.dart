@@ -13,4 +13,4 @@ class Data {
   Map<String, dynamic> toJson() => _$DataToJson(this);
 }
 
-enum DataType { serverInfo, playerInfo, unknown, error, playerListInfo, gameStarted, startGame, question }
+enum DataType { serverInfo, playerInfo, unknown, error, playerListInfo, gameStarted, startGame, question, answer }
