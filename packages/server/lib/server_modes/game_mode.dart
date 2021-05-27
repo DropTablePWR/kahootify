@@ -1,4 +1,5 @@
 import 'package:kahootify_server/models/answer.dart';
+import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/question.dart';
@@ -25,6 +26,8 @@ class GameMode extends ServerMode {
   }
 
   void run() async {
+    server.sendDataToAll(Data(DataType.gameStarted).toJson());
+
     var delay = Duration(seconds: 3);
     for (Question question in questions) {
       answers = {};
@@ -39,9 +42,42 @@ class GameMode extends ServerMode {
   }
 
   void _calculatePoints(QuizQuestion quizQuestion, Question question, DateTime sentTimestamp, Duration delay) {
-    // final timeEnd = DateTime.now();
-    // final timeStart = sentTimestamp.add(delay);
-    //  TODO Calculate points
+    final timeEnd = DateTime.now();
+    final timeStart = sentTimestamp.add(delay);
+    final int difficulty;
+
+    switch (question.difficulty) {
+      case QuestionDifficulty.easy:
+        difficulty = 1;
+        break;
+      case QuestionDifficulty.medium:
+        difficulty = 2;
+        break;
+      case QuestionDifficulty.hard:
+        difficulty = 3;
+        break;
+    }
+
+    final validAnswer = quizQuestion.possibleAnswers.indexOf(question.correctAnswer);
+    final answerDelta = timeEnd.difference(timeStart).inMilliseconds;
+
+    for (AbstractPlayer player in server.knownPlayers.values) {
+      final info = player.playerInfo;
+      final answer = answers[player];
+
+      if (answer != null && answer.answer == validAnswer) {
+        final playerDelta = answer.timestamp.difference(timeStart).inMilliseconds;
+
+        info.combo += 1;
+        info.score += difficulty + info.combo * (answerDelta - playerDelta) / (answerDelta * 2);
+
+        if (questions.length == info.combo) {
+          info.score += 15;
+        }
+      } else {
+        info.combo = 0;
+      }
+    }
   }
 
   @override

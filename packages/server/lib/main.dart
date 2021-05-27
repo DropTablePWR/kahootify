@@ -21,7 +21,7 @@ Future<void> main() async {
     name: "test",
     maxNumberOfPlayers: 5,
     category: Category(id: 10, name: 'test'),
-    answerTimeLimit: 20,
+    answerTimeLimit: 1,
     numberOfQuestions: 10,
     ip: '192.168.1.23',
   );
