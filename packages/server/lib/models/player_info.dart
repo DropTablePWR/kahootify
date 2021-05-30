@@ -10,6 +10,9 @@ class PlayerInfo extends Data {
   double score;
   bool ready;
 
+  @JsonKey(ignore: true, defaultValue: 0)
+  int combo = 0;
+
   PlayerInfo({required this.id, required this.name, this.score = 0.0, this.ready = false}) : super(DataType.playerInfo);
 
   PlayerInfo copyWith({int? id, String? name, double? score, bool? ready}) {
