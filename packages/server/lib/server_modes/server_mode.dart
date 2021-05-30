@@ -7,6 +7,7 @@ import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
+import 'package:kahootify_server/players/local_player.dart';
 import 'package:kahootify_server/players/web_player.dart';
 
 import '../server.dart';
@@ -73,16 +74,30 @@ abstract class ServerMode {
       case DataType.answer:
         handleAnswer(Answer.fromJson(json), player);
         break;
+      case DataType.returnToLobby:
+        _returnToLobby(player);
+        break;
       case DataType.unknown:
       case DataType.error:
       case DataType.playerListInfo:
       case DataType.question:
       case DataType.gameStarted:
-      case DataType.ranking:
+      case DataType.lobbyStarted:
+      case DataType.rankingStarted:
         player.send(ErrorInfo("Unsupported operation").toJson());
         break;
     }
   }
+
+  void _returnToLobby(AbstractPlayer player) {
+    if (player is LocalPlayer) {
+      returnToLobby();
+    } else {
+      player.send(ErrorInfo("No privileges").toJson());
+    }
+  }
+
+  void returnToLobby();
 
   void handleAnswer(Answer answer, AbstractPlayer player);
 

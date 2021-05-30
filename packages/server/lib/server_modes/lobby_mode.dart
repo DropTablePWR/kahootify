@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:kahootify_server/data/remote_trivia_repository.dart';
 import 'package:kahootify_server/models/answer.dart';
+import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/errors.dart';
 import 'package:kahootify_server/models/player_info.dart';
@@ -18,6 +19,7 @@ class LobbyMode extends ServerMode {
   LobbyMode(Server server) : super(server) {
     apiResponse = RemoteTriviaRepository.getTrivia(server.serverInfo.numberOfQuestions, server.serverInfo.category);
     print("Server is in Lobby Mode");
+    server.sendDataToAll(Data(DataType.lobbyStarted).toJson());
   }
 
   @override
@@ -65,5 +67,10 @@ class LobbyMode extends ServerMode {
 
   void _sendInvalidOperation(AbstractPlayer player) {
     player.send(ErrorInfo("Operation invalid during lobby mode").toJson());
+  }
+
+  @override
+  void returnToLobby() {
+    return;
   }
 }
