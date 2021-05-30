@@ -1,20 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'error_info.dart';
+part of 'ranking_info.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ErrorInfo _$ErrorInfoFromJson(Map<String, dynamic> json) {
-  return ErrorInfo(
-    json['message'] as String,
+RankingInfo _$RankingInfoFromJson(Map<String, dynamic> json) {
+  return RankingInfo(
+    (json['players'] as List<dynamic>).map((e) => PlayerInfo.fromJson(e as Map<String, dynamic>)).toList(),
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$ErrorInfoToJson(ErrorInfo instance) => <String, dynamic>{
+Map<String, dynamic> _$RankingInfoToJson(RankingInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
-      'message': instance.message,
+      'players': instance.players,
     };
 
 K _$enumDecode<K, V>(

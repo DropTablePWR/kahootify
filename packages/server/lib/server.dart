@@ -6,6 +6,7 @@ import 'dart:isolate';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/player_list_info.dart';
+import 'package:kahootify_server/models/ranking_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/players/local_player.dart';
@@ -111,6 +112,12 @@ class Server {
   PlayerListInfo generatePlayerListInfo() {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
     return PlayerListInfo(players, _everyoneIsReady());
+  }
+
+  RankingInfo generateRankingInfo() {
+    var players = knownPlayers.values.map((e) => e.playerInfo).toList();
+    players.sort((a, b) => a.score.compareTo(b.score));
+    return RankingInfo(players);
   }
 
   void sendDataToAll(dynamic data) {

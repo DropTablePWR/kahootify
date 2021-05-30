@@ -16,7 +16,7 @@ class GameMode extends ServerMode {
 
   GameMode(Server server, this.questions) : super(server) {
     this.run();
-    print("wow");
+    print("Server is in Game Mode");
   }
 
   @override
@@ -37,6 +37,7 @@ class GameMode extends ServerMode {
       // wait x seconds
       await Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit));
       _calculatePoints(sentQuestion, question, timestamp, delay);
+      server.sendDataToAll(server.generateRankingInfo().toJson());
     }
     nextMode();
   }
@@ -65,7 +66,7 @@ class GameMode extends ServerMode {
       final info = player.playerInfo;
       final answer = answers[player];
 
-      if (answer != null && answer.answer == validAnswer) {
+      if (answer != null && question.correctAnswer.compareTo(answer.question) == 0 && answer.answer == validAnswer) {
         final playerDelta = answer.timestamp.difference(timeStart).inMilliseconds;
 
         info.combo += 1;
