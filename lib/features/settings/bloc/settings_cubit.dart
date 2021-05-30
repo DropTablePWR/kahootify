@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:kahootify/core/data/shared_preferences_repository.dart';
 import 'package:kahootify/core/models/settings.dart';
+import 'package:kahootify_server/models/player_info.dart';
 
 class SettingsCubit extends Cubit<Settings> {
   final SharedPreferencesRepository prefs;
@@ -21,6 +22,8 @@ class SettingsCubit extends Cubit<Settings> {
       prefs.playerName = initialSettings.playerName;
     }
   }
+
+  PlayerInfo get playerInfo => PlayerInfo(id: state.playerId, name: state.playerName);
 
   void setPlayerName(String playerName) {
     emit(state.copyWith(playerName: playerName));

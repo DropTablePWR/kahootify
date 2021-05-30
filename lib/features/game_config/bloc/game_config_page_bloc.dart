@@ -9,7 +9,9 @@ class GameConfigPageBloc extends Bloc<GameConfigPageEvent, GameConfigPageState> 
   GameConfigPageBloc() : super(GameConfigPageInitial());
 
   @override
-  Stream<GameConfigPageState> mapEventToState(GameConfigPageEvent event,) async* {
+  Stream<GameConfigPageState> mapEventToState(
+    GameConfigPageEvent event,
+  ) async* {
     if (event is GameConfigPageEntered) {
       yield GameConfigPageLoading();
       final categories = await RemoteTriviaRepository.getAllAvailableCategories();

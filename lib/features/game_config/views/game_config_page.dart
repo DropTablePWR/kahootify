@@ -10,7 +10,6 @@ import 'package:kahootify/features/lobby/views/lobby_page.dart';
 import 'package:kahootify/features/settings/bloc/settings_cubit.dart';
 import 'package:kahootify/widgets/text_fields/default_text_field.dart';
 import 'package:kahootify_server/models/category.dart';
-import 'package:kahootify_server/models/player_info.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class GameConfigPage extends StatelessWidget {
@@ -20,12 +19,7 @@ class GameConfigPage extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => GameConfigCubit()),
         BlocProvider(create: (_) => GameConfigPageBloc()..add(GameConfigPageEntered())),
-        BlocProvider(
-          create: (_) => ServerStartBloc(
-            ip: context.read<IpCubit>().state,
-            playerInfo: PlayerInfo(id: context.read<SettingsCubit>().state.playerId, name: context.read<SettingsCubit>().state.playerName),
-          ),
-        )
+        BlocProvider(create: (_) => ServerStartBloc(ip: context.read<IpCubit>().ip, playerInfo: context.read<SettingsCubit>().playerInfo))
       ],
       child: _GameConfigPage(),
     );
@@ -85,15 +79,11 @@ class _GameConfigPageState extends State<_GameConfigPage> {
         ),
         floatingActionButton: BlocBuilder<GameConfigCubit, GameConfig>(
           builder: (context, config) {
-            if (config.gameName.isNotEmpty && config.category != null) {
-              return FloatingActionButton(
-                onPressed: () => context.read<ServerStartBloc>().add(InitializeServer(config)),
-                child: const Icon(Icons.check),
-                backgroundColor: KColors.backgroundGreenColor,
-              );
-            } else {
-              return SizedBox.shrink();
-            }
+            return FloatingActionButton(
+              onPressed: () => config.gameName.isNotEmpty && config.category != null ? context.read<ServerStartBloc>().add(InitializeServer(config)) : null,
+              child: const Icon(Icons.check),
+              backgroundColor: KColors.backgroundGreenColor,
+            );
           },
         ),
         body: BlocBuilder<GameConfigPageBloc, GameConfigPageState>(

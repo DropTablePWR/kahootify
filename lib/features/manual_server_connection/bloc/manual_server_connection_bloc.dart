@@ -1,64 +1,57 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify_server/utils/code_converter.dart';
-import 'package:wifi_iot/wifi_iot.dart';
 
-class ManualServerConnectionBloc extends Bloc<ManualServerConnectionEvent, ManualServerConnectionState> {
-  ManualServerConnectionBloc() : super(ManualServerConnectionInitial());
+class ManualServerDiscoveryBloc extends Bloc<ManualServerDiscoveryEvent, ManualServerDiscoveryState> {
+  ManualServerDiscoveryBloc({required this.ip}) : super(ManualServerConnectionInitial());
+  final String ip;
 
   @override
-  Stream<ManualServerConnectionState> mapEventToState(ManualServerConnectionEvent event) async* {
+  Stream<ManualServerDiscoveryState> mapEventToState(ManualServerDiscoveryEvent event) async* {
     if (event is CodeEntered || event is QrCodeScanned) {
-      final myIp = await WiFiForIoTPlugin.getIP();
-      if (myIp == null) {
-        yield NotInWifiError();
-      } else {
-        String? decodedIp;
+      String? decodedIp;
+      if (event is CodeEntered) {
+        decodedIp = CodeConverter.decodeIp(event.code);
+      } else if (event is QrCodeScanned) {
+        decodedIp = CodeConverter.decodeIpFromQrCode(event.qrCode);
+      }
+      if (decodedIp == null) {
         if (event is CodeEntered) {
-          decodedIp = CodeConverter.decodeIp(event.code);
-        } else if (event is QrCodeScanned) {
-          decodedIp = CodeConverter.decodeIpFromQrCode(event.qrCode);
-        }
-        if (decodedIp == null) {
-          if (event is CodeEntered) {
-            yield BadCodeState();
-          } else {
-            yield BadQrState();
-          }
+          yield BadCodeState();
         } else {
-          final myIpParts = myIp.split('.');
-          final discoveredIp = myIpParts[0] + "." + myIpParts[1] + "." + decodedIp;
-          yield DiscoveredIp(discoveredIp);
+          yield BadQrState();
         }
+      } else {
+        final myIpParts = ip.split('.');
+        final discoveredIp = myIpParts[0] + "." + myIpParts[1] + "." + decodedIp;
+        yield DiscoveredIp(discoveredIp);
       }
     }
   }
 }
 
-abstract class ManualServerConnectionState {}
+abstract class ManualServerDiscoveryState {}
 
-class ManualServerConnectionInitial extends ManualServerConnectionState {}
+class ManualServerConnectionInitial extends ManualServerDiscoveryState {}
 
-class BadQrState extends ManualServerConnectionState {}
+class BadQrState extends ManualServerDiscoveryState {}
 
-class BadCodeState extends ManualServerConnectionState {}
+class BadCodeState extends ManualServerDiscoveryState {}
 
-class DiscoveredIp extends ManualServerConnectionState {
+class DiscoveredIp extends ManualServerDiscoveryState {
   final String discoveredIp;
 
   DiscoveredIp(this.discoveredIp);
 }
 
-class NotInWifiError extends ManualServerConnectionState {}
+abstract class ManualServerDiscoveryEvent {}
 
-abstract class ManualServerConnectionEvent {}
-
-class CodeEntered extends ManualServerConnectionEvent {
+class CodeEntered extends ManualServerDiscoveryEvent {
   final String code;
 
   CodeEntered({required this.code});
 }
 
-class QrCodeScanned extends ManualServerConnectionEvent {
+class QrCodeScanned extends ManualServerDiscoveryEvent {
   final String qrCode;
 
   QrCodeScanned(this.qrCode);

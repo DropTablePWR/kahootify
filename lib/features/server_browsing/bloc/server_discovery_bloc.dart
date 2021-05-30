@@ -31,7 +31,7 @@ class ServerDiscoveryBloc extends Bloc<ServerDiscoveryEvent, ServerDiscoveryStat
     ServerDiscoveryEvent event,
   ) async* {
     if (event is FoundServer) {
-      var server = await repository.getServerInfo(event.serverIp);
+      var server = await ServerDiscoveryRepository.getServerInfo(event.serverIp);
       if (server != null) {
         if (state is SearchingForServers) {
           yield FoundServersState(discoveredServers: [server]);

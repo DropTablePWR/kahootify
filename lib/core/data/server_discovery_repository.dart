@@ -52,18 +52,22 @@ class ServerDiscoveryRepository {
     });
   }
 
-  Future<ServerInfo?> getServerInfo(String serverIp) async {
+  static Future<ServerInfo?> getServerInfo(String serverIp) async {
     Uri uri;
     uri = Uri.http('$serverIp:$kDefaultServerPort', "info");
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
     };
-    final response = await http.get(uri, headers: headers);
-    if (response.statusCode != 200) {
+    try {
+      final response = await http.get(uri, headers: headers);
+      if (response.statusCode != 200) {
+        return null;
+      }
+
+      var data = jsonDecode(response.body);
+      return ServerInfo.fromJson(data);
+    } catch (e) {
       return null;
     }
-
-    var data = jsonDecode(response.body);
-    return ServerInfo.fromJson(data);
   }
 }

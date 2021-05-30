@@ -55,6 +55,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initializeSharedPreferencesRepository();
+    tryGetInitialWifiIp();
   }
 
   @override

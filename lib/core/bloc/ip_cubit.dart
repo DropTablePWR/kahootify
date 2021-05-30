@@ -4,4 +4,6 @@ class IpCubit extends Cubit<String> {
   IpCubit(String initialIp) : super(initialIp);
 
   void setIp(String ip) => emit(ip);
+
+  String get ip => state;
 }
