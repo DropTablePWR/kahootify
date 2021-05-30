@@ -65,5 +65,7 @@ const _$DataTypeEnumMap = {
   DataType.startGame: 'startGame',
   DataType.question: 'question',
   DataType.answer: 'answer',
-  DataType.ranking: 'ranking',
+  DataType.rankingStarted: 'rankingStarted',
+  DataType.lobbyStarted: 'lobbyStarted',
+  DataType.returnToLobby: 'returnToLobby',
 };

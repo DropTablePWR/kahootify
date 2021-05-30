@@ -7,29 +7,33 @@ import 'package:kahootify_server/models/quiz_question.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:kahootify_server/players/abstract_player.dart';
 import 'package:kahootify_server/server.dart';
+import 'package:kahootify_server/server_modes/lobby_mode.dart';
+import 'package:kahootify_server/server_modes/ranking_mode.dart';
 import 'package:kahootify_server/server_modes/server_mode.dart';
 
 class GameMode extends ServerMode {
   int currentQuestion = 0;
   List<Question> questions;
   Map<AbstractPlayer, AnswerTimestamp> answers = {};
+  bool gameIsActive = true;
 
   GameMode(Server server, this.questions) : super(server) {
-    this.run();
     print("Server is in Game Mode");
+    server.sendDataToAll(Data(DataType.gameStarted).toJson());
+    this.run();
   }
 
   @override
   void nextMode() {
-    // TODO: implement nextMode
-    print("End of game");
+    server.serverMode = RankingMode(server);
   }
 
   void run() async {
-    server.sendDataToAll(Data(DataType.gameStarted).toJson());
-
     var delay = Duration(seconds: 3);
     for (Question question in questions) {
+      if (!gameIsActive) {
+        return;
+      }
       answers = {};
       var sentQuestion = QuizQuestion.fromQuestion(question: question);
       this.server.sendDataToAll(sentQuestion.toJson());
@@ -104,6 +108,12 @@ class GameMode extends ServerMode {
   void handleAnswer(Answer answer, AbstractPlayer player) {
     var preparedAnswer = AnswerTimestamp.fromAnswer(answer, player);
     answers[player] = preparedAnswer;
+  }
+
+  @override
+  void returnToLobby() {
+    gameIsActive = false;
+    server.serverMode = LobbyMode(server);
   }
 }
 
