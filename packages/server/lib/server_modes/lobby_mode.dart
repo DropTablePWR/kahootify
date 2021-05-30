@@ -17,6 +17,7 @@ class LobbyMode extends ServerMode {
 
   LobbyMode(Server server) : super(server) {
     apiResponse = RemoteTriviaRepository.getTrivia(server.serverInfo.numberOfQuestions, server.serverInfo.category);
+    print("Server is in Lobby Mode");
   }
 
   @override
