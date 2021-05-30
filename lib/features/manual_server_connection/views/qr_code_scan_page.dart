@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/features/manual_server_connection/bloc/manual_server_connection_bloc.dart';
 import 'package:kahootify/widgets/toast.dart';

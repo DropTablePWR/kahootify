@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 import 'package:kahootify/features/server_browsing/bloc/server_discovery_bloc.dart';
 
 class SearchingErrorWidget extends StatelessWidget {
