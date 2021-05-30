@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 
 class ChooseModeButton extends StatelessWidget {
   final Function() onPressed;

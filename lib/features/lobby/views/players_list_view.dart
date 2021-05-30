@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 import 'package:kahootify_server/models/player_info.dart';
 
 class PlayersListView extends StatelessWidget {

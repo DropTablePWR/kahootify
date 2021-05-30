@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 import 'package:kahootify/const.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/game_config/views/game_config_page.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:kahootify/color_consts.dart';
+import 'package:kahootify/color_const.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
