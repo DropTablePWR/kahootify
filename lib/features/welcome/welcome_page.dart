@@ -5,16 +5,16 @@ import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/game_config/views/game_config_page.dart';
 import 'package:kahootify/features/server_browsing/views/server_discovery_page.dart';
 import 'package:kahootify/features/settings/views/settings_page.dart';
-import 'package:kahootify/features/welcome/views/widgets/choose_mode_button.dart';
+import 'package:kahootify/features/welcome/choose_mode_button.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLightColor,
+      backgroundColor: KColors.backgroundLightColor,
       appBar: AppBar(
         title: Text(kAppName),
-        backgroundColor: kBackgroundGreenColor,
+        backgroundColor: KColors.backgroundGreenColor,
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 20.0),
@@ -33,7 +33,7 @@ class WelcomePage extends StatelessWidget {
               children: [
                 Text(
                   "SELECT GAME MODE: ",
-                  style: TextStyle(fontSize: 25, color: kBasedBlackColor),
+                  style: TextStyle(fontSize: 25, color: KColors.basedBlackColor),
                 ),
                 SizedBox(height: 35),
                 Column(

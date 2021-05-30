@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
-import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/core/models/settings.dart';
+import 'package:kahootify/features/settings/bloc/settings_cubit.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -32,10 +32,10 @@ class _SettingsPage extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLightColor,
+      backgroundColor: KColors.backgroundLightColor,
       appBar: AppBar(
         title: Text("SETTINGS"),
-        backgroundColor: kBackgroundGreenColor,
+        backgroundColor: KColors.backgroundGreenColor,
       ),
       body: SafeArea(
         child: BlocBuilder<SettingsCubit, Settings>(
@@ -46,7 +46,7 @@ class _SettingsPage extends State<SettingsPage> {
                 children: [
                   SizedBox(height: 35),
                   Center(
-                    child: Text(settings.playerName, style: TextStyle(fontSize: 35, color: kBasedBlackColor, fontWeight: FontWeight.bold)),
+                    child: Text(settings.playerName, style: TextStyle(fontSize: 35, color: KColors.basedBlackColor, fontWeight: FontWeight.bold)),
                   ),
                   SizedBox(height: 35),
                   Padding(
@@ -54,13 +54,13 @@ class _SettingsPage extends State<SettingsPage> {
                     child: TextField(
                       textCapitalization: TextCapitalization.characters,
                       controller: playerNameInputController,
-                      cursorColor: kBackgroundGreenColor,
+                      cursorColor: KColors.backgroundGreenColor,
                       decoration: InputDecoration(
                         focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: kBackgroundGreenColor),
+                          borderSide: BorderSide(color: KColors.backgroundGreenColor),
                         ),
                         labelText: 'Enter your username',
-                        labelStyle: TextStyle(color: kBackgroundGreenColor),
+                        labelStyle: TextStyle(color: KColors.backgroundGreenColor),
                       ),
                     ),
                   ),
@@ -104,14 +104,14 @@ class _SoundSettingsTile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, size: 50, color: kBackgroundGreenColor),
+        Icon(icon, size: 50, color: KColors.backgroundGreenColor),
         SizedBox(width: 35),
         Switch(
           value: value,
           onChanged: onChanged,
-          activeTrackColor: kBasedBlackColor,
-          activeColor: kBackgroundGreenColor,
-          inactiveThumbColor: kBasedBlackColor,
+          activeTrackColor: KColors.basedBlackColor,
+          activeColor: KColors.backgroundGreenColor,
+          inactiveThumbColor: KColors.basedBlackColor,
         ),
       ],
     );

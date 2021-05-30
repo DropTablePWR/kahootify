@@ -45,7 +45,7 @@ class ServerDiscoveryListView extends StatelessWidget {
       } else {
         return Center(
           child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(kBackgroundGreenColor),
+            valueColor: AlwaysStoppedAnimation<Color>(KColors.backgroundGreenColor),
           ),
         );
       }

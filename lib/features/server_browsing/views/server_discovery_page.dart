@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:kahootify/color_const.dart';
+import 'package:kahootify/core/bloc/server_connection_bloc.dart';
 import 'package:kahootify/core/data/server_discovery_repository.dart';
 import 'package:kahootify/features/manual_server_connection/views/qr_code_scan_page.dart';
 import 'package:kahootify/features/server_browsing/bloc/server_discovery_bloc.dart';
@@ -13,8 +14,11 @@ class ServerDiscoveryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ServerDiscoveryBloc>(
-      create: (context) => ServerDiscoveryBloc(repository: serverDiscoveryRepository),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ServerDiscoveryBloc>(create: (context) => ServerDiscoveryBloc(repository: serverDiscoveryRepository)),
+        BlocProvider<ServerConnectionBloc>(create: (context) => ServerConnectionBloc()),
+      ],
       child: _ServerDiscoveryView(),
     );
   }
@@ -24,15 +28,15 @@ class _ServerDiscoveryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBackgroundLightColor,
+      backgroundColor: KColors.backgroundLightColor,
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => QrCodeScanPage())),
-        child: const Icon(Icons.qr_code, color: kBackgroundLightColor),
-        backgroundColor: kBackgroundGreenColor,
+        child: const Icon(Icons.qr_code, color: KColors.backgroundLightColor),
+        backgroundColor: KColors.backgroundGreenColor,
       ),
       appBar: AppBar(
         title: Text("AVAILABLE SERVERS"),
-        backgroundColor: kBackgroundGreenColor,
+        backgroundColor: KColors.backgroundGreenColor,
         actions: [_AppBarActions()],
       ),
       body: ServerDiscoveryListView(),

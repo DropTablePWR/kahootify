@@ -9,7 +9,7 @@ class SearchingErrorWidget extends StatelessWidget {
 
   const SearchingErrorWidget({required this.message, this.solutionMessage});
 
-  static const _errorTextStyle = TextStyle(fontSize: 25, color: kBasedBlackColor);
+  static const _errorTextStyle = TextStyle(fontSize: 25, color: KColors.basedBlackColor);
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +24,11 @@ class SearchingErrorWidget extends StatelessWidget {
           onPressed: () => context.read<ServerDiscoveryBloc>().add(RefreshRequested()),
           child: Text("REFRESH", style: TextStyle(fontSize: 20)),
           style: ElevatedButton.styleFrom(
-            primary: kBackgroundGreenColor,
+            primary: KColors.backgroundGreenColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
             elevation: 5,
             padding: EdgeInsets.all(20.0),
-            textStyle: TextStyle(color: kBackgroundLightColor),
+            textStyle: TextStyle(color: KColors.backgroundLightColor),
           ),
         ),
       ]),

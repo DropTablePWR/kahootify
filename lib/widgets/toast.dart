@@ -9,7 +9,7 @@ class KahootifyToast {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 3,
-        backgroundColor: kBasedBlackColor,
+        backgroundColor: KColors.basedBlackColor,
         textColor: Colors.white,
         fontSize: 16.0);
   }

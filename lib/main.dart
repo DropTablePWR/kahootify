@@ -6,8 +6,8 @@ import 'package:kahootify/core/data/shared_preferences_repository.dart';
 import 'package:kahootify/features/splash/views/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'core/bloc/settings_cubit.dart';
-import 'features/welcome/views/welcome_page.dart';
+import 'features/settings/bloc/settings_cubit.dart';
+import 'features/welcome/welcome_page.dart';
 
 class SimpleBlocObserver extends BlocObserver {
   @override

@@ -38,7 +38,7 @@ class _QrCodeScanPage extends StatelessWidget {
 
   BoxDecoration get _pinPutDecoration {
     return BoxDecoration(
-      border: Border.all(color: kBackgroundGreenColor),
+      border: Border.all(color: KColors.backgroundGreenColor),
       borderRadius: BorderRadius.circular(15.0),
     );
   }
@@ -60,9 +60,9 @@ class _QrCodeScanPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text("SCAN QR CODE"),
-          backgroundColor: kBackgroundGreenColor,
+          backgroundColor: KColors.backgroundGreenColor,
         ),
-        backgroundColor: kBackgroundLightColor,
+        backgroundColor: KColors.backgroundLightColor,
         body: SizedBox.expand(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -72,11 +72,11 @@ class _QrCodeScanPage extends StatelessWidget {
               Container(
                 width: 250,
                 height: 250,
-                decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: kBackgroundGreenColor, width: 2))),
+                decoration: BoxDecoration(border: Border.fromBorderSide(BorderSide(color: KColors.backgroundGreenColor, width: 2))),
                 child: ScanView(
                   controller: scanController,
                   scanAreaScale: 1,
-                  scanLineColor: kBackgroundLightColor,
+                  scanLineColor: KColors.backgroundLightColor,
                   onCapture: (code) => context.read<ManualServerConnectionBloc>().add(QrCodeScanned(code)),
                 ),
               ),
@@ -96,7 +96,7 @@ class _QrCodeScanPage extends StatelessWidget {
                   followingFieldDecoration: _pinPutDecoration.copyWith(
                     borderRadius: BorderRadius.circular(5.0),
                     border: Border.all(
-                      color: kBackgroundGreenColor.withOpacity(.5),
+                      color: KColors.backgroundGreenColor.withOpacity(.5),
                     ),
                   ),
                 ),

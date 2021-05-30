@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kahootify/color_const.dart';
 import 'package:kahootify/const.dart';
-import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/features/lobby/views/lobby_page.dart';
+import 'package:kahootify/features/settings/bloc/settings_cubit.dart';
 import 'package:kahootify/widgets/player_number_indicator.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
@@ -70,7 +70,7 @@ class _DiscoveredServerListItemState extends State<DiscoveredServerListItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: kBackgroundGreenColor,
+      color: KColors.backgroundGreenColor,
       elevation: 5,
       child: SizedBox(
         height: 70.0,
