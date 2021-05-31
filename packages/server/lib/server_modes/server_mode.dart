@@ -77,15 +77,31 @@ abstract class ServerMode {
       case DataType.returnToLobby:
         _returnToLobby(player);
         break;
+      case DataType.goodbye:
+        removePlayer(player);
+        break;
       case DataType.unknown:
       case DataType.error:
       case DataType.playerListInfo:
       case DataType.question:
       case DataType.gameStarted:
       case DataType.lobbyStarted:
+      case DataType.readyToBeKilled:
       case DataType.rankingStarted:
         player.send(ErrorInfo("Unsupported operation").toJson());
         break;
+    }
+  }
+
+  void removePlayer(AbstractPlayer player) {
+    if (player is LocalPlayer) {
+      server.sendDataToAll(Data(DataType.goodbye).toJson());
+      server.knownPlayers = {};
+      player.send(Data(DataType.readyToBeKilled).toJson());
+    } else {
+      server.knownPlayers.removeWhere((key, value) => value == player);
+      player.send(Data(DataType.goodbye).toJson());
+      server.sendDataToAll(server.generatePlayerListInfo().toJson());
     }
   }
 

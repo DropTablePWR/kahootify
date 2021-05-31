@@ -16,6 +16,6 @@ main() async {
   });
 
   while (true) {
-    await Future.delayed(Duration(seconds: 1)).then((value) => socket.sink.add(jsonEncode(Answer(0, "Test").toJson())));
+    await Future.delayed(Duration(seconds: 10)).then((value) => socket.sink.add(jsonEncode(Answer(0, "Test").toJson())));
   }
 }

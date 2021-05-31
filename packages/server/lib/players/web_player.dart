@@ -22,4 +22,9 @@ class WebPlayer extends AbstractPlayer {
 
     print("reconnecting player: " + this.playerInfo.id.toString());
   }
+
+  @override
+  getConnection() {
+    return socket;
+  }
 }

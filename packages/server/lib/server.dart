@@ -50,6 +50,7 @@ class Server {
     for (AbstractPlayer player in knownPlayers.values) {
       if (player is LocalPlayer) {
         player.send(data);
+        return;
       }
     }
   }
