@@ -19,9 +19,4 @@ class LocalPlayer extends AbstractPlayer {
   void reconnect(data, PlayerInfo playerInfo) {
     throw Exception("Local player can't be reconnected!!!");
   }
-
-  @override
-  getConnection() {
-    return sendPort;
-  }
 }

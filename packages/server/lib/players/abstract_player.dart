@@ -10,6 +10,4 @@ abstract class AbstractPlayer {
   void send(dynamic data);
 
   void reconnect(dynamic data, PlayerInfo playerInfo);
-
-  dynamic getConnection();
 }
