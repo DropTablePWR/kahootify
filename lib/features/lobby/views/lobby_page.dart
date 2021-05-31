@@ -77,18 +77,18 @@ class _LobbyPageState extends State<LobbyPage> {
         return BackdropScaffold(
           headerHeight: MediaQuery.of(context).size.height * 0.5,
           stickyFrontLayer: true,
-          backLayerBackgroundColor: kBackgroundGreenColor,
-          backgroundColor: kBackgroundLightColor,
+          backLayerBackgroundColor: KColors.backgroundGreenColor,
+          backgroundColor: KColors.backgroundLightColor,
           appBar: BackdropAppBar(
             title: Text("LOBBY"),
-            backgroundColor: kBackgroundGreenColor,
+            backgroundColor: KColors.backgroundGreenColor,
             actions: [
               DisplayQRCodeButton(qrCode: widget.initialServerInfo.qrCode, code: widget.initialServerInfo.code),
             ],
           ),
           backLayer: BackLayer(serverInfo: widget.initialServerInfo, isPortrait: true),
           frontLayer: Scaffold(
-            backgroundColor: kBackgroundLightColor,
+            backgroundColor: KColors.backgroundLightColor,
             floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
             floatingActionButton: getFAB(),
             body: Padding(
@@ -99,10 +99,10 @@ class _LobbyPageState extends State<LobbyPage> {
         );
       } else {
         return Scaffold(
-          backgroundColor: kBackgroundLightColor,
+          backgroundColor: KColors.backgroundLightColor,
           appBar: AppBar(
             title: Text("LOBBY"),
-            backgroundColor: kBackgroundGreenColor,
+            backgroundColor: KColors.backgroundGreenColor,
             actions: [
               DisplayQRCodeButton(qrCode: widget.initialServerInfo.qrCode, code: widget.initialServerInfo.code),
             ],

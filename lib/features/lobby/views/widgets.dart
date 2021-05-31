@@ -45,14 +45,14 @@ class ServerInfoWidget extends StatelessWidget {
         Expanded(
           child: Text(
             name,
-            style: TextStyle(fontSize: 15, color: isPortrait ? Colors.white : kBasedBlackColor, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 15, color: isPortrait ? Colors.white : KColors.basedBlackColor, fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(width: 25),
         Expanded(
           child: Text(
             text ?? "",
-            style: TextStyle(fontSize: 15, color: isPortrait ? Colors.white : kBasedBlackColor, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 15, color: isPortrait ? Colors.white : KColors.basedBlackColor, fontWeight: FontWeight.bold),
           ),
         ),
       ],
@@ -70,13 +70,13 @@ class IAmReadyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return NeumorphicButton(
       style: NeumorphicStyle(
-        color: iAmReady ? kBackgroundGreenColor : kBasedBlackColor,
+        color: iAmReady ? KColors.backgroundGreenColor : KColors.basedBlackColor,
         depth: iAmReady ? -10 : 10,
         oppositeShadowLightSource: false,
-        shadowDarkColor: kBasedBlackColor,
-        shadowDarkColorEmboss: kBasedBlackColor,
-        shadowLightColor: kBackgroundLightColor,
-        shadowLightColorEmboss: kBackgroundLightColor,
+        shadowDarkColor: KColors.basedBlackColor,
+        shadowDarkColorEmboss: KColors.basedBlackColor,
+        shadowLightColor: KColors.backgroundLightColor,
+        shadowLightColorEmboss: KColors.backgroundLightColor,
         shape: NeumorphicShape.concave,
         boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(8)),
       ),
@@ -112,7 +112,7 @@ class StartGameButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      backgroundColor: kBackgroundGreenColor,
+      backgroundColor: KColors.backgroundGreenColor,
       label: Text("Start a game"),
       onPressed: () {
         print("Start a game");

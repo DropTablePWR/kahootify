@@ -36,21 +36,21 @@ class _PlayersListItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: BorderSide(
-          color: kBasedBlackColor,
+          color: KColors.basedBlackColor,
           width: 1.5,
         ),
       ),
       color: playerInfo == null
           ? Colors.grey.shade300
           : playerInfo!.ready
-              ? kBackgroundGreenColor
-              : kBasedBlackColor,
+              ? KColors.backgroundGreenColor
+              : KColors.basedBlackColor,
       elevation: 10,
       child: SizedBox(
         height: 50.0,
         child: playerInfo == null
             ? Center(
-                child: Text('EMPTY', style: TextStyle(color: kBasedBlackColor, fontSize: 18, fontWeight: FontWeight.bold)),
+                child: Text('EMPTY', style: TextStyle(color: KColors.basedBlackColor, fontSize: 18, fontWeight: FontWeight.bold)),
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

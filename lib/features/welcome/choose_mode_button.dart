@@ -19,11 +19,11 @@ class ChooseModeButton extends StatelessWidget {
           style: TextStyle(fontSize: 20),
         ),
         style: ElevatedButton.styleFrom(
-          primary: kBackgroundGreenColor,
+          primary: KColors.backgroundGreenColor,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           elevation: 15,
           padding: EdgeInsets.all(20.0),
-          textStyle: TextStyle(color: kBackgroundLightColor),
+          textStyle: TextStyle(color: KColors.backgroundLightColor),
         ),
       ),
     );

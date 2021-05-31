@@ -1,8 +1,10 @@
 import 'dart:ui';
 
-const Color kBackgroundGreenColor = Color(0xff005a44);
-const Color kBackgroundLightColor = Color(0xfffeefe5);
-const Color kBasedYellowColor = Color(0xffffcf00);
-const Color kBasedOrangeColor = Color(0xffee6123);
-const Color kBasedRedColor = Color(0xfffa003f);
-const Color kBasedBlackColor = Color(0xff00140f);
+class KColors {
+  static const Color backgroundGreenColor = Color(0xff005a44);
+  static const Color backgroundLightColor = Color(0xfffeefe5);
+  static const Color basedYellowColor = Color(0xffffcf00);
+  static const Color basedOrangeColor = Color(0xffee6123);
+  static const Color basedRedColor = Color(0xfffa003f);
+  static const Color basedBlackColor = Color(0xff00140f);
+}

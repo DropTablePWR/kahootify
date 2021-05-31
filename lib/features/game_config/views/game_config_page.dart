@@ -3,14 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
 import 'package:kahootify/core/bloc/ip_cubit.dart';
 import 'package:kahootify/core/bloc/server_start_bloc.dart';
-import 'package:kahootify/core/bloc/settings_cubit.dart';
 import 'package:kahootify/features/game_config/bloc/game_config_cubit.dart';
-import 'package:kahootify/features/game_config/bloc/game_config_page/game_config_page_bloc.dart';
+import 'package:kahootify/features/game_config/bloc/game_config_page_bloc.dart';
 import 'package:kahootify/features/game_config/models/game_config.dart';
 import 'package:kahootify/features/lobby/views/lobby_page.dart';
+import 'package:kahootify/features/settings/bloc/settings_cubit.dart';
 import 'package:kahootify/widgets/text_fields/default_text_field.dart';
 import 'package:kahootify_server/models/category.dart';
-import 'package:kahootify_server/models/player_info.dart';
 import 'package:numberpicker/numberpicker.dart';
 
 class GameConfigPage extends StatelessWidget {
@@ -20,12 +19,7 @@ class GameConfigPage extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => GameConfigCubit()),
         BlocProvider(create: (_) => GameConfigPageBloc()..add(GameConfigPageEntered())),
-        BlocProvider(
-          create: (_) => ServerStartBloc(
-            ip: context.read<IpCubit>().state,
-            playerInfo: PlayerInfo(id: context.read<SettingsCubit>().state.playerId, name: context.read<SettingsCubit>().state.playerName),
-          ),
-        )
+        BlocProvider(create: (_) => ServerStartBloc(ip: context.read<IpCubit>().ip, playerInfo: context.read<SettingsCubit>().playerInfo))
       ],
       child: _GameConfigPage(),
     );
@@ -78,22 +72,18 @@ class _GameConfigPageState extends State<_GameConfigPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: kBackgroundLightColor,
+        backgroundColor: KColors.backgroundLightColor,
         appBar: AppBar(
           title: Text("GAME CONFIGURATION"),
-          backgroundColor: kBackgroundGreenColor,
+          backgroundColor: KColors.backgroundGreenColor,
         ),
         floatingActionButton: BlocBuilder<GameConfigCubit, GameConfig>(
           builder: (context, config) {
-            if (config.gameName.isNotEmpty && config.category != null) {
-              return FloatingActionButton(
-                onPressed: () => context.read<ServerStartBloc>().add(InitializeServer(config)),
-                child: const Icon(Icons.check),
-                backgroundColor: kBackgroundGreenColor,
-              );
-            } else {
-              return SizedBox.shrink();
-            }
+            return FloatingActionButton(
+              onPressed: () => config.gameName.isNotEmpty && config.category != null ? context.read<ServerStartBloc>().add(InitializeServer(config)) : null,
+              child: const Icon(Icons.check),
+              backgroundColor: KColors.backgroundGreenColor,
+            );
           },
         ),
         body: BlocBuilder<GameConfigPageBloc, GameConfigPageState>(
@@ -112,7 +102,7 @@ class _GameConfigPageState extends State<_GameConfigPage> {
                       BlocBuilder<GameConfigCubit, GameConfig>(
                         builder: (context, gameConfig) {
                           return Column(children: [
-                            Text(gameConfig.gameName, style: TextStyle(fontSize: 25, color: kBasedBlackColor, fontWeight: FontWeight.bold)),
+                            Text(gameConfig.gameName, style: TextStyle(fontSize: 25, color: KColors.basedBlackColor, fontWeight: FontWeight.bold)),
                             SizedBox(height: 30),
                             DefaultTextField(label: 'Enter your game name', controller: gameNameInputController),
                             SizedBox(height: 35),
@@ -121,13 +111,13 @@ class _GameConfigPageState extends State<_GameConfigPage> {
                               icon: const Icon(Icons.arrow_downward),
                               iconSize: 24,
                               elevation: 16,
-                              style: const TextStyle(color: kBasedBlackColor),
+                              style: const TextStyle(color: KColors.basedBlackColor),
                               decoration: InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: kBackgroundGreenColor),
+                                  borderSide: BorderSide(color: KColors.backgroundGreenColor),
                                 ),
                                 labelText: 'Select a category',
-                                labelStyle: TextStyle(color: kBackgroundGreenColor),
+                                labelStyle: TextStyle(color: KColors.backgroundGreenColor),
                               ),
                               onChanged: (Category? category) {
                                 context.read<GameConfigCubit>().setCategory(category!);
@@ -222,7 +212,7 @@ class _GameConfigNumberPickerState extends State<_GameConfigNumberPicker> {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(widget.text, style: TextStyle(color: kBackgroundGreenColor, fontSize: 15)),
+          child: Text(widget.text, style: TextStyle(color: KColors.backgroundGreenColor, fontSize: 15)),
         ),
         SizedBox(height: 8),
         NumberPicker(
@@ -235,11 +225,11 @@ class _GameConfigNumberPickerState extends State<_GameConfigNumberPicker> {
             widget.onChanged(newValue);
           },
           axis: Axis.horizontal,
-          textStyle: TextStyle(fontSize: 25, color: kBasedBlackColor),
-          selectedTextStyle: TextStyle(fontSize: 25, color: kBackgroundGreenColor, fontWeight: FontWeight.bold),
+          textStyle: TextStyle(fontSize: 25, color: KColors.basedBlackColor),
+          selectedTextStyle: TextStyle(fontSize: 25, color: KColors.backgroundGreenColor, fontWeight: FontWeight.bold),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: kBackgroundGreenColor),
+            border: Border.all(color: KColors.backgroundGreenColor),
           ),
         ),
       ],

@@ -12,13 +12,13 @@ class DefaultTextField extends StatelessWidget {
     return TextField(
       textCapitalization: TextCapitalization.characters,
       controller: controller,
-      cursorColor: kBackgroundGreenColor,
+      cursorColor: KColors.backgroundGreenColor,
       decoration: InputDecoration(
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: kBackgroundGreenColor),
+          borderSide: BorderSide(color: KColors.backgroundGreenColor),
         ),
         labelText: label,
-        labelStyle: TextStyle(color: kBackgroundGreenColor),
+        labelStyle: TextStyle(color: KColors.backgroundGreenColor),
       ),
     );
   }
