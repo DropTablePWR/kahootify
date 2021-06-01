@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kahootify/color_const.dart';
+import 'package:kahootify/features/game/views/game_page.dart';
 import 'package:kahootify/features/lobby/bloc/lobby_page_bloc.dart';
 import 'package:kahootify/features/lobby/views/players_list_view.dart';
-import 'package:kahootify/features/welcome/welcome_page.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 
@@ -47,7 +47,7 @@ class LobbyPage extends StatelessWidget {
         return BlocConsumer<LobbyPageBloc, LobbyPageState>(
           listener: (context, lobbyPageState) {
             if (lobbyPageState.shouldProceedToGameScreen) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => WelcomePage())); //TODO navigate to game screen
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => GamePage()));
             }
           },
           builder: (context, lobbyPageState) {
