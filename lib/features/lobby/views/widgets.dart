@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kahootify/color_const.dart';
+import 'package:kahootify/features/lobby/bloc/lobby_page_bloc.dart';
 import 'package:kahootify_server/models/server_info.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -61,17 +63,16 @@ class ServerInfoWidget extends StatelessWidget {
 }
 
 class IAmReadyButton extends StatelessWidget {
-  final bool iAmReady;
-  final Function() onPressed;
+  final bool amIReady;
 
-  const IAmReadyButton({Key? key, required this.iAmReady, required this.onPressed}) : super(key: key);
+  const IAmReadyButton({required this.amIReady});
 
   @override
   Widget build(BuildContext context) {
     return NeumorphicButton(
       style: NeumorphicStyle(
-        color: iAmReady ? KColors.backgroundGreenColor : KColors.basedBlackColor,
-        depth: iAmReady ? -10 : 10,
+        color: amIReady ? KColors.backgroundGreenColor : KColors.basedBlackColor,
+        depth: amIReady ? -10 : 10,
         oppositeShadowLightSource: false,
         shadowDarkColor: KColors.basedBlackColor,
         shadowDarkColorEmboss: KColors.basedBlackColor,
@@ -83,23 +84,15 @@ class IAmReadyButton extends StatelessWidget {
       child: Container(
         width: 140,
         height: 30,
-        child: iAmReady
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  NeumorphicIcon(Icons.check, size: 30),
-                  Text("I am ready", style: TextStyle(color: Colors.white)),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  NeumorphicIcon(Icons.clear, size: 30),
-                  Text("I am not ready", style: TextStyle(color: Colors.white)),
-                ],
-              ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            NeumorphicIcon(amIReady ? Icons.check : Icons.clear, size: 30),
+            Text(amIReady ? "I am ready" : "I am not ready", style: TextStyle(color: Colors.white)),
+          ],
+        ),
       ),
-      onPressed: onPressed,
+      onPressed: () => context.read<LobbyPageBloc>().add(IAmReadyButtonPressed()),
     );
   }
 }
@@ -113,11 +106,8 @@ class StartGameButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: KColors.backgroundGreenColor,
-      label: Text("Start a game"),
-      onPressed: () {
-        print("Start a game");
-        //TODO Rozpoczęcie rozgrywki
-      },
+      label: Text('Start a game'),
+      onPressed: () => context.read<LobbyPageBloc>().add(IAmReadyButtonPressed()),
       icon: Icon(Icons.outlined_flag, color: Colors.white, size: 50),
       shape: OutlineInputBorder(),
     );

@@ -26,5 +26,6 @@ enum DataType {
   rankingStarted,
   lobbyStarted,
   returnToLobby,
-  goodbye
+  goodbye,
+  readyToBeKilled
 }

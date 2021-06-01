@@ -61,8 +61,8 @@ class _GameConfigPageState extends State<_GameConfigPage> {
               builder: (context) {
                 return LobbyPage(
                   isHost: true,
-                  input: serverStartState.serverInput,
-                  output: serverStartState.serverOutput,
+                  serverInput: serverStartState.serverInput,
+                  serverOutput: serverStartState.serverOutput,
                   initialServerInfo: serverStartState.serverInfo,
                   playerInfo: serverStartState.playerInfo,
                 );

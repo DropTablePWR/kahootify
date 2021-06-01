@@ -41,7 +41,7 @@ class ServerConnectionBloc extends Bloc<ServerConnectionEvent, ServerConnectStat
       serverInput.stream.listen((event) {
         socket.sink.add(event);
       });
-      return ConnectionSuccess(serverOutput: socket.stream, serverInput: serverInput, playerInfo: playerInfo, serverInfo: serverInfo);
+      return ConnectionSuccess(serverOutput: socket.stream.asBroadcastStream(), serverInput: serverInput, playerInfo: playerInfo, serverInfo: serverInfo);
     } catch (e) {
       return ErrorConnectingToServer(reason: 'Error when trying to connect to websocket');
     }
@@ -87,8 +87,8 @@ class ServerConnectionBloc extends Bloc<ServerConnectionEvent, ServerConnectStat
       MaterialPageRoute(
         builder: (_) => LobbyPage(
           isHost: false,
-          input: connectionData.serverInput,
-          output: connectionData.serverOutput,
+          serverInput: connectionData.serverInput,
+          serverOutput: connectionData.serverOutput,
           initialServerInfo: connectionData.serverInfo,
           playerInfo: connectionData.playerInfo,
         ),
