@@ -32,7 +32,7 @@ Future<void> main() async {
   SendPort sendPort = results.item2;
 
   while (true) {
-    await Future.delayed(Duration(seconds: 5)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
+    await Future.delayed(Duration(seconds: 10)).then((value) => sendPort.send(jsonEncode(Data(DataType.goodbye))));
   }
 
   // Classic
