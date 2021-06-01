@@ -2,13 +2,10 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_const.dart';
 import 'package:kahootify/features/game/views/game_page.dart';
-import 'package:kahootify_server/models/quiz_question.dart';
+import 'package:kahootify_server/models/player_info.dart';
 
 class CircularCountdown extends StatelessWidget {
-  const CircularCountdown({
-    Key? key,
-    required this.time,
-  }) : super(key: key);
+  const CircularCountdown({required this.time});
 
   final int time;
 
@@ -19,15 +16,10 @@ class CircularCountdown extends StatelessWidget {
       height: 150,
       duration: time,
       textFormat: CountdownTextFormat.S,
-      initialDuration: 0,
       ringColor: KColors.backgroundLightColor,
-      ringGradient: null,
       fillColor: KColors.backgroundGreenColor,
-      fillGradient: null,
       strokeWidth: 10.0,
       isReverse: true,
-      isReverseAnimation: false,
-      isTimerTextShown: true,
       textStyle: TextStyle(fontSize: 35, color: KColors.basedBlackColor),
       onStart: () {
         print("czas start");
@@ -41,28 +33,38 @@ class CircularCountdown extends StatelessWidget {
 
 class AnswerButton extends StatelessWidget {
   const AnswerButton({
-    Key? key,
     required this.index,
-    required this.quizQuestion,
-    required this.setButtonState(index),
+    required this.answer,
     required this.buttonState,
-  }) : super(key: key);
+  });
 
   final int index;
-  final QuizQuestion quizQuestion;
-  final Function(ButtonState) setButtonState;
+  final String answer;
   final ButtonState buttonState;
+
+  Color getButtonColor() {
+    switch (buttonState) {
+      case ButtonState.correct:
+        return KColors.backgroundGreenColor;
+      case ButtonState.incorrect:
+        return KColors.basedRedColor;
+      case ButtonState.waiting:
+        return Colors.grey.shade300;
+      case ButtonState.enabled:
+        return KColors.basedOrangeColor;
+      default:
+        return Colors.grey.shade300;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          buttonState == ButtonState.disabled ? null : print('odpowiedź: ' + index.toString() + ' - ' + quizQuestion.toString());
-        },
-        child: Text(quizQuestion.possibleAnswers[index]),
+        onPressed: () {}, //TODO on answerButton pressed
+        child: Text(answer),
         style: ElevatedButton.styleFrom(
-            primary: setButtonState(buttonState),
+            primary: getButtonColor(),
             alignment: Alignment.center,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
             elevation: 5,
@@ -74,46 +76,33 @@ class AnswerButton extends StatelessWidget {
   }
 }
 
-class ShowText extends StatelessWidget {
-  const ShowText({
-    Key? key,
-    required this.text,
-  }) : super(key: key);
+class HeaderText extends StatelessWidget {
+  const HeaderText({required this.text});
 
   final String text;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          SizedBox(height: 30),
-          Text(
-            text,
-            style: TextStyle(fontSize: 25, color: KColors.basedBlackColor),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
+      child: Text(text, style: TextStyle(fontSize: 25, color: KColors.basedBlackColor)),
     );
   }
 }
 
 class ResultListItem extends StatelessWidget {
-  final int score;
-  final String nick;
+  final PlayerInfo playerInfo;
 
-  const ResultListItem({Key? key, required this.score, required this.nick}) : super(key: key);
+  const ResultListItem({required this.playerInfo});
+
+  static const _resultTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
-        side: BorderSide(
-          color: KColors.basedBlackColor,
-          width: 1.5,
-        ),
+        side: BorderSide(color: KColors.basedBlackColor, width: 1.5),
       ),
       color: KColors.backgroundGreenColor,
       elevation: 10,
@@ -121,10 +110,9 @@ class ResultListItem extends StatelessWidget {
         height: 50.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(child: Text(nick, style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-            Container(child: Text(score.toString(), style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
+            Expanded(child: Text(playerInfo.name, style: _resultTextStyle)),
+            Expanded(child: Text(playerInfo.score.toString(), style: _resultTextStyle)),
           ],
         ),
       ),
