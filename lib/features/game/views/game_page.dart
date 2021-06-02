@@ -37,6 +37,9 @@ class GamePage extends StatelessWidget {
               if (controller.page == 0 && gamePageState.quizQuestion != null) {
                 context.read<GamePageBloc>().add(StartGame());
               }
+              if (gamePageState.shouldProceedToResultsScreen) {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResultsPage()));
+              }
             },
             child: Scaffold(
               backgroundColor: KColors.backgroundLightColor,
