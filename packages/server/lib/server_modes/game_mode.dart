@@ -76,7 +76,7 @@ class GameMode extends ServerMode {
       final info = player.playerInfo;
       final answer = answers[player];
 
-      if (answer != null && question.correctAnswer.compareTo(answer.question) == 0 && answer.answer == validAnswer) {
+      if (answer != null && question.question.compareTo(answer.question) == 0 && answer.answer == validAnswer) {
         final playerDelta = answer.timestamp.difference(timeStart).inMilliseconds;
 
         info.combo += 1;
