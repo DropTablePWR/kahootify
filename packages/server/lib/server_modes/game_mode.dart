@@ -46,6 +46,7 @@ class GameMode extends ServerMode {
       await Future.delayed(delay);
       if (question != questions.last) {
         server.sendDataToAll(server.generateRankingInfo().toJson());
+        await Future.delayed(delay);
       }
     }
     nextMode();
