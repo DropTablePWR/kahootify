@@ -24,3 +24,9 @@ class AnswerQuestion extends GamePageEvent {
 }
 
 class ProceedToResultsScreen extends GamePageEvent {}
+
+class ReceivedCorrectAnswer extends GamePageEvent {
+  final int correctAnswerIndex;
+
+  ReceivedCorrectAnswer(this.correctAnswerIndex);
+}

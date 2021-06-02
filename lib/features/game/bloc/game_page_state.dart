@@ -15,17 +15,15 @@ class AnswerButtonState {
       : state = ButtonState.enabled,
         answer = '';
 
-  AnswerButtonState newQuestion(String answer) {
-    return AnswerButtonState(state: ButtonState.enabled, answer: answer, index: this.index);
-  }
+  AnswerButtonState newQuestion(String answer) => AnswerButtonState(state: ButtonState.enabled, answer: answer, index: index);
 
-  AnswerButtonState chooseThisAnswer() {
-    return AnswerButtonState(state: ButtonState.waiting, answer: this.answer, index: this.index);
-  }
+  AnswerButtonState chooseThisAnswer() => AnswerButtonState(state: ButtonState.waiting, answer: answer, index: index);
 
-  AnswerButtonState chooseAnotherAnswer() {
-    return AnswerButtonState(state: ButtonState.disabled, answer: this.answer, index: this.index);
-  }
+  AnswerButtonState chooseAnotherAnswer() => AnswerButtonState(state: ButtonState.disabled, answer: answer, index: index);
+
+  AnswerButtonState correctChoice() => AnswerButtonState(state: ButtonState.correct, answer: answer, index: index);
+
+  AnswerButtonState incorrectChoice() => AnswerButtonState(state: ButtonState.incorrect, answer: answer, index: index);
 }
 
 class GamePageState {
@@ -65,6 +63,29 @@ class GamePageState {
       answerButtons: List.generate(
         quizQuestion.possibleAnswers.length,
         (index) => this.answerButtons[index].newQuestion(quizQuestion.possibleAnswers[index]),
+      ),
+    );
+  }
+
+  GamePageState correctAnswer({required int correctAnswerIndex}) {
+    return GamePageState(
+      results: results,
+      serverInfo: serverInfo,
+      questionNumber: questionNumber,
+      currentPage: currentPage,
+      answerButtons: List.generate(
+        quizQuestion!.possibleAnswers.length,
+        (index) {
+          if (index == correctAnswerIndex) {
+            return answerButtons[index].correctChoice();
+          } else {
+            if (answerButtons[index].state == ButtonState.waiting) {
+              return answerButtons[index].incorrectChoice();
+            } else {
+              return answerButtons[index];
+            }
+          }
+        },
       ),
     );
   }

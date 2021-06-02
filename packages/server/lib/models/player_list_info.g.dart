@@ -13,8 +13,7 @@ PlayerListInfo _$PlayerListInfoFromJson(Map<String, dynamic> json) {
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$PlayerListInfoToJson(PlayerListInfo instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PlayerListInfoToJson(PlayerListInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'players': instance.players,
       'isEveryoneReady': instance.isEveryoneReady,

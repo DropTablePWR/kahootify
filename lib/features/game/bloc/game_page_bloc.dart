@@ -60,6 +60,8 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
     } else if (event is AnswerQuestion) {
       serverInput.add(jsonEncode(Answer(event.chosenAnswerIndex, state.quizQuestion!.question).toJson()));
       yield state.chooseAnswer(event.chosenAnswerIndex);
+    } else if (event is ReceivedCorrectAnswer) {
+      yield state.correctAnswer(correctAnswerIndex: event.correctAnswerIndex);
     }
   }
 }
