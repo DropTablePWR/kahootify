@@ -1,12 +1,13 @@
-import 'package:kahootify_server/models/player_info.dart';
+import 'package:kahootify_server/models/correct_answer.dart';
 import 'package:kahootify_server/models/quiz_question.dart';
+import 'package:kahootify_server/models/ranking_info.dart';
 
 abstract class GamePageEvent {}
 
 class ReceivedRanking extends GamePageEvent {
-  final List<PlayerInfo> results;
+  final RankingInfo rankingInfo;
 
-  ReceivedRanking(this.results);
+  ReceivedRanking(this.rankingInfo);
 }
 
 class ShowQuestion extends GamePageEvent {}
@@ -26,9 +27,7 @@ class AnswerQuestion extends GamePageEvent {
 class ProceedToResultsScreen extends GamePageEvent {}
 
 class ReceivedCorrectAnswer extends GamePageEvent {
-  final int correctAnswerIndex;
+  final CorrectAnswer correctAnswer;
 
-  ReceivedCorrectAnswer(this.correctAnswerIndex);
+  ReceivedCorrectAnswer(this.correctAnswer);
 }
-
-class StartGame extends GamePageEvent {}

@@ -44,6 +44,8 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
       case DataType.unknown:
       case DataType.error:
       case DataType.returnToLobby:
+      case DataType.rankingStarted:
+      case DataType.correctAnswer:
       case DataType.goodbye:
       case DataType.readyToBeKilled:
         print('unsupported data: ${data.dataType}');

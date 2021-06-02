@@ -3,8 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify_server/models/answer.dart';
+import 'package:kahootify_server/models/correct_answer.dart';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/quiz_question.dart';
+import 'package:kahootify_server/models/ranking_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 
 import 'bloc.dart';
@@ -24,7 +26,13 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
           add(ReceivedQuestion(QuizQuestion.fromJson(decodedData)));
           break;
         case DataType.rankingInfo:
+          add(ReceivedRanking(RankingInfo.fromJson(decodedData)));
+          break;
+        case DataType.rankingStarted:
           add(ProceedToResultsScreen());
+          break;
+        case DataType.correctAnswer:
+          add(ReceivedCorrectAnswer(CorrectAnswer.fromJson(decodedData)));
           break;
         case DataType.playerListInfo:
         case DataType.serverInfo:
@@ -38,7 +46,7 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
         case DataType.returnToLobby:
         case DataType.goodbye:
         case DataType.readyToBeKilled:
-          print('Unsupported data: ${data.dataType}');
+          print('Unsupported data on Game Page: ${data.dataType}');
           break;
       }
     });
@@ -52,7 +60,7 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
     if (event is ReceivedQuestion) {
       yield state.nextQuestion(quizQuestion: event.quizQuestion);
     } else if (event is ReceivedRanking) {
-      yield state.copyWith(results: event.results, currentPage: 3);
+      yield state.copyWith(results: event.rankingInfo.players, currentPage: 3);
     } else if (event is ProceedToResultsScreen) {
       yield state.proceedToNextScreen();
     } else if (event is ShowQuestion) {
@@ -61,9 +69,7 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
       serverInput.add(jsonEncode(Answer(event.chosenAnswerIndex, state.quizQuestion!.question).toJson()));
       yield state.chooseAnswer(event.chosenAnswerIndex);
     } else if (event is ReceivedCorrectAnswer) {
-      yield state.correctAnswer(correctAnswerIndex: event.correctAnswerIndex);
-    } else if (event is StartGame) {
-      yield state.copyWith(currentPage: 1);
+      yield state.correctAnswer(correctAnswerIndex: event.correctAnswer.answer);
     }
   }
 }

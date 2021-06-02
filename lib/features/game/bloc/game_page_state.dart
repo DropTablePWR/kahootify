@@ -107,6 +107,7 @@ class GamePageState {
       results: this.results,
       serverInfo: this.serverInfo,
       questionNumber: this.questionNumber,
+      quizQuestion: quizQuestion,
       currentPage: this.currentPage,
       answerButtons: List.generate(
         quizQuestion?.possibleAnswers.length ?? 4,

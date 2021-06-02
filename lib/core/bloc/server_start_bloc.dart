@@ -30,7 +30,7 @@ class ServerStartBloc extends Bloc<ServerStartEvent, ServerStartState> {
       final server = await spawnIsolateServer(serverInfo, serverOutput, playerInfo.copyWith(ready: true));
       SendPort sendPort = server.item2;
       serverInput.stream.listen((data) => sendPort.send(data));
-      yield ServerStarted(serverOutput: serverOutput.stream, serverInput: serverInput, playerInfo: playerInfo, serverInfo: serverInfo);
+      yield ServerStarted(serverOutput: serverOutput.stream.asBroadcastStream(), serverInput: serverInput, playerInfo: playerInfo, serverInfo: serverInfo);
     }
   }
 

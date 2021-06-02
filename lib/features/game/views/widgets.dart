@@ -43,7 +43,7 @@ class AnswerButton extends StatelessWidget {
       case ButtonState.incorrect:
         return KColors.basedRedColor;
       case ButtonState.waiting:
-        return Colors.grey.shade300;
+        return KColors.basedYellowColor;
       case ButtonState.enabled:
         return KColors.basedOrangeColor;
       default:

@@ -34,9 +34,6 @@ class GamePage extends StatelessWidget {
               if (gamePageState.currentPage != controller.page) {
                 controller.animateToPage(gamePageState.currentPage, curve: Curves.easeInCubic, duration: 200.milliseconds);
               }
-              if (controller.page == 0 && gamePageState.quizQuestion != null) {
-                context.read<GamePageBloc>().add(StartGame());
-              }
               if (gamePageState.shouldProceedToResultsScreen) {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResultsPage()));
               }

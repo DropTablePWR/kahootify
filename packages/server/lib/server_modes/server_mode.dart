@@ -87,6 +87,7 @@ abstract class ServerMode {
       case DataType.gameStarted:
       case DataType.lobbyStarted:
       case DataType.readyToBeKilled:
+      case DataType.correctAnswer:
       case DataType.rankingStarted:
       case DataType.rankingInfo:
         player.send(ErrorInfo("Unsupported operation").toJson());
