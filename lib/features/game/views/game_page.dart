@@ -1,70 +1,62 @@
+import 'dart:async';
+
+import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
-import 'package:kahootify_server/models/category.dart';
-import 'package:kahootify_server/models/player_info.dart';
-import 'package:kahootify_server/models/question.dart';
-import 'package:kahootify_server/models/quiz_question.dart';
+import 'package:kahootify/features/game/bloc/game_page_bloc.dart';
+import 'package:kahootify/features/game/bloc/game_page_state.dart';
+import 'package:kahootify/features/game/views/page_view_pages/get_ready_page.dart';
 import 'package:kahootify_server/models/server_info.dart';
 
-import 'page_view_pages/first_page_view.dart';
-import 'page_view_pages/second_page_view.dart';
-import 'page_view_pages/third_page_view.dart';
+import 'page_view_pages/count_down_page.dart';
+import 'page_view_pages/question_page.dart';
+import 'page_view_pages/results_page.dart';
 
 class GamePage extends StatelessWidget {
-  final QuizQuestion quizQuestion =
-      QuizQuestion('Animals', QuestionDifficulty.easy, 'dokąd nocą tupta jeż?', ['do przedszkola', 'do domu', 'do łóżka', 'o tam tam tam']);
+  final ServerInfo initialServerInfo;
+  final Stream serverOutput;
+  final StreamController serverInput;
 
-  final ServerInfo serverInfo = ServerInfo(
-    code: '1234',
-    qrCode: '1234',
-    ip: '1234',
-    name: 'TEST',
-    maxNumberOfPlayers: 10,
-    currentNumberOfPlayers: 10,
-    serverStatus: ServerStatus.inGame,
-    category: Category(id: 1, name: 'Animals'),
-    numberOfQuestions: 20,
-    answerTimeLimit: 20,
-    autoStart: true,
-  );
+  GamePage({required this.initialServerInfo, required this.serverOutput, required this.serverInput});
 
-  final int questionNumber = 5;
-  final List<PlayerInfo> results = [
-    PlayerInfo(id: 0, name: 'Artur', score: 10),
-    PlayerInfo(id: 1, name: 'Wojtek', score: 20),
-    PlayerInfo(id: 2, name: 'Joachim', score: 135),
-    PlayerInfo(id: 3, name: 'Arek', score: 125)
-  ];
-
-  final bool horizontal = false;
-
-  final numberOfResults = 4;
+  final PageController controller = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController(initialPage: 0);
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        return Scaffold(
-          backgroundColor: KColors.backgroundLightColor,
-          appBar: AppBar(
-            title: Text('ANSWER THE QUESTION'),
-            backgroundColor: KColors.backgroundGreenColor,
-          ),
-          body: PageView(
-            scrollDirection: Axis.horizontal,
-            controller: controller,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              CountDownPage(questionNumber: questionNumber),
-              QuestionPage(serverInfo: serverInfo, quizQuestion: quizQuestion, questionNumber: questionNumber),
-              ResultsPage(questionNumber: questionNumber, results: results),
-            ],
-          ),
-        );
-      },
+    return BlocProvider<GamePageBloc>(
+      create: (context) => GamePageBloc(serverInfo: initialServerInfo, serverInput: serverInput, serverOutput: serverOutput),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return BlocListener<GamePageBloc, GamePageState>(
+            listener: (context, gamePageState) {
+              if (gamePageState.currentPage != controller.page) {
+                controller.animateToPage(gamePageState.currentPage, curve: Curves.easeInCubic, duration: 200.milliseconds);
+              }
+              if (controller.page == 0 && gamePageState.quizQuestion != null) {
+                controller.animateToPage(1, curve: Curves.easeInCubic, duration: 200.milliseconds);
+              }
+            },
+            child: Scaffold(
+              backgroundColor: KColors.backgroundLightColor,
+              appBar: AppBar(
+                title: Text('ANSWER THE QUESTION'),
+                backgroundColor: KColors.backgroundGreenColor,
+              ),
+              body: PageView(
+                controller: controller,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  GetReadyPage(),
+                  CountDownPage(),
+                  QuestionPage(),
+                  ResultsPage(),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }
-
-enum ButtonState { disabled, enabled, correct, incorrect, waiting }
