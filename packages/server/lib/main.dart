@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:isolate';
 
+import 'package:kahootify_server/models/answer.dart';
 import 'package:kahootify_server/models/category.dart';
 import 'package:kahootify_server/models/player_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
@@ -20,9 +21,9 @@ Future<void> main() async {
   // first config
   ServerInfo serverInfo = ServerInfo.init(
     name: "test",
-    maxNumberOfPlayers: 5,
+    maxNumberOfPlayers: 1,
     category: Category(id: 10, name: 'test'),
-    answerTimeLimit: 30,
+    answerTimeLimit: 3,
     numberOfQuestions: 10,
     ip: '192.168.1.23',
   );
@@ -30,9 +31,9 @@ Future<void> main() async {
 
   var results = await spawnIsolateServer(serverInfo, serverOutput, playerInfo);
   SendPort sendPort = results.item2;
-
+  await Future.delayed(Duration(seconds: 10)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
   while (true) {
-    await Future.delayed(Duration(seconds: 10)).then((value) => sendPort.send(jsonEncode(Data(DataType.goodbye))));
+    await Future.delayed(Duration(seconds: 2)).then((value) => sendPort.send(jsonEncode(Answer(0, "test"))));
   }
 
   // Classic

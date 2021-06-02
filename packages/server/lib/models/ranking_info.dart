@@ -7,8 +7,9 @@ part 'ranking_info.g.dart';
 @JsonSerializable()
 class RankingInfo extends Data {
   List<PlayerInfo> players;
+  String? correctAnswer;
 
-  RankingInfo(this.players) : super(DataType.rankingStarted);
+  RankingInfo(this.players, [this.correctAnswer]) : super(DataType.rankingInfo);
 
   factory RankingInfo.fromJson(Map<String, dynamic> json) => _$RankingInfoFromJson(json);
 

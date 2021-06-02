@@ -12,7 +12,6 @@ import 'package:kahootify_server/server_modes/ranking_mode.dart';
 import 'package:kahootify_server/server_modes/server_mode.dart';
 
 class GameMode extends ServerMode {
-  int currentQuestion = 0;
   List<Question> questions;
   Map<AbstractPlayer, AnswerTimestamp> answers = {};
   bool gameIsActive = true;
@@ -29,19 +28,21 @@ class GameMode extends ServerMode {
   }
 
   void run() async {
-    var delay = Duration(seconds: 3);
     for (Question question in questions) {
       if (!gameIsActive) {
         return;
       }
-      answers = {};
+      var delay = Duration(seconds: 4);
       var sentQuestion = QuizQuestion.fromQuestion(question: question);
       this.server.sendDataToAll(sentQuestion.toJson());
+      answers = {};
       var timestamp = DateTime.now();
-      // wait x seconds
-      await Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit));
+      // wait x + 3 seconds or till everyone answered
+      await Future.any([Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit + 3))]);
       _calculatePoints(sentQuestion, question, timestamp, delay);
-      server.sendDataToAll(server.generateRankingInfo().toJson());
+      if (question != questions.last) {
+        server.sendDataToAll(server.generateRankingInfoWithAnswer(question.correctAnswer).toJson());
+      }
     }
     nextMode();
   }

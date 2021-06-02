@@ -11,7 +11,7 @@ class QuizQuestion extends Data {
   final String question;
   final List<String> possibleAnswers;
 
-  QuizQuestion(this.category, this.difficulty, this.question, this.possibleAnswers) : super(DataType.question);
+  QuizQuestion(this.category, this.difficulty, this.question, this.possibleAnswers) : super(DataType.quizQuestion);
 
   QuizQuestion.fromQuestion({required Question question})
       : this.category = question.category,
@@ -21,7 +21,7 @@ class QuizQuestion extends Data {
           ..addAll(question.incorrectAnswers)
           ..add(question.correctAnswer)
           ..shuffle(),
-        super(DataType.question);
+        super(DataType.quizQuestion);
 
   factory QuizQuestion.fromJson(Map<String, dynamic> json) => _$QuizQuestionFromJson(json);
 
