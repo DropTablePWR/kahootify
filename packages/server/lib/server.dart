@@ -116,13 +116,9 @@ class Server {
   }
 
   RankingInfo generateRankingInfo() {
-    return generateRankingInfoWithAnswer(null);
-  }
-
-  RankingInfo generateRankingInfoWithAnswer(String? answer) {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
     players.sort((a, b) => a.score.compareTo(b.score));
-    return RankingInfo(players, answer);
+    return RankingInfo(players);
   }
 
   void sendDataToAll(dynamic data) {

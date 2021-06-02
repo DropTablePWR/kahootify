@@ -28,5 +28,6 @@ enum DataType {
   lobbyStarted,
   returnToLobby,
   goodbye,
-  readyToBeKilled
+  readyToBeKilled,
+  correctAnswer
 }

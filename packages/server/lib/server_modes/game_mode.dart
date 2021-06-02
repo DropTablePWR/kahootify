@@ -1,4 +1,5 @@
 import 'package:kahootify_server/models/answer.dart';
+import 'package:kahootify_server/models/correct_answer.dart';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
@@ -39,15 +40,17 @@ class GameMode extends ServerMode {
       var timestamp = DateTime.now();
       // wait x + 3 seconds or till everyone answered
       await Future.any([Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit + 3))]);
-      _calculatePoints(sentQuestion, question, timestamp, delay);
+      var answerNumber = _calculatePoints(sentQuestion, question, timestamp, delay);
+      server.sendDataToAll(CorrectAnswer(answerNumber).toJson());
+      await Future.delayed(Duration(seconds: 2));
       if (question != questions.last) {
-        server.sendDataToAll(server.generateRankingInfoWithAnswer(question.correctAnswer).toJson());
+        server.sendDataToAll(server.generateRankingInfo().toJson());
       }
     }
     nextMode();
   }
 
-  void _calculatePoints(QuizQuestion quizQuestion, Question question, DateTime sentTimestamp, Duration delay) {
+  int _calculatePoints(QuizQuestion quizQuestion, Question question, DateTime sentTimestamp, Duration delay) {
     final timeEnd = DateTime.now();
     final timeStart = sentTimestamp.add(delay);
     final int difficulty;
@@ -84,6 +87,7 @@ class GameMode extends ServerMode {
         info.combo = 0;
       }
     }
+    return validAnswer;
   }
 
   @override

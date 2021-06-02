@@ -71,4 +71,5 @@ const _$DataTypeEnumMap = {
   DataType.returnToLobby: 'returnToLobby',
   DataType.goodbye: 'goodbye',
   DataType.readyToBeKilled: 'readyToBeKilled',
+  DataType.correctAnswer: 'correctAnswer',
 };

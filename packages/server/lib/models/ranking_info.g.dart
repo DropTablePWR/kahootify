@@ -9,15 +9,12 @@ part of 'ranking_info.dart';
 RankingInfo _$RankingInfoFromJson(Map<String, dynamic> json) {
   return RankingInfo(
     (json['players'] as List<dynamic>).map((e) => PlayerInfo.fromJson(e as Map<String, dynamic>)).toList(),
-    json['correctAnswer'] as String?,
   )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$RankingInfoToJson(RankingInfo instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$RankingInfoToJson(RankingInfo instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
       'players': instance.players,
-      'correctAnswer': instance.correctAnswer,
     };
 
 K _$enumDecode<K, V>(
@@ -62,4 +59,5 @@ const _$DataTypeEnumMap = {
   DataType.returnToLobby: 'returnToLobby',
   DataType.goodbye: 'goodbye',
   DataType.readyToBeKilled: 'readyToBeKilled',
+  DataType.correctAnswer: 'correctAnswer',
 };
