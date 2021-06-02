@@ -30,3 +30,5 @@ class ReceivedCorrectAnswer extends GamePageEvent {
 
   ReceivedCorrectAnswer(this.correctAnswerIndex);
 }
+
+class StartGame extends GamePageEvent {}

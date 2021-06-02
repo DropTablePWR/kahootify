@@ -58,13 +58,14 @@ class AnswerButton extends StatelessWidget {
         onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
         child: Text(buttonState.answer),
         style: ElevatedButton.styleFrom(
-            primary: getButtonColor(),
-            alignment: Alignment.center,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            elevation: 5,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
-            minimumSize: Size(140, 120)),
+          primary: getButtonColor(),
+          alignment: Alignment.center,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 5,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
+          minimumSize: Size(140, 120),
+        ),
       ),
     );
   }

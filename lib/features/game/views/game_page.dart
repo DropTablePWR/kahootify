@@ -4,6 +4,7 @@ import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
+import 'package:kahootify/features/game/bloc/bloc.dart';
 import 'package:kahootify/features/game/bloc/game_page_bloc.dart';
 import 'package:kahootify/features/game/bloc/game_page_state.dart';
 import 'package:kahootify/features/game/views/page_view_pages/get_ready_page.dart';
@@ -34,7 +35,7 @@ class GamePage extends StatelessWidget {
                 controller.animateToPage(gamePageState.currentPage, curve: Curves.easeInCubic, duration: 200.milliseconds);
               }
               if (controller.page == 0 && gamePageState.quizQuestion != null) {
-                controller.animateToPage(1, curve: Curves.easeInCubic, duration: 200.milliseconds);
+                context.read<GamePageBloc>().add(StartGame());
               }
             },
             child: Scaffold(

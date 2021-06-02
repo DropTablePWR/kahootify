@@ -62,6 +62,8 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
       yield state.chooseAnswer(event.chosenAnswerIndex);
     } else if (event is ReceivedCorrectAnswer) {
       yield state.correctAnswer(correctAnswerIndex: event.correctAnswerIndex);
+    } else if (event is StartGame) {
+      yield state.copyWith(currentPage: 1);
     }
   }
 }
