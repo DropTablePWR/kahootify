@@ -20,10 +20,10 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
       var decodedData = jsonDecode(receivedData);
       var data = Data.fromJson(decodedData);
       switch (data.dataType) {
-        case DataType.question:
+        case DataType.quizQuestion:
           add(ReceivedQuestion(QuizQuestion.fromJson(decodedData)));
           break;
-        case DataType.rankingStarted:
+        case DataType.rankingInfo:
           add(ProceedToResultsScreen());
           break;
         case DataType.playerListInfo:

@@ -1,4 +1,5 @@
 import 'package:kahootify_server/models/answer.dart';
+import 'package:kahootify_server/models/correct_answer.dart';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/error_info.dart';
 import 'package:kahootify_server/models/player_info.dart';
@@ -12,7 +13,6 @@ import 'package:kahootify_server/server_modes/ranking_mode.dart';
 import 'package:kahootify_server/server_modes/server_mode.dart';
 
 class GameMode extends ServerMode {
-  int currentQuestion = 0;
   List<Question> questions;
   Map<AbstractPlayer, AnswerTimestamp> answers = {};
   bool gameIsActive = true;
@@ -29,24 +29,28 @@ class GameMode extends ServerMode {
   }
 
   void run() async {
-    var delay = Duration(seconds: 3);
     for (Question question in questions) {
       if (!gameIsActive) {
         return;
       }
-      answers = {};
+      var delay = Duration(seconds: 4);
       var sentQuestion = QuizQuestion.fromQuestion(question: question);
       this.server.sendDataToAll(sentQuestion.toJson());
+      answers = {};
       var timestamp = DateTime.now();
-      // wait x seconds
-      await Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit));
-      _calculatePoints(sentQuestion, question, timestamp, delay);
-      server.sendDataToAll(server.generateRankingInfo().toJson());
+      // wait x + 3 seconds or till everyone answered
+      await Future.any([Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit + 3))]);
+      var answerNumber = _calculatePoints(sentQuestion, question, timestamp, delay);
+      server.sendDataToAll(CorrectAnswer(answerNumber).toJson());
+      await Future.delayed(Duration(seconds: 2));
+      if (question != questions.last) {
+        server.sendDataToAll(server.generateRankingInfo().toJson());
+      }
     }
     nextMode();
   }
 
-  void _calculatePoints(QuizQuestion quizQuestion, Question question, DateTime sentTimestamp, Duration delay) {
+  int _calculatePoints(QuizQuestion quizQuestion, Question question, DateTime sentTimestamp, Duration delay) {
     final timeEnd = DateTime.now();
     final timeStart = sentTimestamp.add(delay);
     final int difficulty;
@@ -83,6 +87,7 @@ class GameMode extends ServerMode {
         info.combo = 0;
       }
     }
+    return validAnswer;
   }
 
   @override

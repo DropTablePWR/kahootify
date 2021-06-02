@@ -36,9 +36,9 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
         add(ReceivedServerInfo(ServerInfo.fromJson(decodedData)));
         break;
       case DataType.startGame:
-      case DataType.question:
+      case DataType.quizQuestion:
       case DataType.answer:
-      case DataType.rankingStarted:
+      case DataType.rankingInfo:
       case DataType.lobbyStarted:
       case DataType.playerInfo:
       case DataType.unknown:
