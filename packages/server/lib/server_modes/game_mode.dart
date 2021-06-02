@@ -29,20 +29,21 @@ class GameMode extends ServerMode {
   }
 
   void run() async {
+    final delay = Duration(seconds: 3);
+    await Future.delayed(delay);
     for (Question question in questions) {
       if (!gameIsActive) {
         return;
       }
-      var delay = Duration(seconds: 4);
       var sentQuestion = QuizQuestion.fromQuestion(question: question);
       this.server.sendDataToAll(sentQuestion.toJson());
       answers = {};
       var timestamp = DateTime.now();
       // wait x + 3 seconds or till everyone answered
-      await Future.any([Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit + 3))]);
+      await Future.any([Future.delayed(Duration(seconds: this.server.serverInfo.answerTimeLimit + delay.inSeconds))]);
       var answerNumber = _calculatePoints(sentQuestion, question, timestamp, delay);
       server.sendDataToAll(CorrectAnswer(answerNumber).toJson());
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(delay);
       if (question != questions.last) {
         server.sendDataToAll(server.generateRankingInfo().toJson());
       }
