@@ -20,6 +20,7 @@ class LobbyMode extends ServerMode {
     apiResponse = RemoteTriviaRepository.getTrivia(server.serverInfo.numberOfQuestions, server.serverInfo.category);
     print("Server is in Lobby Mode");
     server.sendDataToAll(Data(DataType.lobbyStarted).toJson());
+    server.sendDataToAll(server.generatePlayerListInfo().toJson());
   }
 
   @override
