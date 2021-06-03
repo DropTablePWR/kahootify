@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/features/game/bloc/bloc.dart';
 import 'package:kahootify/features/game/views/widgets.dart';
 
-class ResultsPage extends StatelessWidget {
-  const ResultsPage();
+class SmallResultsPage extends StatelessWidget {
+  const SmallResultsPage();
 
   @override
   Widget build(BuildContext context) {

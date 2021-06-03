@@ -6,7 +6,9 @@ import 'package:kahootify/features/game/views/widgets.dart';
 import 'package:kahootify_server/models/question.dart';
 
 class QuestionPage extends StatelessWidget {
-  const QuestionPage();
+  final GlobalKey questionPageTimerKey = GlobalKey();
+
+  QuestionPage();
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class QuestionPage extends StatelessWidget {
                   ? Column(children: [
                       QuestionInfoRow(),
                       SizedBox(height: 20),
-                      CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit),
+                      CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit, pageNumberToStartOn: 2, key: questionPageTimerKey),
                       Expanded(child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
                       SizedBox(height: 20),
                       Expanded(flex: 3, child: Center(child: AnswerButtonsGrid(buttonStates: gamePageState.answerButtons)))
@@ -31,7 +33,7 @@ class QuestionPage extends StatelessWidget {
                           SizedBox(height: 20),
                           QuestionInfoRow(),
                           SizedBox(height: 30),
-                          CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit),
+                          CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit, pageNumberToStartOn: 2, key: questionPageTimerKey),
                         ]),
                       ),
                       Expanded(

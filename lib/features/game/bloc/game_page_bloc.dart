@@ -66,8 +66,10 @@ class GamePageBloc extends Bloc<GamePageEvent, GamePageState> {
     } else if (event is ShowQuestion) {
       yield state.copyWith(currentPage: 2);
     } else if (event is AnswerQuestion) {
-      serverInput.add(jsonEncode(Answer(event.chosenAnswerIndex, state.quizQuestion!.question).toJson()));
-      yield state.chooseAnswer(event.chosenAnswerIndex);
+      if (state.chosenAnswerIndex == null) {
+        serverInput.add(jsonEncode(Answer(event.chosenAnswerIndex, state.quizQuestion!.question).toJson()));
+        yield state.chooseAnswer(event.chosenAnswerIndex);
+      }
     } else if (event is ReceivedCorrectAnswer) {
       yield state.correctAnswer(correctAnswerIndex: event.correctAnswer.answer);
     }

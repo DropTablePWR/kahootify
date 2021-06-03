@@ -5,12 +5,19 @@ import 'package:kahootify/features/game/bloc/bloc.dart';
 import 'package:kahootify/features/game/views/widgets.dart';
 
 class CountDownPage extends StatelessWidget {
-  const CountDownPage();
+  final GlobalKey countDownPageTimer = GlobalKey();
 
-  List<Widget> getBody(Orientation orientation, int questionNumber) {
+  List<Widget> getBody(Orientation orientation, int questionNumber, BuildContext context) {
     return [
       Expanded(flex: 3, child: HeaderText(text: 'WAIT FOR $questionNumber QUESTION')),
-      Expanded(child: CircularCountdown(time: countdownTime)),
+      Expanded(
+        child: CircularCountdown(
+          time: countdownTime,
+          onComplete: () => context.read<GamePageBloc>().add(ShowQuestion()),
+          pageNumberToStartOn: 1,
+          key: countDownPageTimer,
+        ),
+      ),
     ];
   }
 
@@ -24,11 +31,11 @@ class CountDownPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: orientation == Orientation.portrait
                   ? Column(
-                      children: getBody(orientation, gamePageState.questionNumber),
+                      children: getBody(orientation, gamePageState.questionNumber, context),
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: getBody(orientation, gamePageState.questionNumber),
+                      children: getBody(orientation, gamePageState.questionNumber, context),
                     ),
             );
           },

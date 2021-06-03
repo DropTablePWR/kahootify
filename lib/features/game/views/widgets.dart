@@ -8,24 +8,52 @@ import 'package:kahootify/features/game/bloc/game_page_bloc.dart';
 import 'package:kahootify/features/game/bloc/game_page_state.dart';
 import 'package:kahootify_server/models/player_info.dart';
 
-class CircularCountdown extends StatelessWidget {
-  const CircularCountdown({required this.time});
+class CircularCountdown extends StatefulWidget {
+  const CircularCountdown({required Key key, required this.time, required this.pageNumberToStartOn, this.onComplete}) : super(key: key);
 
+  final Function()? onComplete;
   final int time;
+  final int pageNumberToStartOn;
+
+  @override
+  _CircularCountdownState createState() => _CircularCountdownState();
+}
+
+class _CircularCountdownState extends State<CircularCountdown> {
+  late CountDownController controller;
+
+  @override
+  void initState() {
+    controller = CountDownController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CircularCountDownTimer(
-      width: 150,
-      height: 150,
-      duration: time,
-      textFormat: CountdownTextFormat.S,
-      ringColor: KColors.backgroundLightColor,
-      fillColor: KColors.backgroundGreenColor,
-      strokeWidth: 10.0,
-      isReverse: true,
-      textStyle: TextStyle(fontSize: 35, color: KColors.basedBlackColor),
-      onComplete: () => context.read<GamePageBloc>().add(ShowQuestion()),
+    return BlocListener<GamePageBloc, GamePageState>(
+      listener: (context, gamePageState) {
+        if (gamePageState.currentPage == widget.pageNumberToStartOn) {
+          if (int.parse(controller.getTime()) == widget.time) {
+            controller.start();
+          }
+        } else {
+          controller.restart(duration: widget.time);
+          controller.pause();
+        }
+      },
+      child: CircularCountDownTimer(
+        controller: controller,
+        width: 150,
+        height: 150,
+        duration: widget.time,
+        textFormat: CountdownTextFormat.S,
+        ringColor: KColors.backgroundLightColor,
+        fillColor: KColors.backgroundGreenColor,
+        strokeWidth: 10.0,
+        isReverse: true,
+        textStyle: TextStyle(fontSize: 35, color: KColors.basedBlackColor),
+        onComplete: widget.onComplete,
+      ),
     );
   }
 }
