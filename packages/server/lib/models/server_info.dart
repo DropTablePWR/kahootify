@@ -42,8 +42,8 @@ class ServerInfo extends Data {
     required this.ip,
   })  : currentNumberOfPlayers = 0,
         this.autoStart = false,
-        code = CodeConverter.encodeIp(ip) ?? '000000',
-        qrCode = CodeConverter.encodeIpAsQrCode(ip) ?? '000000',
+        code = CodeConverter.encodeIp(CodeConverter.prepareIp(ip) ?? '000.000') ?? '000000',
+        qrCode = CodeConverter.encodeIpAsQrCode(CodeConverter.prepareIp(ip) ?? '000.000') ?? '000000',
         serverStatus = ServerStatus.lobby,
         super(DataType.serverInfo);
 

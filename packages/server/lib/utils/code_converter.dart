@@ -41,6 +41,15 @@ class CodeConverter {
     return ip;
   }
 
+  static String? prepareIp(String ip) {
+    try {
+      final ipAsParts = ip.split('.');
+      return '${ipAsParts[2].padLeft(3, '0')}.${ipAsParts[3].padLeft(3, '0')}';
+    } catch (e) {
+      return null;
+    }
+  }
+
   static String? encodeIp(String ip) {
     var code = "";
     ip = ip.replaceAll(".", "");
