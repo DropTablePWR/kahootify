@@ -8,11 +8,13 @@ import 'package:kahootify_server/server.dart';
 import 'package:kahootify_server/server_modes/lobby_mode.dart';
 import 'package:kahootify_server/server_modes/server_mode.dart';
 
+import '../const.dart';
+
 class RankingMode extends ServerMode {
   RankingMode(Server server) : super(server) {
     print("Server is in Ranking Mode");
     server.sendDataToAll(Data(DataType.rankingStarted).toJson());
-    Future.delayed(Duration(seconds: 2)).then((value) => server.sendDataToAll(server.generateRankingInfo().toJson()));
+    Future.delayed(Duration(seconds: countdownTime)).then((_) => server.sendDataToAll(server.generateRankingInfo().toJson()));
   }
 
   @override
@@ -37,6 +39,9 @@ class RankingMode extends ServerMode {
 
   @override
   void nextMode() {
+    server.knownPlayers.forEach((_, player) {
+      player.clearPlayerInfo();
+    });
     server.serverMode = LobbyMode(server);
   }
 
