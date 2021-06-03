@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kahootify/color_const.dart';
 import 'package:kahootify/const.dart';
-import 'package:kahootify/features/game_config/models/game_config.dart';
-import 'package:kahootify/features/game_config/views/game_config_page.dart';
-import 'package:kahootify/features/server_browsing/views/server_discovery_page.dart';
-import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/welcome/choose_mode_button.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -19,7 +15,7 @@ class WelcomePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(right: 20.0),
             child: IconButton(
-              onPressed: () => Navigator.of(context).push<GameConfig>(MaterialPageRoute(builder: (routeContext) => SettingsPage())),
+              onPressed: () => Navigator.of(context).pushNamed('/settings'),
               icon: Icon(Icons.settings),
             ),
           )
@@ -39,15 +35,9 @@ class WelcomePage extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    ChooseModeButton(
-                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (routeContext) => GameConfigPage())),
-                      text: "HOST-GAME",
-                    ),
+                    ChooseModeButton(onPressed: () => Navigator.of(context).pushNamed('/game_config'), text: "HOST-GAME"),
                     SizedBox(height: 50),
-                    ChooseModeButton(
-                      onPressed: () => Navigator.of(context).push(ServerDiscoveryPage.route()),
-                      text: "JOIN GAME",
-                    ),
+                    ChooseModeButton(onPressed: () => Navigator.of(context).pushNamed('/discovery'), text: "JOIN GAME"),
                     SizedBox(height: 50),
                   ],
                 ),

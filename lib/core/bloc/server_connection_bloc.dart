@@ -59,21 +59,10 @@ class ServerConnectionBloc extends Bloc<ServerConnectionEvent, ServerConnectStat
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: context.watch<ServerConnectionBloc>().state is ConnectingToServer
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text('Connecting to server...'),
-                        Center(child: CircularProgressIndicator()),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text('Error!', style: TextStyle(color: Colors.red)),
-                        Text((context.read<ServerConnectionBloc>().state as ErrorConnectingToServer).reason, style: TextStyle(color: Colors.red)),
-                      ],
-                    ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: _dialogBody(context, context.watch<ServerConnectionBloc>().state),
+              ),
             ),
           ),
         );
@@ -81,20 +70,33 @@ class ServerConnectionBloc extends Bloc<ServerConnectionEvent, ServerConnectStat
     );
   }
 
+  static List<Widget> _dialogBody(BuildContext context, ServerConnectState state) {
+    if (state is ConnectingToServer) {
+      return [Text('Connecting to server...'), Center(child: CircularProgressIndicator())];
+    } else if (state is ErrorConnectingToServer) {
+      return [
+        Text('Error!', style: TextStyle(color: Colors.red)),
+        Text((context.read<ServerConnectionBloc>().state as ErrorConnectingToServer).reason, style: TextStyle(color: Colors.red))
+      ];
+    } else {
+      return [Text('Connected')];
+    }
+  }
+
   static void navigateToLobby(BuildContext context, ConnectionSuccess connectionData) {
-    Navigator.of(context)
-        .push(
-      MaterialPageRoute(
-        builder: (_) => LobbyPage(
-          isHost: false,
-          serverInput: connectionData.serverInput,
-          serverOutput: connectionData.serverOutput,
-          initialServerInfo: connectionData.serverInfo,
-          playerInfo: connectionData.playerInfo,
-        ),
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      '/lobby',
+      (route) {
+        return route.settings.name == '/discovery';
+      },
+      arguments: GameArgs(
+        amIHost: false,
+        serverInput: connectionData.serverInput,
+        serverOutput: connectionData.serverOutput,
+        initialServerInfo: connectionData.serverInfo,
+        playerInfo: connectionData.playerInfo,
       ),
-    )
-        .then((value) {
+    ).then((_) {
       connectionData.serverInput.add(Data(DataType.goodbye));
       connectionData.serverInput.close();
     });
