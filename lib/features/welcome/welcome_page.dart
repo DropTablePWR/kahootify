@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
 import 'package:kahootify/const.dart';
+import 'package:kahootify/features/settings/bloc/settings_cubit.dart';
 import 'package:kahootify/features/welcome/choose_mode_button.dart';
 
 class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool isMusicEnabled = context.read<SettingsCubit>().state.isMusicEnabled;
+    context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: !isMusicEnabled);
+    context.read<SettingsCubit>().setMusicEnabled(isMusicEnabled: isMusicEnabled); //TODO this hack is terrible :(
     return Scaffold(
       backgroundColor: KColors.backgroundLightColor,
       appBar: AppBar(

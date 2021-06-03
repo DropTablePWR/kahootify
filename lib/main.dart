@@ -42,12 +42,11 @@ class _MyAppState extends State<MyApp> {
   bool isRepositoryLoaded = false;
   bool isIpLoaded = false;
   late AudioPlayer audioPlayer;
+  bool isAudioPlayerLoaded = false;
 
   Future<void> initializeSharedPreferencesRepository() async {
     prefsRepository = SharedPreferencesRepository(await SharedPreferences.getInstance());
-    setState(() {
-      isRepositoryLoaded = true;
-    });
+    setState(() => isRepositoryLoaded = true);
   }
 
   Future<void> tryGetInitialWifiIp() async {
@@ -56,9 +55,7 @@ class _MyAppState extends State<MyApp> {
       localIP = await IpRepository.getIp();
     }
     ip = localIP;
-    setState(() {
-      isIpLoaded = true;
-    });
+    setState(() => isIpLoaded = true);
   }
 
   @override
@@ -73,20 +70,24 @@ class _MyAppState extends State<MyApp> {
     audioPlayer = AudioPlayer();
     await audioPlayer.setAsset('assets/bg_music.mp3');
     await audioPlayer.setLoopMode(LoopMode.one);
-    audioPlayer.load();
+    setState(() => isAudioPlayerLoaded = true);
   }
 
-  void startMusic() {
-    audioPlayer.play();
+  void startMusic() async {
+    if (!audioPlayer.playing) {
+      await audioPlayer.play();
+    }
   }
 
-  void stopMusic() {
-    audioPlayer.stop();
+  void stopMusic() async {
+    if (audioPlayer.playing) {
+      await audioPlayer.stop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isRepositoryLoaded && isIpLoaded) {
+    if (isRepositoryLoaded && isIpLoaded && isAudioPlayerLoaded) {
       return MultiBlocProvider(
         providers: [
           BlocProvider<SettingsCubit>(create: (_) => SettingsCubit(prefsRepository)..initialize()),
@@ -94,7 +95,8 @@ class _MyAppState extends State<MyApp> {
         ],
         child: Builder(builder: (context) {
           return BlocListener<SettingsCubit, Settings>(
-            listener: (context, settings) {
+            listenWhen: (previous, current) => previous.isMusicEnabled != current.isMusicEnabled,
+            listener: (_, settings) {
               if (settings.isMusicEnabled) {
                 startMusic();
               } else {

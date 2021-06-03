@@ -8,12 +8,12 @@ class SettingsCubit extends Cubit<Settings> {
 
   SettingsCubit(this.prefs) : super(Settings.initial());
 
-  void initialize() {
+  void initialize() async {
     final String? playerName = prefs.playerName;
     final int? playerId = prefs.playerId;
     final bool? isMusicEnabled = prefs.isMusicEnabled;
     final bool? isSfxEnabled = prefs.isSfxEnabled;
-    final initialSettings = Settings.initial().copyWith(playerName: playerName, playerId: playerId, isSfxEnabled: isSfxEnabled, isMusicEnabled: isMusicEnabled);
+    final initialSettings = state.copyWith(playerName: playerName, playerId: playerId, isSfxEnabled: isSfxEnabled, isMusicEnabled: isMusicEnabled);
     emit(initialSettings);
     if (isSfxEnabled == null) {
       prefs.isMusicEnabled = initialSettings.isMusicEnabled;

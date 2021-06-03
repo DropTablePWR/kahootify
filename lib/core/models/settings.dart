@@ -11,8 +11,8 @@ class Settings {
   Settings.initial()
       : playerName = 'Player${Random().nextInt(10000)}',
         playerId = Random().nextInt(100000),
-        isMusicEnabled = true,
-        isSfxEnabled = true;
+        isMusicEnabled = false,
+        isSfxEnabled = false;
 
   Settings copyWith({String? playerName, bool? isMusicEnabled, bool? isSfxEnabled, int? playerId}) {
     return Settings(
