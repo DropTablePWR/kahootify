@@ -7,9 +7,10 @@ class CountDownPage extends StatelessWidget {
   const CountDownPage();
 
   List<Widget> getBody(Orientation orientation, int questionNumber) {
+    final countdownTime = 3;
     return [
-      Expanded(flex: 3, child: HeaderText(text: 'WAIT FOR ' + questionNumber.toString() + ' QUESTION')),
-      Expanded(flex: 1, child: CircularCountdown(time: 3)),
+      Expanded(flex: 3, child: HeaderText(text: 'WAIT FOR $questionNumber QUESTION')),
+      Expanded(child: CircularCountdown(time: countdownTime)),
     ];
   }
 
@@ -23,7 +24,6 @@ class CountDownPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: orientation == Orientation.portrait
                   ? Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
                       children: getBody(orientation, gamePageState.questionNumber),
                     )
                   : Row(

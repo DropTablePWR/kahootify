@@ -5,9 +5,7 @@ class GetReadyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Text(
-      'Get ready!',
-      style: TextStyle(fontSize: 25, color: KColors.basedBlackColor),
-    ));
+      child: Text('Get ready!', style: TextStyle(fontSize: 25, color: KColors.basedBlackColor)),
+    );
   }
 }
