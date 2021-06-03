@@ -30,6 +30,7 @@ dependencies:
   flutter_neumorphic: ^3.1.0
   circular_countdown_timer: ^0.2.0
   auto_size_text: ^3.0.0-nullsafety.0
+  just_audio: ^0.7.5
   kahootify_server:
     path: packages/server
 
@@ -39,3 +40,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
