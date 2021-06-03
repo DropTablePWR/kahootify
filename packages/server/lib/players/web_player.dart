@@ -22,4 +22,11 @@ class WebPlayer extends AbstractPlayer {
 
     print("reconnecting player: " + this.playerInfo.id.toString());
   }
+
+  @override
+  void clearPlayerInfo() {
+    playerInfo.score = 0;
+    playerInfo.combo = 0;
+    playerInfo.ready = false;
+  }
 }

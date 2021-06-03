@@ -20,4 +20,10 @@ class LocalPlayer extends AbstractPlayer {
   void reconnect(data, PlayerInfo playerInfo) {
     throw Exception("Local player can't be reconnected!!!");
   }
+
+  @override
+  void clearPlayerInfo() {
+    playerInfo.score = 0;
+    playerInfo.combo = 0;
+  }
 }

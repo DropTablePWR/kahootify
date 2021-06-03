@@ -11,9 +11,5 @@ abstract class AbstractPlayer {
 
   void reconnect(dynamic data, PlayerInfo playerInfo);
 
-  void clearPlayerInfo() {
-    playerInfo.score = 0;
-    playerInfo.combo = 0;
-    playerInfo.ready = false;
-  }
+  void clearPlayerInfo();
 }
