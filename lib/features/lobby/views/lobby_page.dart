@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:kahootify/color_const.dart';
-import 'package:kahootify/features/game/views/game_page.dart';
 import 'package:kahootify/features/lobby/bloc/lobby_page_bloc.dart';
 import 'package:kahootify/features/lobby/views/players_list_view.dart';
 import 'package:kahootify_server/models/player_info.dart';
@@ -13,17 +12,23 @@ import 'package:kahootify_server/models/server_info.dart';
 
 import 'widgets.dart';
 
-class LobbyPage extends StatelessWidget {
-  final bool isHost;
+class GameArgs {
+  final bool amIHost;
   final StreamController serverInput;
   final Stream serverOutput;
   final ServerInfo initialServerInfo;
   final PlayerInfo playerInfo;
 
-  const LobbyPage({required this.isHost, required this.serverInput, required this.serverOutput, required this.initialServerInfo, required this.playerInfo});
+  GameArgs({required this.amIHost, required this.serverInput, required this.serverOutput, required this.initialServerInfo, required this.playerInfo});
+}
+
+class LobbyPage extends StatelessWidget {
+  const LobbyPage(this.args);
+
+  final GameArgs args;
 
   Widget getFAB(LobbyPageState lobbyPageState) {
-    if (isHost) {
+    if (args.amIHost) {
       if (lobbyPageState.isStartGameButtonVisible) {
         return StartGameButton();
       }
@@ -37,25 +42,17 @@ class LobbyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<LobbyPageBloc>(
       create: (_) => LobbyPageBloc(
-        playerInfo: playerInfo,
-        serverInfo: initialServerInfo,
-        amIHost: isHost,
-        serverOutput: serverOutput,
-        serverInput: serverInput,
+        playerInfo: args.playerInfo,
+        serverInfo: args.initialServerInfo,
+        amIHost: args.amIHost,
+        serverOutput: args.serverOutput,
+        serverInput: args.serverInput,
       ),
       child: Builder(builder: (context) {
         return BlocConsumer<LobbyPageBloc, LobbyPageState>(
           listener: (context, lobbyPageState) {
             if (lobbyPageState.shouldProceedToGameScreen) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => GamePage(
-                    serverInput: serverInput,
-                    serverOutput: serverOutput,
-                    initialServerInfo: initialServerInfo,
-                  ),
-                ),
-              );
+              Navigator.of(context).pushNamed('/game', arguments: args);
             }
           },
           builder: (context, lobbyPageState) {
@@ -94,9 +91,7 @@ class LobbyPage extends StatelessWidget {
                   appBar: AppBar(
                     title: Text("LOBBY"),
                     backgroundColor: KColors.backgroundGreenColor,
-                    actions: [
-                      DisplayQRCodeButton(qrCode: lobbyPageState.serverInfo.qrCode, code: lobbyPageState.serverInfo.code),
-                    ],
+                    actions: [DisplayQRCodeButton(qrCode: lobbyPageState.serverInfo.qrCode, code: lobbyPageState.serverInfo.code)],
                   ),
                   floatingActionButton: getFAB(lobbyPageState),
                   body: Padding(

@@ -52,11 +52,10 @@ class _QrCodeScanPage extends StatelessWidget {
           if (serverConnectionState is ConnectingToServer) {
             ServerConnectionBloc.showConnectionDialog(context);
           } else if (serverConnectionState is ConnectionSuccess) {
-            Navigator.of(context).pop();
             ServerConnectionBloc.navigateToLobby(context, serverConnectionState);
           } else if (serverConnectionState is ErrorConnectingToServer) {
             await Future.delayed(Duration(seconds: 2));
-            Navigator.of(context).pop();
+            Navigator.of(context).popUntil((route) => route.settings.name == '/discovery/manual' || route.settings.name == '/discovery');
           }
         })
       ],
