@@ -87,7 +87,7 @@ class ServerConnectionBloc extends Bloc<ServerConnectionEvent, ServerConnectStat
     Navigator.of(context).pushNamedAndRemoveUntil(
       '/lobby',
       (route) {
-        return route.settings.name == '/discovery';
+        return route.settings.name == '/discovery' || route.settings.name == '/discovery/manual' || route.settings.name == '/';
       },
       arguments: GameArgs(
         amIHost: false,

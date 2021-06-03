@@ -22,8 +22,8 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<GamePageBloc>(
       create: (context) => GamePageBloc(serverInfo: args.initialServerInfo, serverInput: args.serverInput, serverOutput: args.serverOutput),
-      child: OrientationBuilder(
-        builder: (context, orientation) {
+      child: Builder(
+        builder: (context) {
           return BlocListener<GamePageBloc, GamePageState>(
             listener: (context, gamePageState) {
               if (gamePageState.currentPage != controller.page) {
