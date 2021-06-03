@@ -31,7 +31,7 @@ Future<void> main() async {
 
   var results = await spawnIsolateServer(serverInfo, serverOutput, playerInfo);
   SendPort sendPort = results.item2;
-  await Future.delayed(Duration(seconds: 10)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
+  await Future.delayed(Duration(seconds: 4)).then((value) => sendPort.send(jsonEncode(Data(DataType.startGame))));
   while (true) {
     await Future.delayed(Duration(seconds: 2)).then((value) => sendPort.send(jsonEncode(Answer(0, "test"))));
   }

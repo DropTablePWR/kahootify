@@ -28,11 +28,7 @@ class RemoteTriviaRepository {
 
   static Future<Either<ApiError, List<Question>>> getTrivia(int numberOfQuestions, Category category) async {
     Uri uri;
-    final Map<String, String> params = {
-      'amount': numberOfQuestions.toString(),
-      'category': category.id.toString(),
-      'type': 'multiple',
-    };
+    final Map<String, String> params = {'amount': numberOfQuestions.toString(), 'category': category.id.toString(), 'type': 'multiple', 'encode': 'url3986'};
 
     uri = Uri.https(kApiUrl, "api.php", params);
     final Map<String, String> headers = {
@@ -42,7 +38,8 @@ class RemoteTriviaRepository {
     if (response.statusCode != 200) {
       return Left(ApiError(jsonDecode(response.body)));
     }
-    var data = jsonDecode(response.body)['results'];
+    var responseBody = Uri.decodeComponent(response.body.replaceAll(RegExp(r'%22'), '%5C%22'));
+    var data = jsonDecode(responseBody)['results'];
     return Right(
       List<Question>.from(data.map((rawQuestion) {
         return Question.fromJson(rawQuestion);
