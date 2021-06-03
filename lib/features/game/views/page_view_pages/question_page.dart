@@ -6,11 +6,9 @@ import 'package:kahootify/features/game/views/widgets.dart';
 import 'package:kahootify_server/models/question.dart';
 
 class QuestionPage extends StatelessWidget {
-  List<Widget> getAnswerButtonList(List<AnswerButtonState> buttonStates) {
-    return List.generate(buttonStates.length, (index) => AnswerButton(buttonState: buttonStates[index]));
-  }
-
   final GlobalKey questionPageTimerKey = GlobalKey();
+
+  QuestionPage();
 
   @override
   Widget build(BuildContext context) {
@@ -19,26 +17,20 @@ class QuestionPage extends StatelessWidget {
         return OrientationBuilder(
           builder: (context, orientation) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32),
+              padding: const EdgeInsets.only(top: 20, right: 32, left: 32),
               child: orientation == Orientation.portrait
                   ? Column(children: [
                       QuestionInfoRow(),
                       SizedBox(height: 20),
                       CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit, pageNumberToStartOn: 2, key: questionPageTimerKey),
                       Expanded(child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
-                      Expanded(
-                        child: GridView.count(
-                          childAspectRatio: 3 / 2,
-                          mainAxisSpacing: 15,
-                          crossAxisCount: 2,
-                          children: getAnswerButtonList(gamePageState.answerButtons),
-                        ),
-                      )
+                      SizedBox(height: 20),
+                      Expanded(flex: 3, child: Center(child: AnswerButtonsGrid(buttonStates: gamePageState.answerButtons)))
                     ])
                   : Row(children: [
                       Expanded(
-                        flex: 1,
                         child: Column(children: [
+                          SizedBox(height: 20),
                           QuestionInfoRow(),
                           SizedBox(height: 30),
                           CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit, pageNumberToStartOn: 2, key: questionPageTimerKey),
@@ -47,16 +39,9 @@ class QuestionPage extends StatelessWidget {
                       Expanded(
                         flex: 2,
                         child: Column(children: [
-                          Expanded(flex: 1, child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
-                          Expanded(
-                            flex: 1,
-                            child: GridView.count(
-                              childAspectRatio: 4,
-                              mainAxisSpacing: 2,
-                              crossAxisCount: 2,
-                              children: getAnswerButtonList(gamePageState.answerButtons),
-                            ),
-                          ),
+                          Expanded(child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
+                          SizedBox(height: 20),
+                          Expanded(flex: 2, child: AnswerButtonsGrid(buttonStates: gamePageState.answerButtons)),
                         ]),
                       ),
                     ]),
@@ -65,6 +50,28 @@ class QuestionPage extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class AnswerButtonsGrid extends StatelessWidget {
+  final List<AnswerButtonState> buttonStates;
+
+  const AnswerButtonsGrid({required this.buttonStates});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final size = constraints.biggest.shortestSide;
+      return GridView(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: size / 2,
+        ),
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        children: List.generate(buttonStates.length, (index) => AnswerButton(buttonState: buttonStates[index], isLeft: index % 2 == 0)),
+      );
+    });
   }
 }
 
@@ -84,22 +91,42 @@ class QuestionInfoRow extends StatelessWidget {
     }
   }
 
+  Color questionDifficultyColor(QuestionDifficulty questionDifficulty) {
+    switch (questionDifficulty) {
+      case QuestionDifficulty.easy:
+        return KColors.basedYellowColor;
+      case QuestionDifficulty.medium:
+        return KColors.basedOrangeColor;
+      case QuestionDifficulty.hard:
+        return KColors.basedRedColor;
+      default:
+        return KColors.basedBlackColor;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GamePageBloc, GamePageState>(
       builder: (context, gamePageState) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              'Question: ' + gamePageState.questionNumber.toString(),
-              style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Difficulty: ' + questionDifficultyToString(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
-              style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
-            ),
-          ],
+        return FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Question: ${gamePageState.questionNumber}',
+                style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 20),
+              Text(
+                'Difficulty:' + questionDifficultyToString(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
+                style: TextStyle(
+                    fontSize: 15,
+                    color: questionDifficultyColor(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         );
       },
     );

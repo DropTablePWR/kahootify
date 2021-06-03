@@ -33,7 +33,7 @@ class SmallResultsPage extends StatelessWidget {
                     child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: gamePageState.results.length,
-                      itemBuilder: (_, int index) => ResultListItem(playerInfo: gamePageState.results[index]),
+                      itemBuilder: (_, int index) => ResultListItem(playerInfo: gamePageState.results[index], index: index),
                     ),
                   )
                 ],
