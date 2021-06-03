@@ -77,13 +77,14 @@ class GamePageState {
       serverInfo: serverInfo,
       questionNumber: questionNumber,
       currentPage: currentPage,
+      chosenAnswerIndex: chosenAnswerIndex,
       answerButtons: List.generate(
         quizQuestion!.possibleAnswers.length,
         (index) {
           if (index == correctAnswerIndex) {
             return answerButtons[index].correctChoice();
           } else {
-            if (index == correctAnswerIndex && correctAnswerIndex != chosenAnswerIndex) {
+            if (index == chosenAnswerIndex && correctAnswerIndex != chosenAnswerIndex) {
               return answerButtons[index].incorrectChoice();
             } else {
               return answerButtons[index];
