@@ -56,17 +56,14 @@ class _GameConfigPageState extends State<_GameConfigPage> {
     return BlocListener<ServerStartBloc, ServerStartState>(
       listener: (context, serverStartState) {
         if (serverStartState is ServerStarted) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) {
-                return LobbyPage(
-                  isHost: true,
-                  serverInput: serverStartState.serverInput,
-                  serverOutput: serverStartState.serverOutput,
-                  initialServerInfo: serverStartState.serverInfo,
-                  playerInfo: serverStartState.playerInfo,
-                );
-              },
+          Navigator.of(context).pushNamed(
+            '/lobby',
+            arguments: GameArgs(
+              amIHost: true,
+              serverInput: serverStartState.serverInput,
+              serverOutput: serverStartState.serverOutput,
+              initialServerInfo: serverStartState.serverInfo,
+              playerInfo: serverStartState.playerInfo,
             ),
           );
         }

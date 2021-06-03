@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,52 +6,52 @@ import 'package:kahootify/features/game/bloc/bloc.dart';
 import 'package:kahootify/features/game/bloc/game_page_bloc.dart';
 import 'package:kahootify/features/game/bloc/game_page_state.dart';
 import 'package:kahootify/features/game/views/page_view_pages/get_ready_page.dart';
-import 'package:kahootify/features/results/views/results_page.dart';
-import 'package:kahootify_server/models/server_info.dart';
+import 'package:kahootify/features/lobby/views/lobby_page.dart';
 
 import 'page_view_pages/count_down_page.dart';
 import 'page_view_pages/question_page.dart';
 import 'page_view_pages/small_results_page.dart';
 
 class GamePage extends StatelessWidget {
-  final ServerInfo initialServerInfo;
-  final Stream serverOutput;
-  final StreamController serverInput;
+  GamePage(this.args);
 
-  GamePage({required this.initialServerInfo, required this.serverOutput, required this.serverInput});
-
+  final GameArgs args;
   final PageController controller = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<GamePageBloc>(
-      create: (context) => GamePageBloc(serverInfo: initialServerInfo, serverInput: serverInput, serverOutput: serverOutput),
-      child: BlocListener<GamePageBloc, GamePageState>(
-        listener: (context, gamePageState) {
-          if (gamePageState.currentPage != controller.page) {
-            controller.animateToPage(gamePageState.currentPage, curve: Curves.easeInCubic, duration: 200.milliseconds);
-          }
-          if (gamePageState.shouldProceedToResultsScreen) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ResultsPage()));
-          }
+      create: (context) => GamePageBloc(serverInfo: args.initialServerInfo, serverInput: args.serverInput, serverOutput: args.serverOutput),
+      child: OrientationBuilder(
+        builder: (context, orientation) {
+          return BlocListener<GamePageBloc, GamePageState>(
+            listener: (context, gamePageState) {
+              if (gamePageState.currentPage != controller.page) {
+                controller.animateToPage(gamePageState.currentPage, curve: Curves.easeInCubic, duration: 200.milliseconds);
+              }
+              if (gamePageState.shouldProceedToResultsScreen) {
+                Navigator.of(context).pushReplacementNamed('/results', arguments: args);
+              }
+            },
+            child: Scaffold(
+              backgroundColor: KColors.backgroundLightColor,
+              appBar: AppBar(
+                title: Text('ANSWER THE QUESTION'),
+                backgroundColor: KColors.backgroundGreenColor,
+              ),
+              body: PageView(
+                controller: controller,
+                physics: NeverScrollableScrollPhysics(),
+                children: [
+                  GetReadyPage(),
+                  CountDownPage(),
+                  QuestionPage(),
+                  SmallResultsPage(),
+                ],
+              ),
+            ),
+          );
         },
-        child: Scaffold(
-          backgroundColor: KColors.backgroundLightColor,
-          appBar: AppBar(
-            title: Text('ANSWER THE QUESTION'),
-            backgroundColor: KColors.backgroundGreenColor,
-          ),
-          body: PageView(
-            controller: controller,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              GetReadyPage(),
-              CountDownPage(),
-              QuestionPage(),
-              SmallResultsPage(),
-            ],
-          ),
-        ),
       ),
     );
   }

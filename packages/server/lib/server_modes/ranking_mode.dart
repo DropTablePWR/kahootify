@@ -12,7 +12,7 @@ class RankingMode extends ServerMode {
   RankingMode(Server server) : super(server) {
     print("Server is in Ranking Mode");
     server.sendDataToAll(Data(DataType.rankingStarted).toJson());
-    server.sendDataToAll(server.generateRankingInfo().toJson());
+    Future.delayed(Duration(seconds: 2)).then((value) => server.sendDataToAll(server.generateRankingInfo().toJson()));
   }
 
   @override

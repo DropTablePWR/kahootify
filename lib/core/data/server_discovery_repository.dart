@@ -6,7 +6,6 @@ import 'package:kahootify/const.dart';
 import 'package:kahootify/core/models/errors.dart';
 import 'package:kahootify/core/utils/network_analyzer.dart';
 import 'package:kahootify_server/models/server_info.dart';
-import 'package:wifi_iot/wifi_iot.dart';
 
 abstract class ServerDiscoveryStreamResult {}
 
@@ -26,8 +25,9 @@ class ServerDiscoveryErrorResult extends ServerDiscoveryStreamResult {
 
 class ServerDiscoveryRepository {
   StreamController<ServerDiscoveryStreamResult> _controller = StreamController<ServerDiscoveryStreamResult>();
+  final String myIp;
 
-  ServerDiscoveryRepository() {
+  ServerDiscoveryRepository(this.myIp) {
     startDiscovery();
   }
 
@@ -36,11 +36,6 @@ class ServerDiscoveryRepository {
   }
 
   void startDiscovery() async {
-    final myIp = await WiFiForIoTPlugin.getIP();
-    if (myIp == null || myIp == '0.0.0.0') {
-      _controller.add(ServerDiscoveryErrorResult(NoWifiConnectionError()));
-      return;
-    }
     final mySubnet = myIp.substring(0, myIp.lastIndexOf("."));
     final discoveryStream = NetworkAnalyzer.discover(mySubnet, kDefaultServerPort);
     discoveryStream.listen((NetworkAddress address) {

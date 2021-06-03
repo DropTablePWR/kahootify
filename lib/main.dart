@@ -3,6 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/core/bloc/ip_cubit.dart';
 import 'package:kahootify/core/data/ip_repository.dart';
 import 'package:kahootify/core/data/shared_preferences_repository.dart';
+import 'package:kahootify/features/game/views/game_page.dart';
+import 'package:kahootify/features/game_config/views/game_config_page.dart';
+import 'package:kahootify/features/lobby/views/lobby_page.dart';
+import 'package:kahootify/features/manual_server_connection/views/qr_code_scan_page.dart';
+import 'package:kahootify/features/results/views/results_page.dart';
+import 'package:kahootify/features/server_browsing/views/server_discovery_page.dart';
+import 'package:kahootify/features/settings/views/settings_page.dart';
 import 'package:kahootify/features/splash/views/splash_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,11 +76,35 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           title: 'Kahootify.ly',
           theme: ThemeData(primarySwatch: Colors.blue),
-          home: WelcomePage(),
+          initialRoute: '/',
+          onGenerateRoute: (settings) => getRoute(context, settings),
         ),
       );
     } else {
       return MaterialApp(home: SplashPage());
     }
+  }
+}
+
+Route getRoute(BuildContext context, RouteSettings settings) {
+  switch (settings.name) {
+    case '/':
+      return MaterialPageRoute(builder: (_) => WelcomePage(), settings: settings);
+    case '/lobby':
+      return MaterialPageRoute(builder: (_) => LobbyPage(settings.arguments as GameArgs), settings: settings);
+    case '/discovery':
+      return MaterialPageRoute(builder: (_) => ServerDiscoveryPage(), settings: settings);
+    case '/discovery/manual':
+      return MaterialPageRoute(builder: (_) => QrCodeScanPage(), settings: settings);
+    case '/game':
+      return MaterialPageRoute(builder: (_) => GamePage(settings.arguments as GameArgs), settings: settings);
+    case '/game_config':
+      return MaterialPageRoute(builder: (_) => GameConfigPage(), settings: settings);
+    case '/settings':
+      return MaterialPageRoute(builder: (_) => SettingsPage(), settings: settings);
+    case '/results':
+      return MaterialPageRoute(builder: (_) => ResultsPage(settings.arguments as GameArgs), settings: settings);
+    default:
+      return MaterialPageRoute(builder: (_) => WelcomePage(), settings: settings);
   }
 }

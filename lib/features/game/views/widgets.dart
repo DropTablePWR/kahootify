@@ -129,8 +129,9 @@ class HeaderText extends StatelessWidget {
 class ResultListItem extends StatelessWidget {
   final PlayerInfo playerInfo;
   final int index;
+  final bool displayBadge;
 
-  const ResultListItem({required this.playerInfo, required this.index});
+  const ResultListItem({required this.playerInfo, required this.index, this.displayBadge = false});
 
   static const _resultTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
@@ -147,18 +148,52 @@ class ResultListItem extends StatelessWidget {
       elevation: 10,
       child: SizedBox(
         height: 50.0,
-        child: Row(
+        child: Stack(
+          clipBehavior: Clip.antiAlias,
           children: [
-            Expanded(child: SizedBox()),
-            Expanded(
-              flex: 3,
-              child: Text('$myIndex.${playerInfo.name}', style: _resultTextStyle, textAlign: TextAlign.start),
+            Center(
+              child: Row(children: [
+                Expanded(child: Text('$myIndex.', style: _resultTextStyle, textAlign: TextAlign.center)),
+                Expanded(flex: 2, child: Text('${playerInfo.name}', style: _resultTextStyle, textAlign: TextAlign.center)),
+                Expanded(child: Text(formattedScore.toString(), style: _resultTextStyle, textAlign: TextAlign.center)),
+              ]),
             ),
-            Expanded(
-              flex: 2,
-              child: Text(formattedScore.toString(), style: _resultTextStyle, textAlign: TextAlign.center),
-            ),
+            if (displayBadge && index < 3) Badge(index)
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class Badge extends StatelessWidget {
+  const Badge(this.place);
+
+  final int place;
+
+  Color _badgeColor() {
+    switch (place) {
+      case 0:
+        return Color(0xffFFD700);
+      case 1:
+        return Color(0xffC0C0C0);
+      case 2:
+        return Color(0xffCD7F32);
+      default:
+        return Color(0xFFFFFFFF);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Container(
+          color: _badgeColor(),
+          width: 5,
+          height: 40,
         ),
       ),
     );
