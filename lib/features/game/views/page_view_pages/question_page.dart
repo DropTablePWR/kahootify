@@ -22,12 +22,15 @@ class QuestionPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: orientation == Orientation.portrait
                   ? Column(children: [
+                      SizedBox(height: 20),
                       QuestionInfoRow(),
                       SizedBox(height: 20),
                       CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit),
-                      Expanded(child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
+                      Expanded(flex: 1, child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
                       Expanded(
+                        flex: 4,
                         child: GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
                           childAspectRatio: 3 / 2,
                           mainAxisSpacing: 15,
                           crossAxisCount: 2,
@@ -39,6 +42,7 @@ class QuestionPage extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: Column(children: [
+                          SizedBox(height: 20),
                           QuestionInfoRow(),
                           SizedBox(height: 30),
                           CircularCountdown(time: gamePageState.serverInfo.answerTimeLimit),
@@ -49,10 +53,12 @@ class QuestionPage extends StatelessWidget {
                         child: Column(children: [
                           Expanded(flex: 1, child: HeaderText(text: gamePageState.quizQuestion?.question ?? '')),
                           Expanded(
-                            flex: 1,
+                            flex: 3,
                             child: GridView.count(
-                              childAspectRatio: 4,
-                              mainAxisSpacing: 2,
+                              physics: NeverScrollableScrollPhysics(),
+                              childAspectRatio: 3,
+                              shrinkWrap: true,
+                              mainAxisSpacing: 10,
                               crossAxisCount: 2,
                               children: getAnswerButtonList(gamePageState.answerButtons),
                             ),
@@ -84,22 +90,41 @@ class QuestionInfoRow extends StatelessWidget {
     }
   }
 
+  Color questionDifficultyColor(QuestionDifficulty questionDifficulty) {
+    switch (questionDifficulty) {
+      case QuestionDifficulty.easy:
+        return KColors.basedYellowColor;
+      case QuestionDifficulty.medium:
+        return KColors.basedOrangeColor;
+      case QuestionDifficulty.hard:
+        return KColors.basedRedColor;
+      default:
+        return KColors.basedBlackColor;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<GamePageBloc, GamePageState>(
       builder: (context, gamePageState) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              'Question: ' + gamePageState.questionNumber.toString(),
-              style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Difficulty: ' + questionDifficultyToString(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
-              style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
-            ),
-          ],
+        return FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                'Question: ' + gamePageState.questionNumber.toString(),
+                style: TextStyle(fontSize: 15, color: KColors.basedBlackColor, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '  Difficulty: ' + questionDifficultyToString(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
+                style: TextStyle(
+                    fontSize: 15,
+                    color: questionDifficultyColor(gamePageState.quizQuestion?.difficulty ?? QuestionDifficulty.medium),
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         );
       },
     );

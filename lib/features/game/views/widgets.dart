@@ -43,7 +43,7 @@ class AnswerButton extends StatelessWidget {
       case ButtonState.incorrect:
         return KColors.basedRedColor;
       case ButtonState.waiting:
-        return KColors.basedYellowColor;
+        return KColors.basedBlueColor;
       case ButtonState.enabled:
         return KColors.basedOrangeColor;
       default:
@@ -54,17 +54,21 @@ class AnswerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
-        child: Text(buttonState.answer),
-        style: ElevatedButton.styleFrom(
-          primary: getButtonColor(),
-          alignment: Alignment.center,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 5,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
-          minimumSize: Size(140, 120),
+      child: SizedBox(
+        width: 120,
+        height: 100,
+        child: ElevatedButton(
+          onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
+          child: FittedBox(fit: BoxFit.fitHeight, child: Text(buttonState.answer)),
+          style: ElevatedButton.styleFrom(
+            primary: getButtonColor(),
+            alignment: Alignment.center,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            elevation: 5,
+            padding: const EdgeInsets.all(8),
+            textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
+            minimumSize: Size(120, 100),
+          ),
         ),
       ),
     );
@@ -78,22 +82,28 @@ class HeaderText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
-      child: Text(text, style: TextStyle(fontSize: 25, color: KColors.basedBlackColor)),
+    return FittedBox(
+      fit: BoxFit.fitWidth,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
+        child: Text(text, style: TextStyle(fontSize: 35, color: KColors.basedBlackColor)),
+      ),
     );
   }
 }
 
 class ResultListItem extends StatelessWidget {
   final PlayerInfo playerInfo;
+  final int index;
 
-  const ResultListItem({required this.playerInfo});
+  const ResultListItem({required this.playerInfo, required this.index});
 
   static const _resultTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
+    final int formattedScore = playerInfo.score.toInt() * 100;
+    final int myIndex = index + 1;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -104,10 +114,23 @@ class ResultListItem extends StatelessWidget {
       child: SizedBox(
         height: 50.0,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(child: Text(playerInfo.name, style: _resultTextStyle)),
-            Expanded(child: Text(playerInfo.score.toString(), style: _resultTextStyle)),
+            Expanded(flex: 1, child: SizedBox()),
+            Expanded(
+                flex: 3,
+                child: Text(
+                  myIndex.toString() + '. ' + playerInfo.name,
+                  style: _resultTextStyle,
+                  textAlign: TextAlign.start,
+                )),
+            Expanded(
+                flex: 2,
+                child: Text(
+                  formattedScore.toString(),
+                  style: _resultTextStyle,
+                  textAlign: TextAlign.center,
+                )),
           ],
         ),
       ),
