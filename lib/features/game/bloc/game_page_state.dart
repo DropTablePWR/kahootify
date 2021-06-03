@@ -31,6 +31,7 @@ class GamePageState {
   final ServerInfo serverInfo;
   final QuizQuestion? quizQuestion;
   final int questionNumber;
+  final int? chosenAnswerIndex;
   final int currentPage;
   final bool shouldProceedToResultsScreen;
   final List<AnswerButtonState> answerButtons;
@@ -38,6 +39,7 @@ class GamePageState {
   GamePageState({
     required this.results,
     required this.serverInfo,
+    this.chosenAnswerIndex,
     this.quizQuestion,
     required this.questionNumber,
     this.shouldProceedToResultsScreen = false,
@@ -48,6 +50,7 @@ class GamePageState {
   GamePageState.initial({required this.serverInfo})
       : questionNumber = 0,
         currentPage = 0,
+        chosenAnswerIndex = null,
         quizQuestion = null,
         shouldProceedToResultsScreen = false,
         answerButtons = List.generate(4, (index) => AnswerButtonState.initial(index: index)),
@@ -59,6 +62,7 @@ class GamePageState {
       serverInfo: this.serverInfo,
       questionNumber: this.questionNumber + 1,
       quizQuestion: quizQuestion,
+      chosenAnswerIndex: null,
       currentPage: 1,
       answerButtons: List.generate(
         quizQuestion.possibleAnswers.length,
@@ -79,7 +83,7 @@ class GamePageState {
           if (index == correctAnswerIndex) {
             return answerButtons[index].correctChoice();
           } else {
-            if (answerButtons[index].state == ButtonState.waiting) {
+            if (index == correctAnswerIndex && correctAnswerIndex != chosenAnswerIndex) {
               return answerButtons[index].incorrectChoice();
             } else {
               return answerButtons[index];
@@ -108,6 +112,7 @@ class GamePageState {
       serverInfo: this.serverInfo,
       questionNumber: this.questionNumber,
       quizQuestion: quizQuestion,
+      chosenAnswerIndex: chosenAnswerIndex,
       currentPage: this.currentPage,
       answerButtons: List.generate(
         quizQuestion?.possibleAnswers.length ?? 4,
@@ -125,6 +130,7 @@ class GamePageState {
     List<PlayerInfo>? results,
     ServerInfo? serverInfo,
     QuizQuestion? quizQuestion,
+    int? chosenAnswerIndex,
     int? questionNumber,
     int? currentPage,
     List<AnswerButtonState>? answerButtons,
@@ -136,6 +142,7 @@ class GamePageState {
       quizQuestion: quizQuestion ?? this.quizQuestion,
       currentPage: currentPage ?? this.currentPage,
       answerButtons: answerButtons ?? this.answerButtons,
+      chosenAnswerIndex: chosenAnswerIndex ?? this.chosenAnswerIndex,
     );
   }
 }
