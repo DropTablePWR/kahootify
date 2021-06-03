@@ -12,6 +12,8 @@ import 'package:kahootify_server/server_modes/lobby_mode.dart';
 import 'package:kahootify_server/server_modes/ranking_mode.dart';
 import 'package:kahootify_server/server_modes/server_mode.dart';
 
+import '../const.dart';
+
 class GameMode extends ServerMode {
   List<Question> questions;
   Map<AbstractPlayer, AnswerTimestamp> answers = {};
@@ -29,7 +31,7 @@ class GameMode extends ServerMode {
   }
 
   void run() async {
-    final delay = Duration(seconds: 3);
+    final delay = Duration(seconds: countdownTime);
     await Future.delayed(delay);
     for (Question question in questions) {
       if (!gameIsActive) {
@@ -120,6 +122,9 @@ class GameMode extends ServerMode {
   @override
   void returnToLobby() {
     gameIsActive = false;
+    server.knownPlayers.forEach((_, player) {
+      player.clearPlayerInfo();
+    });
     server.serverMode = LobbyMode(server);
   }
 }

@@ -117,7 +117,7 @@ class Server {
 
   RankingInfo generateRankingInfo() {
     var players = knownPlayers.values.map((e) => e.playerInfo).toList();
-    players.sort((a, b) => a.score.compareTo(b.score));
+    players.sort((a, b) => b.score.compareTo(a.score));
     return RankingInfo(players);
   }
 
