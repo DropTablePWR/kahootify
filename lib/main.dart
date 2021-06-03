@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:kahootify/core/bloc/ip_cubit.dart';
 import 'package:kahootify/core/data/ip_repository.dart';
 import 'package:kahootify/core/data/shared_preferences_repository.dart';
+import 'package:kahootify/core/models/settings.dart';
 import 'package:kahootify/features/game/views/game_page.dart';
 import 'package:kahootify/features/game_config/views/game_config_page.dart';
 import 'package:kahootify/features/lobby/views/lobby_page.dart';
@@ -39,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   late String ip;
   bool isRepositoryLoaded = false;
   bool isIpLoaded = false;
+  late AudioPlayer audioPlayer;
 
   Future<void> initializeSharedPreferencesRepository() async {
     prefsRepository = SharedPreferencesRepository(await SharedPreferences.getInstance());
@@ -63,6 +66,22 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     initializeSharedPreferencesRepository();
     tryGetInitialWifiIp();
+    initializePlayer();
+  }
+
+  Future<void> initializePlayer() async {
+    audioPlayer = AudioPlayer();
+    await audioPlayer.setAsset('assets/bg_music.mp3');
+    await audioPlayer.setLoopMode(LoopMode.one);
+    audioPlayer.load();
+  }
+
+  void startMusic() {
+    audioPlayer.play();
+  }
+
+  void stopMusic() {
+    audioPlayer.stop();
   }
 
   @override
@@ -73,12 +92,23 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<SettingsCubit>(create: (_) => SettingsCubit(prefsRepository)..initialize()),
           BlocProvider<IpCubit>(create: (_) => IpCubit(ip)),
         ],
-        child: MaterialApp(
-          title: 'Kahootify.ly',
-          theme: ThemeData(primarySwatch: Colors.blue),
-          initialRoute: '/',
-          onGenerateRoute: (settings) => getRoute(context, settings),
-        ),
+        child: Builder(builder: (context) {
+          return BlocListener<SettingsCubit, Settings>(
+            listener: (context, settings) {
+              if (settings.isMusicEnabled) {
+                startMusic();
+              } else {
+                stopMusic();
+              }
+            },
+            child: MaterialApp(
+              title: 'Kahootify.ly',
+              theme: ThemeData(primarySwatch: Colors.blue),
+              initialRoute: '/',
+              onGenerateRoute: (settings) => getRoute(context, settings),
+            ),
+          );
+        }),
       );
     } else {
       return MaterialApp(home: SplashPage());
