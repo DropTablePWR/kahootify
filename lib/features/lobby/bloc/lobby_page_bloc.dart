@@ -72,7 +72,8 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
     } else if (event is ReceivedNewPlayerList) {
       final newPlayerList = event.playerList;
       final isStartGameButtonVisible = isGameReadyToStart(newPlayerList);
-      yield state.copyWith(playerList: newPlayerList, isStartGameButtonVisible: isStartGameButtonVisible);
+      final newPlayerInfo = state.playerInfo.copyWith(ready: newPlayerList.players.firstWhere((element) => element.id == state.playerInfo.id).ready);
+      yield state.copyWith(playerList: newPlayerList, isStartGameButtonVisible: isStartGameButtonVisible, playerInfo: newPlayerInfo);
     } else if (event is ReceivedGameStart) {
       yield state.copyWith(shouldProceedToGameScreen: true);
     } else if (event is ReceivedServerInfo) {
