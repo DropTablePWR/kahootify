@@ -8,7 +8,7 @@ part 'ranking_info.g.dart';
 class RankingInfo extends Data {
   List<PlayerInfo> players;
 
-  RankingInfo(this.players) : super(DataType.rankingStarted);
+  RankingInfo(this.players) : super(DataType.rankingInfo);
 
   factory RankingInfo.fromJson(Map<String, dynamic> json) => _$RankingInfoFromJson(json);
 

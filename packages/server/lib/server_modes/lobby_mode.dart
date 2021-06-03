@@ -35,7 +35,7 @@ class LobbyMode extends ServerMode {
     player.playerInfo = playerInfo;
     var playerListInfo = server.generatePlayerListInfo();
     server.sendDataToAll(playerListInfo.toJson());
-    if (server.serverInfo.autoStart && playerListInfo.everyoneIsReady) {
+    if (server.serverInfo.autoStart && playerListInfo.isEveryoneReady) {
       nextMode();
     }
   }

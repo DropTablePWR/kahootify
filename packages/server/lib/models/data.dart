@@ -21,11 +21,13 @@ enum DataType {
   playerListInfo,
   gameStarted,
   startGame,
-  question,
+  quizQuestion,
   answer,
+  rankingInfo,
   rankingStarted,
   lobbyStarted,
   returnToLobby,
   goodbye,
-  readyToBeKilled
+  readyToBeKilled,
+  correctAnswer
 }

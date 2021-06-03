@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify_server/models/data.dart';
 import 'package:kahootify_server/models/player_info.dart';
+import 'package:kahootify_server/models/player_list_info.dart';
 import 'package:kahootify_server/models/server_info.dart';
 
 class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
@@ -13,7 +14,7 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
     required this.amIHost,
     required this.serverOutput,
     required this.serverInput,
-  }) : super(LobbyPageState(playerInfo: playerInfo, playerList: [], serverInfo: serverInfo)) {
+  }) : super(LobbyPageState(playerInfo: playerInfo, playerList: PlayerListInfo.empty(), serverInfo: serverInfo)) {
     serverOutput.listen((receivedData) => processServerData(receivedData));
   }
 
@@ -23,11 +24,10 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
 
   void processServerData(receivedData) {
     var decodedData = jsonDecode(receivedData);
-    var decodedDataType = DataType.values.firstWhere((element) => element.toString().split('.')[1] == decodedData['dataType']);
-    switch (decodedDataType) {
+    var data = Data.fromJson(decodedData);
+    switch (data.dataType) {
       case DataType.playerListInfo:
-        final newPlayerList = List<PlayerInfo>.from(decodedData['players'].map((rawPlayer) => PlayerInfo.fromJson(rawPlayer)).toList());
-        add(ReceivedNewPlayerList(newPlayerList));
+        add(ReceivedNewPlayerList(PlayerListInfo.fromJson(decodedData)));
         break;
       case DataType.gameStarted:
         add(ReceivedGameStart());
@@ -36,17 +36,19 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
         add(ReceivedServerInfo(ServerInfo.fromJson(decodedData)));
         break;
       case DataType.startGame:
-      case DataType.question:
+      case DataType.quizQuestion:
       case DataType.answer:
-      case DataType.rankingStarted:
+      case DataType.rankingInfo:
       case DataType.lobbyStarted:
       case DataType.playerInfo:
       case DataType.unknown:
       case DataType.error:
       case DataType.returnToLobby:
+      case DataType.rankingStarted:
+      case DataType.correctAnswer:
       case DataType.goodbye:
       case DataType.readyToBeKilled:
-        print('unsupported data: $decodedDataType');
+        print('unsupported data: ${data.dataType}');
         break;
     }
   }
@@ -73,9 +75,7 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
     }
   }
 
-  bool isGameReadyToStart(List<PlayerInfo> playerList) => isEveryoneReady(playerList) && playerList.length > 1;
-
-  bool isEveryoneReady(List<PlayerInfo> playerList) => playerList.every((element) => element.ready);
+  bool isGameReadyToStart(PlayerListInfo playerList) => playerList.isEveryoneReady && playerList.players.length > 1;
 }
 
 abstract class LobbyPageEvent {}
@@ -83,7 +83,7 @@ abstract class LobbyPageEvent {}
 class IAmReadyButtonPressed extends LobbyPageEvent {}
 
 class ReceivedNewPlayerList extends LobbyPageEvent {
-  final List<PlayerInfo> playerList;
+  final PlayerListInfo playerList;
 
   ReceivedNewPlayerList(this.playerList);
 }
@@ -98,7 +98,7 @@ class ReceivedGameStart extends LobbyPageEvent {}
 
 class LobbyPageState {
   final PlayerInfo playerInfo;
-  final List<PlayerInfo> playerList;
+  final PlayerListInfo playerList;
   final bool isStartGameButtonVisible;
   final ServerInfo serverInfo;
   final bool shouldProceedToGameScreen;
@@ -113,7 +113,7 @@ class LobbyPageState {
 
   LobbyPageState copyWith({
     PlayerInfo? playerInfo,
-    List<PlayerInfo>? playerList,
+    PlayerListInfo? playerList,
     bool? isStartGameButtonVisible,
     ServerInfo? serverInfo,
     bool? shouldProceedToGameScreen,

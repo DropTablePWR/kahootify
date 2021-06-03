@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:kahootify_server/models/player_info.dart';
 
+import '../const.dart';
 import 'abstract_player.dart';
 
 class LocalPlayer extends AbstractPlayer {
@@ -12,7 +13,7 @@ class LocalPlayer extends AbstractPlayer {
 
   @override
   send(data) {
-    sendPort.send(jsonEncode(data));
+    Future.delayed(kLocalPlayerDelay).then((_) => sendPort.send(jsonEncode(data)));
   }
 
   @override

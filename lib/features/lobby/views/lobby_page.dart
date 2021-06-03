@@ -47,7 +47,15 @@ class LobbyPage extends StatelessWidget {
         return BlocConsumer<LobbyPageBloc, LobbyPageState>(
           listener: (context, lobbyPageState) {
             if (lobbyPageState.shouldProceedToGameScreen) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => GamePage()));
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => GamePage(
+                    serverInput: serverInput,
+                    serverOutput: serverOutput,
+                    initialServerInfo: initialServerInfo,
+                  ),
+                ),
+              );
             }
           },
           builder: (context, lobbyPageState) {
@@ -73,7 +81,7 @@ class LobbyPage extends StatelessWidget {
                     body: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 30),
                       child: PlayersListView(
-                        playersList: lobbyPageState.playerList,
+                        playersList: lobbyPageState.playerList.players,
                         maxNumberOfPlayers: lobbyPageState.serverInfo.maxNumberOfPlayers,
                         isHorizontal: false,
                       ),
@@ -98,7 +106,7 @@ class LobbyPage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: PlayersListView(
-                            playersList: lobbyPageState.playerList,
+                            playersList: lobbyPageState.playerList.players,
                             maxNumberOfPlayers: lobbyPageState.serverInfo.maxNumberOfPlayers,
                             isHorizontal: true,
                           ),

@@ -1,7 +1,10 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kahootify/color_const.dart';
-import 'package:kahootify/features/game/views/game_page.dart';
+import 'package:kahootify/features/game/bloc/bloc.dart';
+import 'package:kahootify/features/game/bloc/game_page_bloc.dart';
+import 'package:kahootify/features/game/bloc/game_page_state.dart';
 import 'package:kahootify_server/models/player_info.dart';
 
 class CircularCountdown extends StatelessWidget {
@@ -21,35 +24,26 @@ class CircularCountdown extends StatelessWidget {
       strokeWidth: 10.0,
       isReverse: true,
       textStyle: TextStyle(fontSize: 35, color: KColors.basedBlackColor),
-      onStart: () {
-        print("czas start");
-      },
-      onComplete: () {
-        print("czas stop");
-      },
+      onComplete: () => context.read<GamePageBloc>().add(ShowQuestion()),
     );
   }
 }
 
 class AnswerButton extends StatelessWidget {
   const AnswerButton({
-    required this.index,
-    required this.answer,
     required this.buttonState,
   });
 
-  final int index;
-  final String answer;
-  final ButtonState buttonState;
+  final AnswerButtonState buttonState;
 
   Color getButtonColor() {
-    switch (buttonState) {
+    switch (buttonState.state) {
       case ButtonState.correct:
         return KColors.backgroundGreenColor;
       case ButtonState.incorrect:
         return KColors.basedRedColor;
       case ButtonState.waiting:
-        return Colors.grey.shade300;
+        return KColors.basedYellowColor;
       case ButtonState.enabled:
         return KColors.basedOrangeColor;
       default:
@@ -61,16 +55,17 @@ class AnswerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {}, //TODO on answerButton pressed
-        child: Text(answer),
+        onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
+        child: Text(buttonState.answer),
         style: ElevatedButton.styleFrom(
-            primary: getButtonColor(),
-            alignment: Alignment.center,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-            elevation: 5,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
-            minimumSize: Size(140, 120)),
+          primary: getButtonColor(),
+          alignment: Alignment.center,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          elevation: 5,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
+          minimumSize: Size(140, 120),
+        ),
       ),
     );
   }

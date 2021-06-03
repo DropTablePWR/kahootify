@@ -1,19 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'data.dart';
+part of 'correct_answer.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Data _$DataFromJson(Map<String, dynamic> json) {
-  return Data(
-    _$enumDecode(_$DataTypeEnumMap, json['dataType']),
-  );
+CorrectAnswer _$CorrectAnswerFromJson(Map<String, dynamic> json) {
+  return CorrectAnswer(
+    json['answer'] as int,
+  )..dataType = _$enumDecode(_$DataTypeEnumMap, json['dataType']);
 }
 
-Map<String, dynamic> _$DataToJson(Data instance) => <String, dynamic>{
+Map<String, dynamic> _$CorrectAnswerToJson(CorrectAnswer instance) => <String, dynamic>{
       'dataType': _$DataTypeEnumMap[instance.dataType],
+      'answer': instance.answer,
     };
 
 K _$enumDecode<K, V>(
