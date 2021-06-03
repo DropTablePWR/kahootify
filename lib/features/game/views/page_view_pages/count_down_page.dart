@@ -10,7 +10,14 @@ class CountDownPage extends StatelessWidget {
   List<Widget> getBody(Orientation orientation, int questionNumber, BuildContext context) {
     return [
       Expanded(flex: 3, child: HeaderText(text: 'WAIT FOR $questionNumber QUESTION')),
-      Expanded(child: CircularCountdown(time: countdownTime,onComplete: () => context.read<GamePageBloc>().add(ShowQuestion()), pageNumberToStartOn: 1, key: countDownPageTimer)),
+      Expanded(
+        child: CircularCountdown(
+          time: countdownTime,
+          onComplete: () => context.read<GamePageBloc>().add(ShowQuestion()),
+          pageNumberToStartOn: 1,
+          key: countDownPageTimer,
+        ),
+      ),
     ];
   }
 
