@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,18 +33,20 @@ class CircularCountdown extends StatelessWidget {
 class AnswerButton extends StatelessWidget {
   const AnswerButton({
     required this.buttonState,
+    required this.isLeft,
   });
 
   final AnswerButtonState buttonState;
+  final bool isLeft;
 
-  Color getButtonColor() {
+  Color _buttonColor() {
     switch (buttonState.state) {
       case ButtonState.correct:
         return KColors.backgroundGreenColor;
       case ButtonState.incorrect:
         return KColors.basedRedColor;
       case ButtonState.waiting:
-        return KColors.basedYellowColor;
+        return KColors.blueColor;
       case ButtonState.enabled:
         return KColors.basedOrangeColor;
       default:
@@ -53,21 +56,31 @@ class AnswerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ElevatedButton(
-        onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
-        child: Text(buttonState.answer),
-        style: ElevatedButton.styleFrom(
-          primary: getButtonColor(),
-          alignment: Alignment.center,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          elevation: 5,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
-          minimumSize: Size(140, 120),
+    return LayoutBuilder(builder: (context, constraints) {
+      final size = constraints.biggest.shortestSide;
+      return Align(
+        alignment: isLeft ? Alignment.centerRight : Alignment.centerLeft,
+        child: SizedBox(
+          height: size,
+          width: size,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: () => context.read<GamePageBloc>().add(AnswerQuestion(buttonState.index)),
+              child: FittedBox(fit: BoxFit.fitHeight, child: Text(buttonState.answer)),
+              style: ElevatedButton.styleFrom(
+                primary: _buttonColor(),
+                alignment: Alignment.center,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+                elevation: 5,
+                padding: const EdgeInsets.all(8),
+                textStyle: TextStyle(color: KColors.basedBlackColor, fontSize: 15),
+              ),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -80,20 +93,23 @@ class HeaderText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 30, 16, 0),
-      child: Text(text, style: TextStyle(fontSize: 25, color: KColors.basedBlackColor)),
+      child: AutoSizeText(text, style: TextStyle(fontSize: 20, color: KColors.basedBlackColor)),
     );
   }
 }
 
 class ResultListItem extends StatelessWidget {
   final PlayerInfo playerInfo;
+  final int index;
 
-  const ResultListItem({required this.playerInfo});
+  const ResultListItem({required this.playerInfo, required this.index});
 
   static const _resultTextStyle = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
+    final int formattedScore = (playerInfo.score * 100).toInt();
+    final int myIndex = index + 1;
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
@@ -104,10 +120,16 @@ class ResultListItem extends StatelessWidget {
       child: SizedBox(
         height: 50.0,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Expanded(child: Text(playerInfo.name, style: _resultTextStyle)),
-            Expanded(child: Text(playerInfo.score.toString(), style: _resultTextStyle)),
+            Expanded(child: SizedBox()),
+            Expanded(
+              flex: 3,
+              child: Text('$myIndex.${playerInfo.name}', style: _resultTextStyle, textAlign: TextAlign.start),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(formattedScore.toString(), style: _resultTextStyle, textAlign: TextAlign.center),
+            ),
           ],
         ),
       ),

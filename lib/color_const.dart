@@ -6,5 +6,6 @@ class KColors {
   static const Color basedYellowColor = Color(0xffffcf00);
   static const Color basedOrangeColor = Color(0xffee6123);
   static const Color basedRedColor = Color(0xfffa003f);
+  static const Color blueColor = Color(0xff42bff5);
   static const Color basedBlackColor = Color(0xff00140f);
 }
