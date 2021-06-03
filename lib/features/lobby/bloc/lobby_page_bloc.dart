@@ -35,6 +35,12 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
       case DataType.serverInfo:
         add(ReceivedServerInfo(ServerInfo.fromJson(decodedData)));
         break;
+      case DataType.returnToLobby:
+        add(IDoNotWantToGoToNextScreenAnymore());
+        break;
+      case DataType.rankingStarted:
+        add(IDoNotWantToGoToNextScreenAnymore());
+        break;
       case DataType.startGame:
       case DataType.quizQuestion:
       case DataType.answer:
@@ -43,7 +49,6 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
       case DataType.playerInfo:
       case DataType.unknown:
       case DataType.error:
-      case DataType.returnToLobby:
       case DataType.rankingStarted:
       case DataType.correctAnswer:
       case DataType.goodbye:
@@ -72,6 +77,8 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
       yield state.copyWith(shouldProceedToGameScreen: true);
     } else if (event is ReceivedServerInfo) {
       yield state.copyWith(serverInfo: event.serverInfo);
+    } else if (event is IDoNotWantToGoToNextScreenAnymore) {
+      yield state.copyWith(shouldProceedToGameScreen: false);
     }
   }
 
@@ -79,6 +86,8 @@ class LobbyPageBloc extends Bloc<LobbyPageEvent, LobbyPageState> {
 }
 
 abstract class LobbyPageEvent {}
+
+class IDoNotWantToGoToNextScreenAnymore extends LobbyPageEvent {}
 
 class IAmReadyButtonPressed extends LobbyPageEvent {}
 
